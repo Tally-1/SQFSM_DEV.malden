@@ -1,0 +1,10 @@
+joinUnassigned 			= 0;
+briefing 				= 0;
+skipLobby 				= 1;
+respawnOnStart  		= -1;
+allowFunctionsRecompile = 1;
+
+author = "[P] Tally";
+enableDebugConsole = 2;
+
+#include "Functions\CfgFunctions.hpp"
