@@ -1,0 +1,9 @@
+SQFM_newGroups = [];
+
+call SQFM_fnc_initSettings;
+call SQFM_fnc_groupSpawnedEh;
+
+{[_x] call SQFM_fnc_initGroup;} forEach allGroups;
+[] spawn SQFM_fnc_taskManager;
+
+true;
