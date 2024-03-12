@@ -10,6 +10,8 @@ class CfgFunctions
 			class sendDbgMsg       {};
 			class debug3D          {};
 			class custom3Dmarkers  {};
+
+			class objective3D      {};
 		};
 
 		class misc
