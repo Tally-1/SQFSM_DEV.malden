@@ -15,6 +15,11 @@ class CfgFunctions
 			class drawObjectiveModule {};
 			class setModuleLineColor  {};
 
+			class groups3D            {};
+			class group3D             {};
+			class group3DNoData       {};
+			class sideColor           {};
+
 		};
 
 		class misc

@@ -3,10 +3,11 @@ params [
 ];
 
 private _dataArr = [
-	["birth",               time],
-	["task",       createHashmap],
-	["traveling",          false],
-	["enemies",               []]	
+	["birth",              time],
+	["taskName",         "idle"],
+	["taskData",  createHashmap],
+	["traveling",         false],
+	["enemies",              []]	
 ];
 
 private _data = createHashmapObject [_dataArr];

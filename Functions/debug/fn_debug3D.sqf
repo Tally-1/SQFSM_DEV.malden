@@ -7,5 +7,6 @@ if(SQFM_debugMode)
 then{
 		call SQFM_fnc_custom3Dmarkers;
 		call SQFM_fnc_objective3D;
+		call SQFM_fnc_groups3D;
 		
 }}];
