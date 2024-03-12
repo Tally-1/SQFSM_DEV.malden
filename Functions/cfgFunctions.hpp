@@ -6,17 +6,43 @@ class CfgFunctions
 		class debug
 		{
 			file = "Functions\debug";
-			class debugMessage     {};
-			class sendDbgMsg       {};
-			class debug3D          {};
-			class custom3Dmarkers  {};
+			class debugMessage        {};
+			class sendDbgMsg          {};
+			class debug3D             {};
+			class custom3Dmarkers     {};
 
-			class objective3D      {};
+			class objective3D         {};
+			class drawObjectiveModule {};
+			class setModuleLineColor  {};
+
 		};
 
 		class misc
 		{
 			file = "Functions\misc";
+
+		};
+
+		class math
+		{
+			file = "Functions\math";
+			class module3dData    {};
+			class getModuleArea   {};
+			class getAreaCorners  {};
+			class areaCornerLines {};
+			class sinCosPos       {};
+			class AddZ            {};
+
+		};
+
+		class objectiveModule
+		{
+			file = "Functions\objectiveModule";
+			class initObjective             {};
+			class setObjectiveData          {};
+			class objectiveDescription      {};
+
+
 
 		};
 
