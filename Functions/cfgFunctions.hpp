@@ -3,6 +3,12 @@ class CfgFunctions
 	class SQFM
 	{
 		
+		class battlefield
+		{
+			file = "Functions\battlefield";
+			class initBattle {};
+		};
+		
 		class debug
 		{
 			file = "Functions\debug";
@@ -51,14 +57,38 @@ class CfgFunctions
 
 		};
 
+		class man
+		{
+			file = "Functions\man";
+			class unconscious           {};
+			class isRealMan             {};
+			class functionalMan         {};
+			class hostile               {};
+			class validEnemy            {};
+			class firstValidGroupMember {};
+		};
+
+		class vehicle
+		{
+			file = "Functions\vehicle";
+			class deadCrew          {};
+			class validVehicle      {};
+			class validEnemyVehicle {};
+
+		};
+
 		class groups
 		{
 			file =    "Functions\groups";
+			class validGroup          {};
 			class initGroup           {};
 			class initGroupData       {};
 			class grpEvents           {};
 			class onEnemyDetected     {};
 			class onKnowsAboutChanged {};
+			class addToDataAllGroups  {};
+
+			class groupInBattle       {};
 
 		};
 		
@@ -85,10 +115,14 @@ class CfgFunctions
 			class tenSecondTasks  {};
 			class minuteTasks     {};
 			class fiveMinTasks    {};
-
-			class handleNewGroups {};
-
-
 		};
+
+		class tasks
+		{
+			file = "Functions\taskManager\tasks";
+			class handleNewGroups  {};
+			class handleDeadGroups {};
+		};
+
 	};
 };

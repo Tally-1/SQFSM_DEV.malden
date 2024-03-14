@@ -7,7 +7,10 @@ private _dataArr = [
 	["taskName",         "idle"],
 	["taskData",  createHashmap],
 	["traveling",         false],
-	["enemies",              []]	
+	["available",         true],
+	["enemies",              []],
+	["battlefield",      "none"]/*,
+	["inBattle", SQFM_fnc_groupInBattle]*/
 ];
 
 private _data = createHashmapObject [_dataArr];

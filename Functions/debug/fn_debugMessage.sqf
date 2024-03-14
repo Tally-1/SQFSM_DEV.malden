@@ -4,10 +4,10 @@ private _displayType = "systemChat";
 private _signature   = "Squad FSM: ";
 
 params[ 
-	"_text", 
+	"_text",
+	"_displayType",
     "_print", 
-    "_log", 
-    "_displayType",
+    "_log",
     "_signature"
 ];
 
