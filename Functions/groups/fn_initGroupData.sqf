@@ -9,8 +9,8 @@ private _dataArr = [
 	["traveling",         false],
 	["available",         true],
 	["enemies",              []],
-	["battlefield",      "none"]/*,
-	["inBattle", SQFM_fnc_groupInBattle]*/
+	["battlefield",      "none"],
+	["inBattle", SQFM_fnc_groupInBattle]
 ];
 
 private _data = createHashmapObject [_dataArr];

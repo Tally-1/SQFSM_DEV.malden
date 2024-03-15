@@ -6,7 +6,28 @@ class CfgFunctions
 		class battlefield
 		{
 			file = "Functions\battlefield";
-			class initBattle {};
+			class initBattle            {};
+			class initBattleMap         {};
+			class battlefieldRadius     {};
+			class battlefieldDimensions {};
+			class getBattleGrid         {};
+
+		};
+
+		class building
+		{
+			file = "Functions\building";
+			class isHouse       {};
+			class nearBuildings {};
+		};
+
+		class clusters
+		{
+			file = "Functions\clusters";
+			class clusterRadius {};
+			class objArrData    {};
+			class cluster       {};
+
 		};
 		
 		class debug
@@ -43,6 +64,12 @@ class CfgFunctions
 			class areaCornerLines {};
 			class sinCosPos       {};
 			class AddZ            {};
+			class roundPos        {};
+			class average         {};
+			class avgPos2D        {};
+			class getMidpoint     {};
+			class straightPosArr  {};
+			class squareGrid      {};
 
 		};
 
@@ -74,6 +101,7 @@ class CfgFunctions
 			class deadCrew          {};
 			class validVehicle      {};
 			class validEnemyVehicle {};
+			class validLandEntity   {};
 
 		};
 
