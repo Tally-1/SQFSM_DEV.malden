@@ -15,8 +15,13 @@ private _distances = [];
 	
 	_xArr   pushBackUnique (_pos#0);
 	_yArr   pushBackUnique (_pos#1);
-	_sides  pushBackUnique _side;
-	_groups pushBackUnique _group;
+
+	if(_side in [east,west,independent])
+	then{_sides  pushBackUnique _side;};
+
+	if([_group] call SQFM_fnc_validGroup)
+	then{_groups pushBackUnique _group;};
+
 
 } forEach _objArr;
 

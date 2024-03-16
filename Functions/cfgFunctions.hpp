@@ -12,6 +12,9 @@ class CfgFunctions
 			class battlefieldDimensions {};
 			class getBattleGrid         {};
 
+			class posInBattleZone       {};
+			class nearestBattlePosRad   {};
+
 		};
 
 		class building
@@ -24,9 +27,10 @@ class CfgFunctions
 		class clusters
 		{
 			file = "Functions\clusters";
-			class clusterRadius {};
-			class objArrData    {};
-			class cluster       {};
+			class clusterRadius   {};
+			class objArrData      {};
+			class cluster         {};
+			class setClusterGrid  {};
 
 		};
 		
@@ -52,6 +56,7 @@ class CfgFunctions
 		class misc
 		{
 			file = "Functions\misc";
+			class copyHashmap {};
 
 		};
 
@@ -70,6 +75,7 @@ class CfgFunctions
 			class getMidpoint     {};
 			class straightPosArr  {};
 			class squareGrid      {};
+			class getNearest      {};
 
 		};
 
@@ -117,22 +123,30 @@ class CfgFunctions
 			class addToDataAllGroups  {};
 
 			class groupInBattle       {};
+			class addGroupShots       {};
+
+			class groupBattleInit     {};
+			class groupBattleEnd      {};
+
 
 		};
 		
 		class init
 		{
 			file = "Functions\init";
-			class initSQFSM    {postInit = 1};
-			class serverInit   {};
-			class initSettings {};
-			class clientInit   {};
+			class initSQFSM     {postInit = 1};
+			class serverInit    {};
+			class initSettings  {};
+			class clientInit    {};
+			class initgameState {};
 		};
 
 		class globalEvents
 		{
 			file = "Functions\globalEvents";
-			class groupSpawnedEh {};
+			class groupSpawnedEh      {};
+			class projectileCreated   {};
+			class onProjectileCreated {};
 
 		};
 

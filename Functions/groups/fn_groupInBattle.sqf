@@ -1,4 +1,4 @@
-private _battlefield = SQFM_battles get (_self get "battlefield");
+private _battlefield = _self call ["getBattle"];
 if(isNil "_battlefield")exitWith{false;};
 
 true;

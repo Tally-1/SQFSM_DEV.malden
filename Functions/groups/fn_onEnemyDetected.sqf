@@ -3,13 +3,17 @@ params [
 	["_newTarget", nil, [objNull]]
 ];
 private _data = _group getVariable "SQFM_grpData";
-private _man  = [_group] call SQFM_fnc_firstValidGroupMember;
 
-if (isNil "_data")                         exitWith{/*"Nil data"         call dbgm;*/};
-if (_data call ["inBattle"])               exitWith{/*"Already fighting" call dbgm;*/};
-if!(alive _man)                            exitWith{/*"Dead man"         call dbgm;*/};
-if!([_group] call SQFM_fnc_validGroup)     exitWith{/*"Invalid group"    call dbgm;*/};
-if!([_newTarget] call SQFM_fnc_validEnemy) exitWith{/*"Invalid enemy"    call dbgm;*/};
+if(isNil "_data")           exitWith{};
+if(_data call ["inBattle"]) exitWith{};
+
+private _man = [_group] call SQFM_fnc_firstValidGroupMember;
+if!(alive _man)                                exitWith{};
+if([_man] call SQFM_fnc_posInBattleZone)       exitWith{};
+if([_newTarget] call SQFM_fnc_posInBattleZone) exitWith{};
+
+if!([_group] call SQFM_fnc_validGroup)     exitWith{};
+if!([_newTarget] call SQFM_fnc_validEnemy) exitWith{};
 
 [_man, _newTarget] call SQFM_fnc_initBattle;
 
