@@ -8,12 +8,17 @@ class CfgFunctions
 			file = "Functions\battlefield";
 			class initBattle            {};
 			class initBattleMap         {};
+			class initBattleBuildings   {};
 			class battlefieldRadius     {};
 			class battlefieldDimensions {};
 			class getBattleGrid         {};
 
 			class posInBattleZone       {};
 			class nearestBattlePosRad   {};
+			class initBattleGroups      {};
+			class endBattleGroups       {};
+			class onBattleFirstShot     {};
+			class endBattle             {};
 
 		};
 
@@ -37,6 +42,7 @@ class CfgFunctions
 		class debug
 		{
 			file = "Functions\debug";
+			// class clientLoop          {};
 			class debugMessage        {};
 			class sendDbgMsg          {};
 			class debug3D             {};
@@ -50,6 +56,12 @@ class CfgFunctions
 			class group3D             {};
 			class group3DNoData       {};
 			class sideColor           {};
+
+			class battle3D            {};
+			class drawBattle          {};
+			class drawBuilding        {};
+			class draw3dMarker        {};
+			class multi3dMarkers      {};
 
 		};
 
@@ -76,6 +88,8 @@ class CfgFunctions
 			class straightPosArr  {};
 			class squareGrid      {};
 			class getNearest      {};
+			class pos360          {};
+			class getCircleLines  {};
 
 		};
 
@@ -127,10 +141,18 @@ class CfgFunctions
 
 			class groupBattleInit     {};
 			class groupBattleEnd      {};
-
-
 		};
 		
+		class groups_suppress
+		{
+			file = "Functions\groups\suppress";
+			class groupReturnFire     {};
+			class grpIsNotSuppressing {};
+			class endGrpReturnFire    {};
+			
+		
+		};
+
 		class init
 		{
 			file = "Functions\init";

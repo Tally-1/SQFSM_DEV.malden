@@ -21,4 +21,4 @@ private _defaultIcon  = "\A3\ui_f\data\map\markers\handdrawn\dot_CA.paa";
 		0.035
 	];
 
-} forEach SFSM_Custom3Dpositions;
+} forEach SQFM_Custom3Dpositions;

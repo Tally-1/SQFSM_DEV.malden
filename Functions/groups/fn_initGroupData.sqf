@@ -28,7 +28,10 @@ private _dataArr = [
 	["battleEnd",                       SQFM_fnc_groupBattleEnd],
 	["addShot",                          SQFM_fnc_addGroupShots],
 	["getBattle",  {SQFM_battles get (_self get "battlefield")}],
-	["inBattle",                         SQFM_fnc_groupInBattle]
+	["inBattle",                         SQFM_fnc_groupInBattle],
+	["isNotSuppressing",           SQFM_fnc_grpIsNotSuppressing],
+	["returnFire",                     SQFM_fnc_groupReturnFire],
+	["endReturnFire",   {_self spawn SQFM_fnc_endGrpReturnFire}]
 ];
 
 private _data = createHashmapObject [_dataArr];
