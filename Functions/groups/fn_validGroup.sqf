@@ -1,4 +1,6 @@
 params ["_group"];
+if(isNull _group)
+exitWith{false;};
 
 if(typeName _group isNotEqualTo "GROUP")
 exitWith{false;};

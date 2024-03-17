@@ -12,9 +12,11 @@ drawIcon3D [
         0.04
     ];
 
-{[_x] call SQFM_fnc_drawBuilding} forEach (_self get "buildings");
+{drawLine3D _x}forEach(_self get "edgeLines");
 
-{drawLine3D _x}         forEach(_self get "edgeLines");
-{_x call ["drawLines"]} forEach(_self get "urbanZones");
+if(!isNull (findDisplay 312))then{ 
+	{[_x] call SQFM_fnc_drawBuilding} forEach (_self get "buildings");	
+	{_x call ["drawLines"]}           forEach (_self get "urbanZones");
+};
 
 true;

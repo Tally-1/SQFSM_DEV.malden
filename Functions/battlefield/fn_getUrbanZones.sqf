@@ -21,14 +21,17 @@ _buildings = [_buildings, [], _sortAlgo, "DESCEND"] call BIS_fnc_sortBy;
 	private _pos        = getPosATL _building;
 	private _nearHouses = ([_pos, _zoneRadius] call SQFM_fnc_nearBuildings)select{!(_x in _registered)};
 	private _count      = count _nearHouses;
-	if(_count > 2)then{
+	if(_count > 2)then{ 
+		private _newPos = [_nearHouses] call SQFM_fnc_avgPos2D;
+		private _newRad = _zoneRadius + (_newPos distance2D _pos);
+
+		_nearHouses           = ([_newPos, _newRad] call SQFM_fnc_nearBuildings)select{!(_x in _registered)};
 		private _sizes        = _nearHouses apply {(boundingBox _x)#2};
 		private _buildingSize = selectMax _sizes;
-		private _radius       = ([_pos, _nearHouses] call SQFM_fnc_clusterRadius);//+_buildingSize;
-		// if(_radius > )
-		private _lines = [_pos, _radius, 16, _green] call SQFM_fnc_getCircleLines;
+		private _radius       = ([_newPos, _nearHouses] call SQFM_fnc_clusterRadius);//+_buildingSize;
+		private _lines = [_newPos, _radius, 16, _green] call SQFM_fnc_getCircleLines;
 		private _dataArr = [
-			["position",         _pos],
+			["position",      _newPos],
 			["radius",        _radius],
 			["buildings", _nearHouses],
 			["lines",          _lines],
@@ -39,7 +42,6 @@ _buildings = [_buildings, [], _sortAlgo, "DESCEND"] call BIS_fnc_sortBy;
 		_zones pushBackUnique _hashMap;
 		_registered append _nearHouses;
 		(_self get "buildings") insert [0, _nearHouses, true];
-		systemChat str count _registered;
 	};
 	
 } forEach _buildings;

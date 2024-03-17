@@ -6,19 +6,24 @@ class CfgFunctions
 		class battlefield
 		{
 			file = "Functions\battlefield";
-			class initBattle            {};
-			class initBattleMap         {};
-			class initBattleBuildings   {};
-			class battlefieldRadius     {};
-			class battlefieldDimensions {};
-			class getBattleGrid         {};
+			class initBattle              {};
+			class initBattleMap           {};
+			class initBattleBuildings     {};
+			class getUrbanZones           {};
+			class postInitBattle          {};
+			class updateBattle            {};
+			class battlefieldRadius       {};
+			class battlefieldDimensions   {};
+			class getBattleGrid           {};
 
-			class posInBattleZone       {};
-			class nearestBattlePosRad   {};
-			class initBattleGroups      {};
-			class endBattleGroups       {};
-			class onBattleFirstShot     {};
-			class endBattle             {};
+			class posInBattleZone         {};
+			class nearestBattlePosRad     {};
+			class initBattleGroups        {};
+			class endBattleGroups         {};
+			class onBattleFirstShot       {};
+			class timeSinceLastBattleShot {};
+			
+			class endBattle               {};
 
 		};
 
