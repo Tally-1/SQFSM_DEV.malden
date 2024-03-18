@@ -11,6 +11,6 @@ waitUntil {sleep 1; _self call ["isNotSuppressing",[_timer]]};
 
 if(_self call ["inBattle"])
 then{_self set["action", "Fighting"];}
-else{_self set["action", "idle"];};
+else{_self set["action", ""];};
 
 true;

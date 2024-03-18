@@ -37,10 +37,11 @@ class CfgFunctions
 		class clusters
 		{
 			file = "Functions\clusters";
-			class clusterRadius   {};
-			class objArrData      {};
-			class cluster         {};
-			class setClusterGrid  {};
+			class clusterRadius      {};
+			class objArrData         {};
+			class hashifyClusterData {};
+			class cluster            {};
+			class setClusterGrid     {};
 
 		};
 		
@@ -104,9 +105,6 @@ class CfgFunctions
 			class initObjective             {};
 			class setObjectiveData          {};
 			class objectiveDescription      {};
-
-
-
 		};
 
 		class man
@@ -133,19 +131,20 @@ class CfgFunctions
 		class groups
 		{
 			file =    "Functions\groups";
-			class validGroup          {};
-			class initGroup           {};
-			class initGroupData       {};
-			class grpEvents           {};
-			class onEnemyDetected     {};
-			class onKnowsAboutChanged {};
-			class addToDataAllGroups  {};
+			class validGroup               {};
+			class initGroup                {};
+			class initGroupData            {};
+			class addToDataAllGroups       {};
+			class groupInBattle            {};
+			class addGroupShots            {};
+			class groupBattleInit          {};
+			class groupBattleEnd           {};
 
-			class groupInBattle       {};
-			class addGroupShots       {};
+			class groupCanInitBattle       {};
+			class timeSinceLastGroupBattle {};
+			class getGroupCluster          {};
+			class updateAllGroups          {};
 
-			class groupBattleInit     {};
-			class groupBattleEnd      {};
 		};
 		
 		class groups_suppress
@@ -154,8 +153,15 @@ class CfgFunctions
 			class groupReturnFire     {};
 			class grpIsNotSuppressing {};
 			class endGrpReturnFire    {};
+		};
+
+		class groups_events
+		{
+			file = "Functions\groups\events";
+			class grpEvents           {};
+			class onEnemyDetected     {};
+			class onKnowsAboutChanged {};
 			
-		
 		};
 
 		class init
