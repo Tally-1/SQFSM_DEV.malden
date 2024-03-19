@@ -13,7 +13,7 @@ private _setGroupCluster = {_self set ["groupCluster", (_self call ["getGroupClu
 private _dataArr = [
 	["birth",              time],
 	["grp",              _group],
-	["action",           ""],
+	["action",               ""],
 	["state",                ""],
 	// ["taskData",  createHashmap],
 	["traveling",         false],

@@ -65,6 +65,7 @@ private _getGrpMembers = {
 	_grpVehMen;
 };
 private _getUnits         = {units (_self get "grp") select {alive _x}};
+private _getUnitsOnfoot   = {_self call ["getUnits"] select {vehicle _x isEqualTo _x}};
 private _setGroupCluster  = {_self set ["groupCluster", (_self call ["getGroupCluster"])]};
 private _canSelfTransport = {
 	private _men      = _self call["getUnits"];
@@ -95,7 +96,8 @@ private _deleteWps = {
 	for"_i"from 0 to _count do{deleteWaypoint [_group, 0]};
 };
 
-private _dataArr = [
+private _dataArr = [ 
+
 	["birth",              time],
 	["grp",              _group],
 	["action",               ""],
@@ -108,20 +110,28 @@ private _dataArr = [
 	["shots",                []],
 	["groupCluster",        nil],
 
-	/******************************/
+//  {METHODS}
+
+	/**********************{TRAVEL}*****************************/
 	["initTravel",                     SQFM_fnc_initGroupTravel],
 	["execTravel",                     SQFM_fnc_execGroupTravel],
 	["onTravelWpComplete",          SQFM_fnc_onTravelWpComplete],
 	["execTravel",                     SQFM_fnc_execGroupTravel],
-	["getUnits",                                      _getUnits],
-	["getGrpMembers",                            _getGrpMembers],
 	["getVehicles",                   SQFM_fnc_getGroupVehicles],
 	["leaveInvalidVehicles",      SQFM_fnc_leaveInvalidVehicles],
 	["validVehicle",                 SQFM_fnc_validGroupVehicle],
 	["canSelfTransport",                      _canSelfTransport],
 	["boardingStatus",                       _getBoardingStatus],
+	["boardOwnVehicles",         SQFM_fnc_groupBoardOwnVehicles],
+
+	/********************{GROUP MEMBERS}************************/
+	["getUnits",                                      _getUnits],
+	["getUnitsOnfoot",                          _getUnitsOnfoot],
+	["getGrpMembers",                            _getGrpMembers],
 	["getGroupCluster",                SQFM_fnc_getGroupCluster],
 	["setGroupCluster",                        _setGroupCluster],
+
+	/**********************{COMBAT}****************************/
 	["battleInit",                     SQFM_fnc_groupBattleInit],
 	["battleEnd",                       SQFM_fnc_groupBattleEnd],
 	["addShot",                          SQFM_fnc_addGroupShots],
@@ -189,254 +199,34 @@ TODO:
 	- transport->get out.
 	- transport pause for combat 
 */
-// SQFM_fnc_hashifyClusterData = {};
+// SQFM_fnc_hashifyClusterData      = {};
+// SQFM_fnc_crewSize                = {};
+// SQFM_fnc_vehiclesCanTransportMen = {};
+// SQFM_fnc_isLandVehicle           = {};
+// SQFM_fnc_validAvailableVehicle   = {};
+// SQFM_fnc_getNearAvailVehicles    = {};
+// SQFM_fnc_clearPos                = {};
+// SQFM_fnc_clearPosSqrArea         = {};
+// SQFM_fnc_clearPosInArea          = {};
+// SQFM_fnc_findParkingSpot         = {};
+// SQFM_fnc_validGroupVehicle       = {};
+// SQFM_fnc_leaveInvalidVehicles    = {};
+// SQFM_fnc_getGroupVehicles        = {};
 
 
-SQFM_fnc_crewSize = { 
-params[
-  ["_vehicle", nil, [objNull]]
-];
-private _crewCount = count fullCrew [_vehicle, "", true];
-
-_crewCount;
-};
-
-SQFM_fnc_vehiclesCanTransportMen = { 
-params[ 
-	["_men",      nil, [[]]],
-	["_vehicles", nil, [[]]]
-];
-private _menInVehicles     = _men select {vehicle _x in _vehicles};
-private _crewSizeNeeded    = count _men - count _menInVehicles;
-private _crewSizeAvailable = 0;
-{
-	private _capacity  = [_x] call SQFM_fnc_crewSize;
-	private _crewCount = count crew _x;
-	_capacity = _capacity-_crewCount;
-	_crewSizeAvailable = _crewSizeAvailable+_capacity;
-	
-} forEach _vehicles;
-
-if(_crewSizeNeeded <= _crewSizeAvailable)exitWith{true;};
-
-false;
-};
-
-SQFM_fnc_isLandVehicle = { 
-params[
-	["_vehicle",nil,[objNull]]
-];
-if!(_vehicle isKindOf "land") exitWith{false;};
-// if!(canMove _vehicle)         exitWith{false;};
-if (_vehicle isKindOf "man")  exitWith{false;};
-
-true;
-};
-
-SQFM_fnc_validGroupVehicle = { 
-params[
-	["_vehicle", nil, [objNull]]
-];
-private _grpPos   = _self get"groupCluster"get"position";
-
-if(!alive _vehicle)
-exitWith{false;};
-
-if(!canMove _vehicle)
-exitWith{false;};
-
-if(fuel _vehicle < 0.05)
-exitWith{false;};
-
-if!([_vehicle] call SQFM_fnc_isLandVehicle)
-exitWith{false;};
-
-private _men           = _self call ["getUnits"];
-private _menInVehicles = _men select {vehicle _x isEqualTo _vehicle};
-private _crewed        = count _menInVehicles > 0;
-
-if(_vehicle distance2D _grpPos > 200
-&&{_crewed isEqualTo false})
-exitWith{false;};
-
-true;
-};
-
-SQFM_fnc_leaveInvalidVehicles = { 
-private _group = _self get "grp";
-
-{
-	if!(_self call ["validVehicle", [_x]])
-	then{_group leaveVehicle _x;};
-	
-} forEach assignedVehicles _group;
-
-true;
-};
-
-SQFM_fnc_getGroupVehicles = { 
-_self call ["leaveInvalidVehicles"];
-private _group    = _self get "grp";
-private _grpPos   = _self get"groupCluster"get"position";
-private _inUse    = _self call ["getGrpMembers"] select {[_x] call SQFM_fnc_isLandVehicle};
-private _assigned = assignedVehicles _group select {alive _x;};
-private _all      = [];
-
-_all insert [0, _inUse,    true];
-_all insert [0, _assigned, true];
-
-[_all, _assigned, _inUse];
-};
-
-SQFM_fnc_validAvailableVehicle = { 
-if!([_vehicle] call SQFM_fnc_isLandVehicle)
-exitWith{false;};
-
-if(!alive _vehicle)
-exitWith{false;};
-
-if(!canMove _vehicle)
-exitWith{false;};
-
-if(fuel _vehicle < 0.05)
-exitWith{false;};
-
-if(crew _vehicle isNotEqualTo [])
-exitWith{false;};
-
-true;
-};
-
-SQFM_fnc_getNearAvailVehicles = { 
-params[
-	["_pos", nil, [[]]],
-	["_rad", 200,  [0]]
-];
-private _vehicles = nearestObjects [_pos, ["Car", "Tank"], _rad] select {[_x] call SQFM_fnc_validAvailableVehicle;};
-_vehicles;
-};
-
-SQFM_fnc_clearPos = { 
-params[
-	"_pos", 
-	["_excludeRoads",    false],
-	["_safeDistX",           8],
-	["_safeDistZ",          20]
-];
-if(isNil "_pos")exitWith{false;};
-private _xx = _pos#0;
-
-if(isNil "_xx")exitWith{
-	(str _this) call dbgm;
-	false;
-};
-
-// FRLI_fnc_distToNearWp
-private _groundPos = ATLToASL [_pos#0, _pos#1, 0.1];
-private _topPos    = ATLToASL [_pos#0, _pos#1, _safeDistZ];
-
-private _blocked = [objNull, "VIEW"] checkVisibility [_groundPos, _topPos] < 1;
-if(_blocked)exitWith{false;};
-
-private _nearObj = nearestTerrainObjects [_pos, ["BUILDING", "HOUSE", "ROCK", "ROCKS", "TREE", "ROAD"], _safeDistX]; 
-if(count _nearObj > 0)exitWith{false;};
-
-_nearObj = _pos nearObjects ["land", _safeDistX];
-if(count _nearObj > 0)exitWith{false;};
-
-
-private _nearRoads = _pos nearRoads _safeDistX;
-if((count _nearRoads > 0) isEqualTo true
-&&{_excludeRoads          isEqualTo true})
-exitWith{false;};
-
-
-true;
-};
-
-SQFM_fnc_clearPosSqrArea = { 
-params[
-	["_center",   nil,     [[]]],
-	["_size",     nil,      [0]]
-];
-
-if(_size < 30)then{_size = 30;};
-private _posRad    = 10;
-private _posCount  = round (_size / _posRad);
-
-if(_posCount < 30)then{_posCount = 30;};
-
-private _positions  = [_center, _size, _posCount, 0, false] call SQFM_fnc_squareGrid;
-private _posDist    = _positions#0 distance2D (_positions#1);
-
-while {_posDist > 5} do {
-		_posCount  = _posCount+50;
-		systemChat str _posDist;
-		_positions = [_center, _size, _posCount] call SQFM_fnc_squareGrid;
-		_posDist   = _positions#0 distance2D (_positions#1);
-		systemChat str _posDist;
-};
-
-
-private _posFilter = {
-	_x isNotEqualTo [0,0,0] 
-	&& {_x isNotEqualTo [0,0]
-	&& {[_x, true, 5] call SQFM_fnc_clearPos
-	}}
-};
-
-// _positions = _clearPoss select _posFilter;
-_positions = _positions select _posFilter;
-
-_positions;
-};
-
-
-SQFM_fnc_clearPosInArea = { 
-params[
-  ["_area",           nil,    [[]]],
-  ["_minPosCount",    1,       [0]],
-  ["_allowExpansion", true, [true]]
-];
-private _areaSize = selectMax[_area#1, _area#2];
-private _center   = _area#0;
-private _posgrid  = [_center, _areaSize] call SQFM_fnc_clearPosSqrArea;
-private _posCount = count _posgrid;
-private _attempts = 0;
-
-
-
-while{_posCount<_minPosCount
-&&   {_attempts < 10}}do{
-    _areaSize = _areaSize+50;
-    _attempts = _attempts+1;
-    
-    _posgrid  = [_center, _areaSize] call SQFM_fnc_clearPosSqrArea;
-    _posCount = count _posgrid;
-};
-
-_posgrid = [_posgrid, [], {_center distance _x}, "ASCEND"] call BIS_fnc_sortBy;
-
-_posgrid;
-};
-
-SQFM_fnc_findParkingSpot = { 
-params["_pos"];
-private _parkingArea  = [_pos, 30, 30];
-private _parkingSpot  = _pos;
-private _parkingSpots = [_parkingArea, 4] call SQFM_fnc_clearPosInArea;
-private _spotCount    = count _parkingSpots;
-
-if(_spotCount > 0)then{
-  _parkingSpot = _parkingSpots#(_spotCount-1);
-};
-
-_parkingSpot;
-};
 
 // private _parking = [getPos player] call SQFM_fnc_findParkingSpot;
-// ;
 // SQFM_Custom3Dpositions = [[_parking, "Parking"]];
+
+SQFM_fnc_onTravelWpComplete = { 
+_self call ["deleteWaypoints"];
+
+_self deleteAt "travelData";
+_self set ["action", ""];
+_self set ["state",  ""];
+
+hint str "Waypond ndded";
+};
 
 SQFM_fnc_execGroupTravel = { 
 params[
@@ -466,15 +256,291 @@ _self set ["state",      "traveling"];
 _wp setWaypointStatements ["true", _onCompleted];
 };
 
-SQFM_fnc_onTravelWpComplete = { 
-_self call ["deleteWaypoints"];
+SQFM_fnc_vehicleEjectDeadAndUncon = { 
+params[
+	["_vehicle", nil, [objNull]]
+];
+{
+	private _eject = (!alive _x) or {[_x] call SQFM_fnc_unconscious};
+	if(_eject)then{
+		_x action ["Eject", _vehicle];
+		_x leaveVehicle _vehicle;
+	};
+	
+} forEach crew _vehicle;
 
-_self deleteAt "travelData";
-_self set ["action", ""];
-_self set ["state",  ""];
-
-hint str "Waypond ndded";
+true;
 };
+
+// moveInDriver
+// moveInCommander
+// moveInGunner
+// moveInTurret
+// moveInCargo
+
+// "driver"
+// "commander"
+// "gunner"
+// "turret"
+// "cargo"
+// [
+// 	unit, 
+// 	role, 
+// 	cargoIndex, 
+// 	turretPath, 
+// 	personTurret, 
+// 	assignedUnit, 
+// 	positionName
+// ]
+// fullCrew [_vehicle, "driver",    true];
+
+
+SQFM_fnc_seatStatus = { 
+params[
+	["_seatData", nil, [[]]]
+];
+
+if(_seatData isEqualTo [])exitWith{"occupied";};
+
+private _crewMan     = _seatData#0;
+private _assignedMan = _seatData#5;
+
+if(alive _crewMan)     exitWith{"occupied";};
+if(alive _assignedMan) exitWith{"assigned"};
+
+"available";
+};
+
+
+SQFM_fnc_clearSeat = { 
+private _man     = _self get "man";
+private _vehicle = _self get "vehicle";
+if(isNull _man)
+exitWith{"no man"};
+
+if(vehicle _man != _vehicle)
+exitWith{_man leaveVehicle _vehicle; "unassigned"};
+
+_man action ["Eject", _vehicle];
+unassignVehicle _man; 
+"ejected";
+};
+
+
+SQFM_fnc_hashifySeatData = { 
+params[
+	["_seatData", nil,      [[]]],
+	["_vehicle",  nil, [objNull]]
+];
+private _crewMan     = _seatData#0;
+private _assignedMan = _seatData#5;
+private _cargoIndex  = _seatData#2;
+private _turretPath  = _seatData#3;
+private _seatStatus  = [_seatData] call SQFM_fnc_seatStatus;
+
+if(!alive _crewMan
+&&{alive _assignedMan})
+then{_crewMan = _assignedMan};
+
+private _dataArr     = [
+	["vehicle",                  _vehicle],
+	["man",                      _crewMan],
+	["seat",   [_cargoIndex, _turretPath]],
+	["status",                _seatStatus],
+
+	/************************************/
+	["clearSeat",      SQFM_fnc_clearSeat]
+];
+
+private _hashMap = createHashmapObject [_dataArr];
+
+_hashMap;
+};
+
+
+SQFM_fnc_cargoSeatData = { 
+params[
+	["_vehicle", nil, [objNull]],
+	["_role",    nil,      [""]]
+];
+
+if!(_role in ["turret", "cargo"])
+exitWith{
+	"Wrong enum for seats query" call dbgm;
+	'Use: ["turret", "cargo"]'   call dbgm;
+	nil;
+};
+private _dataArr = fullCrew [_vehicle, _role, true];
+if(_dataArr isEqualTo [])exitWith{[]};
+
+private _seats = [];
+{
+	private _hashMap = [_x, _vehicle] call SQFM_fnc_hashifySeatData;
+	_seats pushBackUnique _hashMap;
+
+} forEach _dataArr;
+
+_seats;
+}; 
+
+// SQFM_fnc_availableTurrets = { 
+// private _turrets = ;
+// if(_turrets isEqualTo [])exitWith{[]};
+// private _available = _self 
+
+// _available;
+// };
+
+
+SQFM_fnc_crewData = { 
+params[
+	["_vehicle", nil, [objNull]]
+];
+private _turrets    = [_vehicle, "turret"] call SQFM_fnc_cargoSeatData;
+private _cargoSeats = [_vehicle, "cargo"]  call SQFM_fnc_cargoSeatData;
+private _driverSeat =  (fullCrew [_vehicle, "driver", true])#0;
+private _gunnerSeat =  (fullCrew [_vehicle, "gunner", true])#0;
+private _cmmndrSeat =  (fullCrew [_vehicle, "commander", true])#0;
+
+if(isNil "_driverSeat")then{_driverSeat = []};
+if(isNil "_gunnerSeat")then{_gunnerSeat = []};
+if(isNil "_cmmndrSeat")then{_cmmndrSeat = []};
+
+if(_driverSeat isNotEqualTo [])then{_driverSeat = [_driverSeat, _vehicle] call SQFM_fnc_hashifySeatData};
+if(_gunnerSeat isNotEqualTo [])then{_gunnerSeat = [_gunnerSeat, _vehicle] call SQFM_fnc_hashifySeatData};
+if(_cmmndrSeat isNotEqualTo [])then{_cmmndrSeat = [_cmmndrSeat, _vehicle] call SQFM_fnc_hashifySeatData};
+
+private _dataArr = [
+	["driver",      _driverSeat],
+	["gunner",      _gunnerSeat],
+	["commander",   _cmmndrSeat],
+	["turrets",     _turrets],
+	["passengers",  _cargoSeats]/*,
+
+	["availableTurrets",  SQFM_fnc_availableTurrets]*/
+];
+
+private _hashMap = createHashmapObject [_dataArr];
+
+_hashMap;
+};
+
+// private _hashmap = [cursorObject] call SQFM_fnc_crewData;
+// [_hashmap] call SQFM_fnc_copyHashmap;
+
+// SQFM_fnc_availableCrewSpace = {
+// SQFM_fnc_manGetInVehicle
+// };
+
+SQFM_fnc_manGetInVehicle = { 
+params[
+	["_man",      nil, [objNull]],
+	["_vehicle",  nil, [objNull]]
+];
+
+if(_man distance _vehicle < 10)exitWith{_man moveInAny _vehicle;};
+private _crewData     = [_vehicle] call SQFM_fnc_crewData;
+private _driverStatus = _crewData get"driver"get"status";
+private _gunnerStatus = _crewData get"gunner"get"status";
+private _cmmndrStatus = _crewData get"commander"get"status";
+private _turret       = (_crewData get "turrets" select {_x get "status" isEqualTo "available"})#0;
+private _seat         = (_crewData get "passengers" select {_x get "status" isEqualTo "available"})#0;
+
+if((!isNil "_driverStatus")
+&&{_driverStatus isEqualTo "available"})exitWith{
+	_man assignAsDriver _vehicle;
+	[_man] allowGetIn true;
+	[_man] orderGetIn true;
+	true;
+};
+
+if((!isNil "_gunnerStatus")
+&&{_gunnerStatus isEqualTo "available"})exitWith{
+	_man assignAsGunner _vehicle;
+	[_man] allowGetIn true;
+	[_man] orderGetIn true;
+	true;
+};
+
+if((!isNil "_cmmndrStatus")
+&&{_cmmndrStatus isEqualTo "available"})exitWith{
+	_man assignAsCommander _vehicle;
+	[_man] allowGetIn true;
+	[_man] orderGetIn true;
+	true;
+};
+
+if(!isNil "_turret")exitWith{ 
+	private _turretPath = (_turret get"seat")#1;
+	_man assignAsTurret [_vehicle, [_turretPath]];
+	[_man] allowGetIn true;
+	[_man] orderGetIn true;
+	true;
+};
+
+if(!isNil "_seat")exitWith{ 
+	_man assignAsCargo _vehicle;
+	[_man] allowGetIn true;
+	[_man] orderGetIn true;
+	true;
+};
+
+false;
+};
+
+SQFM_fnc_menGetInSingleVehicle = { 
+params[
+	["_men",     nil,      [[]]],
+	["_vehicle", nil, [objNull]]
+];
+[_vehicle] call SQFM_fnc_vehicleEjectDeadAndUncon;
+private _crewMen = [];
+{
+	private _boarded = [_x, _vehicle] call SQFM_fnc_manGetInVehicle;
+	if(_boarded)then{_crewMen pushBackUnique _x;};
+	
+} forEach _men;
+
+_crewMen;
+};
+
+private _men = units testGrp select {vehicle _x == _x};
+[_men, cursorObject] call SQFM_fnc_menGetInSingleVehicle;
+
+SQFM_fnc_menOrderGetInVehicles = { 
+params[
+	["_men",      nil, [[]]],
+	["_vehicles", nil, [[]]]
+];
+private _assignedMen = [];
+
+{
+	private _availableMen = _men select {!(_x in _assignedMen)};
+	private _menOrderedIn = [_availableMen, _x] call SQFM_fnc_menGetInSingleVehicle;
+	_assignedMen insert [0, _menOrderedIn, true];
+
+} forEach _vehicles;
+
+
+};
+
+
+SQFM_fnc_groupBoardOwnVehicles = { 
+private _vehicles    = _self call ["getVehicles"];
+private _menOnFoot   = _self call ["getUnitsOnfoot"];
+private _grpVehInUse = _vehicles#2;
+private _allVehicles = _vehicles#0;
+private _hasCapacity = [_menOnFoot, _grpVehInUse] call SQFM_fnc_vehiclesCanTransportMen;
+if(_hasCapacity)exitWith{
+	[_menOnFoot, _grpVehInUse] call SQFM_fnc_menOrderGetInVehicles;
+};
+
+[_menOnFoot, _allVehicles] call SQFM_fnc_menOrderGetInVehicles;
+
+true;
+};
+
+
 
 SQFM_fnc_initGroupTravel = { 
 params[
@@ -490,8 +556,8 @@ private _params         = [_movePos, _taskName];
 
 if(_noTransport)exitWith{_self call ["execTravel", _params]};
 
-private _vehicles       = (_self call ["getVehicles"]);
-private _hasCapacity    = _self call ["canSelfTransport"];
+private _vehicles    = (_self call ["getVehicles"]);
+private _hasCapacity = _self call ["canSelfTransport"];
 // private _nearVehicles   = [_grpPos] call SQFM_fnc_getNearAvailVehicles;
 
 };
@@ -516,4 +582,4 @@ private _hasCapacity    = _self call ["canSelfTransport"];
 /*********************************/
 systemChat "devfiled read";
 
-[364];
+[];

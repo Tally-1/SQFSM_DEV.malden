@@ -96,6 +96,8 @@ class CfgFunctions
 			class getNearest      {};
 			class pos360          {};
 			class getCircleLines  {};
+			class clearPosSqrArea {};
+			class clearPosInArea  {};
 
 		};
 
@@ -121,10 +123,15 @@ class CfgFunctions
 		class vehicle
 		{
 			file = "Functions\vehicle";
-			class deadCrew          {};
-			class validVehicle      {};
-			class validEnemyVehicle {};
-			class validLandEntity   {};
+			class deadCrew                {};
+			class crewSize                {};
+			class validVehicle            {};
+			class isLandVehicle           {};
+			class vehiclesCanTransportMen {};
+			class validEnemyVehicle       {};
+			class validLandEntity         {};
+			class getNearAvailVehicles    {};
+			class validAvailableVehicle   {};
 
 		};
 
@@ -161,6 +168,15 @@ class CfgFunctions
 			class grpEvents           {};
 			class onEnemyDetected     {};
 			class onKnowsAboutChanged {};
+			
+		};
+
+		class groups_travel
+		{
+			file = "Functions\groups\travel";
+			class validGroupVehicle       {};
+			class leaveInvalidVehicles    {};
+			class getGroupVehicles        {};
 			
 		};
 
