@@ -1,3 +1,7 @@
+params[
+	["_vehicle", nil, [objNull]]
+];
+
 if!([_vehicle] call SQFM_fnc_isLandVehicle)
 exitWith{false;};
 

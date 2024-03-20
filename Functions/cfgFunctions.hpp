@@ -123,15 +123,32 @@ class CfgFunctions
 		class vehicle
 		{
 			file = "Functions\vehicle";
-			class deadCrew                {};
-			class crewSize                {};
-			class validVehicle            {};
-			class isLandVehicle           {};
-			class vehiclesCanTransportMen {};
-			class validEnemyVehicle       {};
-			class validLandEntity         {};
-			class getNearAvailVehicles    {};
-			class validAvailableVehicle   {};
+			class deadCrew                 {};
+			class crewSize                 {};
+			class validVehicle             {};
+			class isLandVehicle            {};
+			class vehiclesCanTransportMen  {};
+			class validEnemyVehicle        {};
+			class validLandEntity          {};
+			class getNearAvailVehicles     {};
+			class validAvailableVehicle    {};
+			class menGetInSingleVehicle    {};
+			class menCanTeleportBoard      {};
+			class sortTravelVehicleList    {};
+			class menOrderGetInVehicles    {};
+			class vehicleEjectDeadAndUncon {};
+
+		};
+
+		class vehicle_crwData
+		{
+			file = "Functions\vehicle\crwData";
+			class crewData                  {};
+			class cargoSeatData             {};
+			class hashifySeatData           {};
+			class clearSeat                 {};
+			class seatStatus                {};
+			
 
 		};
 
@@ -149,7 +166,6 @@ class CfgFunctions
 
 			class groupCanInitBattle       {};
 			class timeSinceLastGroupBattle {};
-			class getGroupCluster          {};
 			class updateAllGroups          {};
 
 		};
@@ -174,10 +190,29 @@ class CfgFunctions
 		class groups_travel
 		{
 			file = "Functions\groups\travel";
-			class validGroupVehicle       {};
-			class leaveInvalidVehicles    {};
-			class getGroupVehicles        {};
+			class validGroupVehicle         {};
+			class leaveInvalidVehicles      {};
+			class getGroupVehicles          {};
+			class nearGroupVehicles         {};
+			class groupCanSelfTransport     {};
+			class groupBoardingStatus       {};
+			class deleteWps                 {};
+			class allAvailableGroupVehicles {};
+			class enoughGroupTransportNear  {};
+			class onTravelWpComplete        {};
+			class groupBoardOwnVehicles     {};
+			class groupBoardAllAvailable    {};
 			
+		};
+
+		class groups_members
+		{
+			file = "Functions\groups\members";
+			class getGrpMembers            {};
+			class getGroupUnits            {};
+			class getGroupUnitsOnFoot      {};
+			class getGroupCluster          {};
+			class setGroupCluster          {};
 		};
 
 		class init
