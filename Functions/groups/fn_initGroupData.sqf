@@ -2,34 +2,62 @@ params [
 	["_group", nil, [grpNull]]
 ];
 
-private _getGrpMembers = {
-	private _grpVehMen = []; // all men and vehicles in the group
-	{_grpVehMen pushBackUnique vehicle _x;} forEach units (_self get "grp");
-	_grpVehMen;
-};
-private _getUnits        = {units (_self get "grp") select {alive _x}};
-private _setGroupCluster = {_self set ["groupCluster", (_self call ["getGroupCluster"])]};
+private _dataArr = [ 
 
-private _dataArr = [
 	["birth",              time],
 	["grp",              _group],
 	["action",               ""],
 	["state",                ""],
-	// ["taskData",  createHashmap],
-	["traveling",         false],
+	["travelData",          nil],
 	["available",          true],
 	["battlefield",  [-1,-1,-1]],
 	["battleTimes",          []],
 	["shots",                []],
 	["groupCluster",        nil],
 
-	/******************************/
-	// // ["initTravel",                       SQFM_fnc_initGroupTravel],
-	// ["getUnits",                                      _getUnits],
-	// ["getGrpMembers",                            _getGrpMembers],
-	// ["getVehicles",                   SQFM_fnc_getGroupVehicles],
-	// ["getGroupCluster",                SQFM_fnc_getGroupCluster],
-	// ["setGroupCluster",                        _setGroupCluster],
+//  {METHODS}
+
+	["3DIcon",                             SQFM_fnc_group3DIcon],
+	["3DColor",                           SQFM_fnc_group3DColor],
+	
+	/**********************{TRAVEL}*****************************/
+	["initTravel",                     SQFM_fnc_initGroupTravel],
+	["execTravel",                     SQFM_fnc_execGroupTravel],
+	["onTravelWpComplete",          SQFM_fnc_onTravelWpComplete],
+	["deleteWaypoints",                      SQFM_fnc_deleteWps],
+	["execTravel",                     SQFM_fnc_execGroupTravel],
+	["getOwnVehicles",                SQFM_fnc_getGroupVehicles],
+	["getNearVehicles",              SQFM_fnc_nearGroupVehicles],
+	["allAvailableVehicles", SQFM_fnc_allAvailableGroupVehicles],
+	["leaveInvalidVehicles",      SQFM_fnc_leaveInvalidVehicles],
+	["validVehicle",                 SQFM_fnc_validGroupVehicle],
+
+                      /*{boarding}*/
+	["canSelfTransport",         SQFM_fnc_groupCanSelfTransport],
+	["enoughTransportNear",   SQFM_fnc_enoughGroupTransportNear],
+	["canBoardNow",                   SQFM_fnc_groupcanBoardNow],
+	["boardingStatus",             SQFM_fnc_groupBoardingStatus],
+	["getBoardingMen",             SQFM_fnc_getGroupBoardingMen],
+	["boardVehicles",               SQFM_fnc_groupBoardVehicles],
+	["boardOwnVehicles",         SQFM_fnc_groupBoardOwnVehicles],
+	["boardAllAvailable",       SQFM_fnc_groupBoardAllAvailable],
+	["postBoarding",                 SQFM_fnc_postGroupBoarding],
+	["boardingStarted",           SQFM_fnc_groupBoardingStarted],
+	["boardingEnded",               SQFM_fnc_groupBoardingEnded],
+	["boardingFailed",             SQFM_fnc_groupBoardingFailed],
+	["endBoarding",                   SQFM_fnc_endGroupBoarding],
+	["boardThenTravel",           SQFM_fnc_groupBoardThenTravel],
+	
+	/********************{GROUP MEMBERS}************************/
+	["getUnits",                         SQFM_fnc_getGroupUnits],
+	["getUnitsOnfoot",             SQFM_fnc_getGroupUnitsOnFoot],
+	["getVehiclesInUse",    {(_self call ["getOwnVehicles"])#2}],
+	["getGrpMembers",                    SQFM_fnc_getGrpMembers],
+	["getGroupCluster",                SQFM_fnc_getGroupCluster],
+	["setGroupCluster",                SQFM_fnc_setGroupCluster],
+	["getAvgPos",                          SQFM_fnc_groupAvgPos],
+
+	/**********************{COMBAT}****************************/
 	["battleInit",                     SQFM_fnc_groupBattleInit],
 	["battleEnd",                       SQFM_fnc_groupBattleEnd],
 	["addShot",                          SQFM_fnc_addGroupShots],

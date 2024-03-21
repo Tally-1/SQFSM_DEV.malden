@@ -73,6 +73,9 @@ private _dataArr = [
 
 //  {METHODS}
 
+	["3DIcon",                             SQFM_fnc_group3DIcon],
+	["3DColor",                           SQFM_fnc_group3DColor],
+	
 	/**********************{TRAVEL}*****************************/
 	["initTravel",                     SQFM_fnc_initGroupTravel],
 	["execTravel",                     SQFM_fnc_execGroupTravel],
@@ -82,18 +85,25 @@ private _dataArr = [
 	["getOwnVehicles",                SQFM_fnc_getGroupVehicles],
 	["getNearVehicles",              SQFM_fnc_nearGroupVehicles],
 	["allAvailableVehicles", SQFM_fnc_allAvailableGroupVehicles],
-	["enoughTransportNear",   SQFM_fnc_enoughGroupTransportNear],
 	["leaveInvalidVehicles",      SQFM_fnc_leaveInvalidVehicles],
 	["validVehicle",                 SQFM_fnc_validGroupVehicle],
+
+                      /*{boarding}*/
 	["canSelfTransport",         SQFM_fnc_groupCanSelfTransport],
+	["enoughTransportNear",   SQFM_fnc_enoughGroupTransportNear],
+	["canBoardNow",                   SQFM_fnc_groupcanBoardNow],
 	["boardingStatus",             SQFM_fnc_groupBoardingStatus],
+	["getBoardingMen",             SQFM_fnc_getGroupBoardingMen],
 	["boardVehicles",               SQFM_fnc_groupBoardVehicles],
 	["boardOwnVehicles",         SQFM_fnc_groupBoardOwnVehicles],
 	["boardAllAvailable",       SQFM_fnc_groupBoardAllAvailable],
-	["postBoarding",   {_self spawn SQFM_fnc_postGroupBoarding}],
+	["postBoarding",                 SQFM_fnc_postGroupBoarding],
+	["boardingStarted",           SQFM_fnc_groupBoardingStarted],
+	["boardingEnded",               SQFM_fnc_groupBoardingEnded],
+	["boardingFailed",             SQFM_fnc_groupBoardingFailed],
+	["endBoarding",                   SQFM_fnc_endGroupBoarding],
+	["boardThenTravel",           SQFM_fnc_groupBoardThenTravel],
 	
-	
-
 	/********************{GROUP MEMBERS}************************/
 	["getUnits",                         SQFM_fnc_getGroupUnits],
 	["getUnitsOnfoot",             SQFM_fnc_getGroupUnitsOnFoot],
@@ -101,6 +111,7 @@ private _dataArr = [
 	["getGrpMembers",                    SQFM_fnc_getGrpMembers],
 	["getGroupCluster",                SQFM_fnc_getGroupCluster],
 	["setGroupCluster",                SQFM_fnc_setGroupCluster],
+	["getAvgPos",                          SQFM_fnc_groupAvgPos],
 
 	/**********************{COMBAT}****************************/
 	["battleInit",                     SQFM_fnc_groupBattleInit],
@@ -167,95 +178,47 @@ TODO:
 	- Task pause for combat-while traveling.
 
 4) Travel FSM.
-	- Get vehicle (if needed)
+	- POST-boarding: Fix it (end state)
+	- Get vehicle (if needed) 
 	- transport->get out.
 	- transport pause for combat 
 
 5) BUGS.
 	- crash to desktop on massive friendly fire (eventHandler?)
+
+6) Implement FSM functionality
+   - There are 2 sets of states
+     1) The overAll task the group is performing
+	 2) The current action within the context of said task.
+
+The task should be displayed by text.
+The action should be displayed by the Icon.
+The boarding status should be displayed by a second Icon
+
 */
 
-
-SQFM_fnc_execGroupTravel = { 
-params[
-	["_movePos",  nil,    [[]]],
-	["_taskName", "move", [""]]
-];
-_self call ["deleteWaypoints"];
-private _parkingSpot = [_movePos] call SQFM_fnc_findParkingSpot;
-private _targetPos   = _parkingSpot;
-private _onCompleted = '(group this getVariable "SQFM_grpData") call ["onTravelWpComplete"]';
-if(_movePos distance2D _parkingSpot > 100)
-then{_targetPos = _movePos;};
-
-private _wp = (_self get "grp") addWaypoint [_targetPos, 0];
-private _dataArr = [
-	["startTime", round time],
-	["waypoint",         _wp],
-	["taskName",   _taskName]
-];
-
-private _travelData = createHashmapObject [_dataArr];
-_self set ["travelData", _travelData];
-_self set ["action",     "traveling"];
-_self set ["state",      "traveling"];
-
-
-_wp setWaypointStatements ["true", _onCompleted];
-};
-
-
-
-
-SQFM_fnc_initGroupTravel = { 
-params[
-	["_movePos",  nil,    [[]]],
-	["_taskName", "move", [""]]
-];
-_self call ["setGroupCluster"];
-private _grpPos         = _self get"groupCluster"get"position";
-private _distance       = _movePos distance2D _grpPos;
-private _boardingStatus = _self call ["boardingStatus"];
-private _noTransport    = _distance < 500 || {_boardingStatus isEqualTo "boarded"};
-private _params         = [_movePos, _taskName];
-
-if(_noTransport)exitWith{_self call ["execTravel", _params]};
-
-
-};
-
-
-
-SQFM_fnc_groupBoardVehicles = { 
-if(_self call  ["canSelfTransport"])exitWith{ 
-	_self set  ["state", "boarding"];
-	_self call ["boardOwnVehicles"];
-	_self call ["postBoarding"];
-	true;
-};
-
-if(_self call  ["enoughTransportNear"])exitWith{ 
-	_self set  ["state", "boarding"];
-	_self call ["boardAllAvailable"];
-	_self call ["postBoarding"];
-	true;
-};
-
-false;
-};
-
-SQFM_fnc_postGroupBoarding = { 
-private _self = _this;
-
-};
+// SQFM_fnc_groupAvgPos                 = {};
+// SQFM_fnc_execGroupTravel             = {};
+// SQFM_fnc_initGroupTravel             = {};
+// SQFM_fnc_groupBoardThenTravel        = {};
+// SQFM_fnc_groupcanBoardNow            = {};
+// SQFM_fnc_getGroupBoardingMen         = {};
+// SQFM_fnc_getAssignedVehicles         = {};
+// SQFM_fnc_teleportIntoAssignedVehicle = {};
+// SQFM_fnc_groupBoardingStarted        = {};
+// SQFM_fnc_groupBoardingEnded          = {};
+// SQFM_fnc_groupBoardingFailed         = {};
+// SQFM_fnc_groupBoardVehicles          = {};
+// SQFM_fnc_postGroupBoarding           = {};
+// SQFM_fnc_endGroupBoarding            = {};
 
 
 // \A3\ui_f\data\map\markers\military\end_CA.paa
 // SQFM_fnc_sortTravelVehicleList
-[testGrp] call SQFM_fnc_initGroup;
+// [testGrp] call SQFM_fnc_initGroup;
 private _data = testGrp getVariable "SQFM_grpData";
 
-_data call ["boardVehicles"];
+_data call ["boardVehicles", [true]];
 
 // _data call ["execTravel", [getpos player, "---"]];
 

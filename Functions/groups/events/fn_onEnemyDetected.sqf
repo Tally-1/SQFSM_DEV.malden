@@ -2,6 +2,11 @@ params [
 	["_group", nil, [grpNull]],
 	["_enemy", nil, [objNull]]
 ];
+if!(side _group in SQFM_validSides)       exitWith{};
+if!(side _enemy in SQFM_validSides)       exitWith{};
+if!(side group _enemy in SQFM_validSides) exitWith{};
+if (group _enemy isEqualTo _group)        exitWith{};
+
 private _enemyGroup  = group _enemy;
 private _spotterData = (_group getVariable "SQFM_grpData");
 private _enemyData   = (_enemyGroup getVariable "SQFM_grpData");

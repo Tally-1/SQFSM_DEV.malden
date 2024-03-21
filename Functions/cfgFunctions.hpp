@@ -57,10 +57,6 @@ class CfgFunctions
 			class objective3D         {};
 			class drawObjectiveModule {};
 			class setModuleLineColor  {};
-
-			class groups3D            {};
-			class group3D             {};
-			class group3DNoData       {};
 			class sideColor           {};
 
 			class battle3D            {};
@@ -98,6 +94,7 @@ class CfgFunctions
 			class getCircleLines  {};
 			class clearPosSqrArea {};
 			class clearPosInArea  {};
+			class numDiff         {};
 
 		};
 
@@ -112,12 +109,14 @@ class CfgFunctions
 		class man
 		{
 			file = "Functions\man";
-			class unconscious           {};
-			class isRealMan             {};
-			class functionalMan         {};
-			class hostile               {};
-			class validEnemy            {};
-			class firstValidGroupMember {};
+			class unconscious                 {};
+			class isRealMan                   {};
+			class functionalMan               {};
+			class hostile                     {};
+			class validEnemy                  {};
+			class firstValidGroupMember       {};
+			class getAssignedVehicles         {};
+			class teleportIntoAssignedVehicle {};
 		};
 
 		class vehicle
@@ -133,6 +132,7 @@ class CfgFunctions
 			class getNearAvailVehicles     {};
 			class validAvailableVehicle    {};
 			class menGetInSingleVehicle    {};
+			class manGetInvehicle          {};
 			class menCanTeleportBoard      {};
 			class sortTravelVehicleList    {};
 			class menOrderGetInVehicles    {};
@@ -148,25 +148,26 @@ class CfgFunctions
 			class hashifySeatData           {};
 			class clearSeat                 {};
 			class seatStatus                {};
-			
-
 		};
 
-		class groups
+		class groups_global
 		{
 			file =    "Functions\groups";
 			class validGroup               {};
 			class initGroup                {};
 			class initGroupData            {};
 			class addToDataAllGroups       {};
+		};
+
+		class groups_combat
+		{
+			file = "Functions\groups\combat";
 			class groupInBattle            {};
+			class groupCanInitBattle       {};
 			class addGroupShots            {};
 			class groupBattleInit          {};
 			class groupBattleEnd           {};
-
-			class groupCanInitBattle       {};
 			class timeSinceLastGroupBattle {};
-			class updateAllGroups          {};
 
 		};
 		
@@ -194,15 +195,31 @@ class CfgFunctions
 			class leaveInvalidVehicles      {};
 			class getGroupVehicles          {};
 			class nearGroupVehicles         {};
-			class groupCanSelfTransport     {};
-			class groupBoardingStatus       {};
-			class deleteWps                 {};
 			class allAvailableGroupVehicles {};
-			class enoughGroupTransportNear  {};
 			class onTravelWpComplete        {};
+			class deleteWps                 {};
+			class initGroupTravel           {};
+			class execGroupTravel           {};
+			
+		};
+
+		class groups_boarding
+		{
+			file = "Functions\groups\boarding";
+			class groupCanSelfTransport     {};
 			class groupBoardOwnVehicles     {};
 			class groupBoardAllAvailable    {};
-			
+			class enoughGroupTransportNear  {};
+			class groupBoardingStatus       {};
+			class groupcanBoardNow          {};
+			class getGroupBoardingMen       {};
+			class groupBoardingStarted      {};
+			class groupBoardingEnded        {};
+			class groupBoardingFailed       {};
+			class groupBoardVehicles        {};
+			class postGroupBoarding         {};
+			class endGroupBoarding          {};
+			class groupBoardThenTravel      {};
 		};
 
 		class groups_members
@@ -213,6 +230,17 @@ class CfgFunctions
 			class getGroupUnitsOnFoot      {};
 			class getGroupCluster          {};
 			class setGroupCluster          {};
+			class groupAvgPos              {};
+		};
+
+		class groups_debug
+		{
+			file = "Functions\groups\debug";
+			class groups3D            {};
+			class group3D             {};
+			class group3DNoData       {};
+			class group3DIcon         {};
+			class group3DColor        {};
 		};
 
 		class init
@@ -248,6 +276,7 @@ class CfgFunctions
 			file = "Functions\taskManager\tasks";
 			class handleNewGroups  {};
 			class handleDeadGroups {};
+			class updateAllGroups  {};
 		};
 
 	};
