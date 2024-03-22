@@ -1,7 +1,7 @@
 private _orange = [0.85,0.4,0,1];
 private _green  = [0.3,1,0.3,1];
 drawIcon3D [
-        "\a3\ui_f\data\igui\cfg\simpletasks\types\destroy_ca.paa",            
+        "\a3\ui_f\data\igui\cfg\simpletasks\types\attack_ca.paa",            
         _orange,
         (_self get "position"),
         1,

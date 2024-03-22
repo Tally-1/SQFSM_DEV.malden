@@ -19,12 +19,16 @@ private _boarded = _self call ["postBoarding"];
 if(_boarded isEqualTo false
 &&{_retry   isEqualTo true})
 exitWith{
-	systemChat "Retrying boarding";
+	"Retrying boarding" call dbgm;
 	_self call ["boardVehicles", [false]];
+};
+
+if(_boarded)then{
+	
 };
 
 _self set  ["action", ""];
 _self set  ["state",  ""];
-systemChat str ["Boarding ended ", _boarded];
+
 
 _boarded;

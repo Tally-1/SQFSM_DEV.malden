@@ -1,0 +1,33 @@
+params[
+	["_module",nil,[objNull]]
+];
+private _vehicles     = [];
+private _capacities   = [];
+private _parkingSpots = [];
+
+{
+	deleteVehicleCrew _x;
+	private _data = [_x] call SQFM_fnc_transportVehicleData;
+	if(!isNil "_data")then{
+		_vehicles     pushBackUnique  _data;
+		_capacities   pushBackUnique (_data get "capacity");
+		_parkingSpots pushBackUnique [_data get "pos", _data get "dir", _data get "shape"];
+	};
+	deleteVehicle _x;	
+} forEach (synchronizedObjects _module);
+
+if(_vehicles isEqualTo [])exitWith{["Transport-spawner cannot init", "hint"]call dbgm;};
+
+private _dataArr = [
+	["vehicles",                            _vehicles],
+	["spawnTransport",        SQFM_fnc_spawnTransport],
+	["getVehicleType", SQFM_fnc_spawnerGetVehicleType],
+	["selectSpawnPos",     SQFM_fnc_transportSpawnPos]
+];
+private _maxCapacity = selectMax _capacities;
+private _hashMap     = createHashmapObject [_dataArr];
+
+_hashMap set         ["maxCapacity",  _maxCapacity];
+_module  setVariable ["SQFM_spawnerData", _hashMap];
+
+true;

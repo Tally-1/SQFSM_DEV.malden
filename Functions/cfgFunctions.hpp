@@ -48,22 +48,25 @@ class CfgFunctions
 		class debug
 		{
 			file = "Functions\debug";
-			// class clientLoop          {};
-			class debugMessage        {};
-			class sendDbgMsg          {};
-			class debug3D             {};
-			class custom3Dmarkers     {};
+			// class clientLoop             {};
+			class debugMessage              {};
+			class sendDbgMsg                {};
+			class debug3D                   {};
+			class custom3Dmarkers           {};
 
-			class objective3D         {};
-			class drawObjectiveModule {};
-			class setModuleLineColor  {};
-			class sideColor           {};
+			class objective3D               {};
+			class drawObjectiveModule       {};
+			class setModuleLineColor        {};
+			class sideColor                 {};
 
-			class battle3D            {};
-			class drawBattle          {};
-			class drawBuilding        {};
-			class draw3dMarker        {};
-			class multi3dMarkers      {};
+			class battle3D                  {};
+			class drawBattle                {};
+			class drawBuilding              {};
+			class draw3dMarker              {};
+			class multi3dMarkers            {};
+			class transportModules3D        {};
+			class drawTransportModule       {};
+			class drawTransportModuleNoInit {};
 
 		};
 
@@ -92,9 +95,14 @@ class CfgFunctions
 			class getNearest      {};
 			class pos360          {};
 			class getCircleLines  {};
+			class clearPos        {};
 			class clearPosSqrArea {};
 			class clearPosInArea  {};
+			class findParkingSpot {};
 			class numDiff         {};
+			class decimals        {};
+			class objectShape     {};
+			class shapeFitsShape  {};
 
 		};
 
@@ -104,6 +112,16 @@ class CfgFunctions
 			class initObjective             {};
 			class setObjectiveData          {};
 			class objectiveDescription      {};
+		};
+
+		class transportModule
+		{
+			class initTransportSpawner   {};
+			class transportVehicleData   {};
+			class transportSpawnPosClear {};
+			class spawnerGetVehicleType  {};
+			class transportSpawnPos      {};
+			class spawnTransport         {};
 		};
 
 		class man
@@ -220,6 +238,7 @@ class CfgFunctions
 			class postGroupBoarding         {};
 			class endGroupBoarding          {};
 			class groupBoardThenTravel      {};
+			class groupEjectFromAllVehicles {};
 		};
 
 		class groups_members

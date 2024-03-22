@@ -6,6 +6,7 @@ addToGroups = SQFM_fnc_addToDataAllGroups;
 // SQFM_Custom3Dpositions = [[getPosATL player, "playerPos"]];
 // SQFM_fnc_
 // SQFM_battles
+// SQFSM_TransportSpawner
 
 SQFM_fnc_initBattleMap = { 
 params[ 
@@ -103,6 +104,7 @@ private _dataArr = [
 	["boardingFailed",             SQFM_fnc_groupBoardingFailed],
 	["endBoarding",                   SQFM_fnc_endGroupBoarding],
 	["boardThenTravel",           SQFM_fnc_groupBoardThenTravel],
+	["ejectAll",             SQFM_fnc_groupEjectFromAllVehicles],
 	
 	/********************{GROUP MEMBERS}************************/
 	["getUnits",                         SQFM_fnc_getGroupUnits],
@@ -133,35 +135,24 @@ _data call ["setGroupCluster"];
 
 _data;
 };
-
-
-
-SQFM_fnc_groupBattleInit = { 
-params [
-	["_battlePos",nil,[[]]] // center of battle, used as key in the SQFM_battles hashmap.
-];
-
-_self set ["battlefield",  _battlePos];
-_self set ["state",       "In battle"];
-_self set ["action",      "In battle"];
-_self set ["available",         false];
-
-(_self get "battleTimes")pushBackUnique round time;
-};
-
-SQFM_fnc_groupBattleEnd = { 
-private _action = "";
-
-if(!([_x] call SQFM_fnc_validGroup))
-then{_action = "eliminated"};
-
-_self set ["battlefield", [-1,-1,-1]];
-_self set ["state",               ""];
-_self set ["action",          _action];
-_self set ["available",         true];
-
-(_self get "battleTimes")pushBackUnique round time;
-};
+// SQFM_fnc_groupBattleInit             = {};
+// SQFM_fnc_groupBattleEnd              = {};
+// SQFM_fnc_groupAvgPos                 = {};
+// SQFM_fnc_groupcanBoardNow            = {};
+// SQFM_fnc_getGroupBoardingMen         = {};
+// SQFM_fnc_getAssignedVehicles         = {};
+// SQFM_fnc_teleportIntoAssignedVehicle = {};
+// SQFM_fnc_groupBoardingStarted        = {};
+// SQFM_fnc_groupBoardingEnded          = {};
+// SQFM_fnc_groupBoardingFailed         = {};
+// SQFM_fnc_groupBoardVehicles          = {};
+// SQFM_fnc_postGroupBoarding           = {};
+// SQFM_fnc_endGroupBoarding            = {};
+// SQFM_fnc_execGroupTravel             = {};
+// SQFM_fnc_onTravelWpComplete          = {};
+// SQFM_fnc_initGroupTravel             = {};
+// SQFM_fnc_groupEjectFromAllVehicles   = {};
+// SQFM_fnc_groupBoardThenTravel        = {};
 
 /*********************************/
 /*
@@ -194,35 +185,124 @@ TODO:
 The task should be displayed by text.
 The action should be displayed by the Icon.
 The boarding status should be displayed by a second Icon
+*/
+
+// SQFM_fnc_decimals               = {};
+// SQFM_fnc_shapeFitsShape         = {};
+// SQFM_fnc_objectShape            = {};
+// SQFM_fnc_transportVehicleData   = {};
+// SQFM_Custom3Dpositions             = [];
+// SQFM_fnc_transportSpawnPosClear    = {};
+// SQFM_fnc_spawnerGetVehicleType     = {};
+// SQFM_fnc_transportSpawnPos         = {};
+// SQFM_fnc_drawTransportModuleNoInit = {};
+// SQFM_fnc_drawTransportModule       = {};
+
+SQFM_fnc_initTransportSpawner   = { 
+params[
+	["_module",nil,[objNull]]
+];
+private _vehicles     = [];
+private _capacities   = [];
+private _parkingSpots = [];
+private _side         = call compile (_module getVariable "sqfm_side");
+private _assetCount   = 
+
+{
+	deleteVehicleCrew _x;
+	private _data = [_x] call SQFM_fnc_transportVehicleData;
+	if(!isNil "_data")then{
+		_vehicles     pushBackUnique  _data;
+		_capacities   pushBackUnique (_data get "capacity");
+		_parkingSpots pushBackUnique [_data get "pos", _data get "dir", _data get "shape"];
+	};
+	deleteVehicle _x;	
+} forEach (synchronizedObjects _module);
+
+if(_vehicles isEqualTo [])exitWith{["Transport-spawner cannot init", "hint"]call dbgm;};
+
+private _dataArr = [
+	["vehicles",                               _vehicles],
+	["lastSpawnTime",                            time-10],
+	["side",                                       _side],
+	["assetCount", _module getVariable "sqfm_assetcount"],
+	["maxCapacity",                                  nil],
+/***********************************************************/
+	["timeSinceSpawn",{time-(_self get "lastSpawnTime")}],
+	["spawnTransport",           SQFM_fnc_spawnTransport],
+	["getVehicleType",    SQFM_fnc_spawnerGetVehicleType],
+	["selectSpawnPos",        SQFM_fnc_transportSpawnPos]
+];
+private _maxCapacity = selectMax _capacities;
+private _hashMap     = createHashmapObject [_dataArr];
+
+_hashMap set         ["maxCapacity",  _maxCapacity];
+_module  setVariable ["SQFM_spawnerData", _hashMap];
+
+true;
+};
+
+SQFM_fnc_spawnTransport = { 
+params[
+	["_capacity",nil,[]]
+];
+private _vehicleData = _self call ["getVehicleType", [_capacity]];
+if(isNil "_vehicleData")
+exitWith{};
+
+private _spawnPosData = _self call ["selectSpawnPos", [_vehicleData]];
+if(isNil "_spawnPosData")
+exitWith{};
+
+private _vehicleType = _vehicleData  get "type";
+private _spawnPos    = _spawnPosData get "pos";
+private _spawnDir    = _spawnPosData get "dir";
+
+private _vehicle = createVehicle [
+	_vehicleType, 
+	_spawnPos, 
+	[], 
+	0, 
+	"CAN_COLLIDE"
+];
+
+_vehicle allowDamage false;
+_vehicle setDir    _spawnDir;
+_vehicle setPosATL _spawnPos;
+
+
+_vehicle spawn{sleep 1; _this allowDamage true;};
+
+_vehicle;
+};
+/*
+Post-Init transport-Group
+	- Define as transport group
+	- Set waypoints (pickup, drop off, return)
+	- Transport spawner module initial build.
+Subtract from VehiclePool
+Add waypoint to caller 
 
 */
 
-// SQFM_fnc_groupAvgPos                 = {};
-// SQFM_fnc_execGroupTravel             = {};
-// SQFM_fnc_initGroupTravel             = {};
-// SQFM_fnc_groupBoardThenTravel        = {};
-// SQFM_fnc_groupcanBoardNow            = {};
-// SQFM_fnc_getGroupBoardingMen         = {};
-// SQFM_fnc_getAssignedVehicles         = {};
-// SQFM_fnc_teleportIntoAssignedVehicle = {};
-// SQFM_fnc_groupBoardingStarted        = {};
-// SQFM_fnc_groupBoardingEnded          = {};
-// SQFM_fnc_groupBoardingFailed         = {};
-// SQFM_fnc_groupBoardVehicles          = {};
-// SQFM_fnc_postGroupBoarding           = {};
-// SQFM_fnc_endGroupBoarding            = {};
 
+// [TS1] call SQFM_fnc_initTransportSpawner;
+// copyToClipboard str allVariables TS1;
+// private _data = TS1 getVariable "SQFM_spawnerData";
+// _data set  ["spawnTransport", SQFM_fnc_spawnTransport];
+// _data call ["spawnTransport", [15]];
+// ooo= str ([v3] call SQFM_fnc_transportVehicleData);
+// 
 
-// \A3\ui_f\data\map\markers\military\end_CA.paa
-// SQFM_fnc_sortTravelVehicleList
+/************************************************************/
+// private _pos      = getPosATLVisual player;
+// private _taskName = "reinforce";
+// private _params   = [_pos, _taskName];
+
 // [testGrp] call SQFM_fnc_initGroup;
-private _data = testGrp getVariable "SQFM_grpData";
-
-_data call ["boardVehicles", [true]];
-
-// _data call ["execTravel", [getpos player, "---"]];
-
-// ["battleInit", SQFM_fnc_groupBattleInit] call addToGroups;
+// private _data = testGrp getVariable "SQFM_grpData";
+// _data call ["initTravel", _params];
+/************************************************************/
 
 /**************************************************************/
 

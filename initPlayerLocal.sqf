@@ -1,3 +1,4 @@
+[] spawn{
 waituntil {!isNull (findDisplay 46)};
 
 (findDisplay 46) displayAddEventHandler 
@@ -22,3 +23,4 @@ _Pressed"];
 
     false;
 }];
+};

@@ -9,5 +9,6 @@ then{
 		call SQFM_fnc_objective3D;
 		call SQFM_fnc_groups3D;
 		call SQFM_fnc_battle3D;
+		call SQFM_fnc_transportModules3D;
 		
 }}];
