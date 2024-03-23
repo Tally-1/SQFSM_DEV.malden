@@ -2,17 +2,17 @@ params[
 	["_capacity",nil,[]]
 ];
 private _vehicleData = _self call ["getVehicleType", [_capacity]];
-if(isNil "_vehicleData")
-exitWith{};
+if(isNil "_vehicleData")exitWith{};
 
 private _spawnPosData = _self call ["selectSpawnPos", [_vehicleData]];
-if(isNil "_spawnPosData")
-exitWith{};
+if(isNil "_spawnPosData")exitWith{};
+
+private _count = _self get "assetCount";
+if(_count < 1)exitWith{};
 
 private _vehicleType = _vehicleData  get "type";
 private _spawnPos    = _spawnPosData get "pos";
 private _spawnDir    = _spawnPosData get "dir";
-
 
 private _vehicle = createVehicle [
 	_vehicleType, 
@@ -22,11 +22,21 @@ private _vehicle = createVehicle [
 	"CAN_COLLIDE"
 ];
 
+_self set ["assetCount", _count-1];
+
 _vehicle allowDamage false;
-_vehicle setDir    _spawnDir;
-_vehicle setPosATL _spawnPos;
+_vehicle setDir      _spawnDir;
+_vehicle setPosATL   _spawnPos;
+_vehicle setVariable ["SQFM_transport", true, true];
+_vehicle setUnloadInCombat [true, false];
 
+createVehicleCrew _vehicle;
 
-_vehicle spawn{sleep 1; _this allowDamage true;};
+{_x addCuratorEditableObjects [[_vehicle],true];} forEach allCurators;
+
+_vehicle spawn{
+	sleep 1; 
+	_this allowDamage true;
+};
 
 _vehicle;

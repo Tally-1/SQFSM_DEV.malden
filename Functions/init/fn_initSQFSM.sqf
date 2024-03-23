@@ -1,6 +1,9 @@
-dbgm = SQFM_fnc_debugMessage;
+[]spawn{
+	waitUntil { time>0;};
+	isNil{
+    dbgm = SQFM_fnc_debugMessage;
 
-if(hasInterface) then{[] spawn SQFM_fnc_clientInit;};
-if(isServer)     then{[] spawn SQFM_fnc_serverInit;};
-
+    if(hasInterface) then{[] call SQFM_fnc_clientInit;};
+    if(isServer)     then{[] call SQFM_fnc_serverInit;};
+}};
 true;

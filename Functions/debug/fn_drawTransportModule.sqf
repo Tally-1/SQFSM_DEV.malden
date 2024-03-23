@@ -10,7 +10,7 @@ private _color = [_data get "side"] call SQFM_fnc_sideColor;
 
 drawIcon3D [
         "\A3\ui_f\data\map\markers\military\pickup_CA.paa",            
-        [1,1,1,1],
+        _color,
         (getPosATL _module),
         1,
         1,

@@ -4,6 +4,8 @@ params[
 private _vehicles     = [];
 private _capacities   = [];
 private _parkingSpots = [];
+private _side         = call compile (_module getVariable "sqfm_side");
+private _assetCount   = 
 
 {
 	deleteVehicleCrew _x;
@@ -19,10 +21,18 @@ private _parkingSpots = [];
 if(_vehicles isEqualTo [])exitWith{["Transport-spawner cannot init", "hint"]call dbgm;};
 
 private _dataArr = [
-	["vehicles",                            _vehicles],
-	["spawnTransport",        SQFM_fnc_spawnTransport],
-	["getVehicleType", SQFM_fnc_spawnerGetVehicleType],
-	["selectSpawnPos",     SQFM_fnc_transportSpawnPos]
+	["vehicles",                               _vehicles],
+	["module",                                   _module],
+	["lastSpawnTime",                            time-10],
+	["side",                                       _side],
+	["assetCount", _module getVariable "sqfm_assetcount"],
+	["maxCapacity",                                  nil],
+/***********************************************************/
+	["timeSinceSpawn",{time-(_self get "lastSpawnTime")}],
+	["spawnTransport",           SQFM_fnc_spawnTransport],
+	["sendTransport",             SQFM_fnc_sendTransport],
+	["getVehicleType",    SQFM_fnc_spawnerGetVehicleType],
+	["selectSpawnPos",        SQFM_fnc_transportSpawnPos]
 ];
 private _maxCapacity = selectMax _capacities;
 private _hashMap     = createHashmapObject [_dataArr];

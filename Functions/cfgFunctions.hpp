@@ -116,12 +116,23 @@ class CfgFunctions
 
 		class transportModule
 		{
-			class initTransportSpawner   {};
-			class transportVehicleData   {};
-			class transportSpawnPosClear {};
-			class spawnerGetVehicleType  {};
-			class transportSpawnPos      {};
-			class spawnTransport         {};
+			file = "Functions\transportModule";
+			class initTransportSpawner    {};
+			class transportVehicleData    {};
+			class transportSpawnPosClear  {};
+			class spawnerGetVehicleType   {};
+			class transportSpawnPos       {};
+			class spawnTransport          {};
+			class initAllTransportModules {};
+		};
+
+		class transportTask
+		{
+			file = "Functions\transportModule\transportTask";
+			class sendTransport           {};
+			class onPickupWpTransporter   {};
+			class onDropOffWpTransporter  {};
+			class onReturnWpTransporter   {};
 		};
 
 		class man
@@ -175,6 +186,7 @@ class CfgFunctions
 			class initGroup                {};
 			class initGroupData            {};
 			class addToDataAllGroups       {};
+			class getGroupsZone            {};
 		};
 
 		class groups_combat
@@ -218,6 +230,7 @@ class CfgFunctions
 			class deleteWps                 {};
 			class initGroupTravel           {};
 			class execGroupTravel           {};
+			class groupPickupPos            {};
 			
 		};
 
@@ -250,6 +263,14 @@ class CfgFunctions
 			class getGroupCluster          {};
 			class setGroupCluster          {};
 			class groupAvgPos              {};
+		};
+
+		class groups_tasks
+		{
+			file = "Functions\groups\tasks";
+			class initTaskData    {};
+			class endTask         {};
+			class addTaskWaypoint {};
 		};
 
 		class groups_debug
