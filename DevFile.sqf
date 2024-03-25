@@ -7,9 +7,111 @@ addToGroups = SQFM_fnc_addToDataAllGroups;
 // SQFM_fnc_
 // SQFM_battles
 // SQFSM_TransportSpawner
-// SQFM_fnc_initBattleMap = {};
+// SQFM_fnc_initBattleMap               = {};
+SQFM_fnc_initGroupData               = { 
 
-// SQFM_fnc_initGroupData = { };
+params [
+	["_group", nil, [grpNull]]
+];
+private _emptyMap = createHashmapObject[[]];
+private _dataArr = [ 
+
+	["birth",             round time],
+	["lastTransportCall", round time],
+	["grp",                   _group],
+	["side",             side _group],
+	["action",                    ""],
+	["state",                     ""],
+	["travelData",               nil],
+	["available",               true],
+	["battlefield",       [-1,-1,-1]],
+	["battleTimes",               []],
+	["shots",                     []],
+	["groupCluster",             nil],
+	["transportCrew",          false],
+	["transportVehicle",     objNull],
+	["taskData",           _emptyMap], 
+
+//  {METHODS}
+
+	["3DIcon",                             SQFM_fnc_group3DIcon],
+	["3DColor",                           SQFM_fnc_group3DColor],
+	["initTask",                          SQFM_fnc_initTaskData],
+	
+	/**********************{TRAVEL}*****************************/
+	["initTravel",                     SQFM_fnc_initGroupTravel],
+	["execTravel",                     SQFM_fnc_execGroupTravel],
+	["onTravelWpComplete",          SQFM_fnc_onTravelWpComplete],
+	["deleteWaypoints",                      SQFM_fnc_deleteWps],
+	["execTravel",                     SQFM_fnc_execGroupTravel],
+	["getOwnVehicles",                SQFM_fnc_getGroupVehicles],
+	["getNearVehicles",              SQFM_fnc_nearGroupVehicles],
+	["allAvailableVehicles", SQFM_fnc_allAvailableGroupVehicles],
+	["callTransport",                SQFM_fnc_validGroupVehicle],
+	["leaveInvalidVehicles",      SQFM_fnc_leaveInvalidVehicles],
+	["validVehicle",                 SQFM_fnc_validGroupVehicle],
+	["getPickupPos",                    SQFM_fnc_groupPickupPos],
+
+					  /*{transport}*/
+	["canCallTransport",           SQFM_fnc_groupCanCallTransport],
+	["callTransport",                 SQFM_fnc_groupCallTransport],
+	["getTransportSpawner",     SQFM_fnc_groupGetTransportSpawner],
+	["sinceTransportCall", {time-(_self get "lastTransportCall")}],
+
+                      /*{boarding}*/
+	["canSelfTransport",         SQFM_fnc_groupCanSelfTransport],
+	["enoughTransportNear",   SQFM_fnc_enoughGroupTransportNear],
+	["canBoardNow",                   SQFM_fnc_groupcanBoardNow],
+	["boardingStatus",             SQFM_fnc_groupBoardingStatus],
+	["getBoardingMen",             SQFM_fnc_getGroupBoardingMen],
+	["boardVehicles",               SQFM_fnc_groupBoardVehicles],
+	["boardOwnVehicles",         SQFM_fnc_groupBoardOwnVehicles],
+	["boardAllAvailable",       SQFM_fnc_groupBoardAllAvailable],
+	["postBoarding",                 SQFM_fnc_postGroupBoarding],
+	["boardingStarted",           SQFM_fnc_groupBoardingStarted],
+	["boardingEnded",               SQFM_fnc_groupBoardingEnded],
+	["boardingFailed",             SQFM_fnc_groupBoardingFailed],
+	["endBoarding",                   SQFM_fnc_endGroupBoarding],
+	["boardThenTravel",           SQFM_fnc_groupBoardThenTravel],
+	["ejectAll",             SQFM_fnc_groupEjectFromAllVehicles],
+	
+	/********************{GROUP MEMBERS}************************/
+	["getUnits",                         SQFM_fnc_getGroupUnits],
+	["getUnitsOnfoot",             SQFM_fnc_getGroupUnitsOnFoot],
+	["getVehiclesInUse",    {(_self call ["getOwnVehicles"])#2}],
+	["getGrpMembers",                    SQFM_fnc_getGrpMembers],
+	["getGroupCluster",                SQFM_fnc_getGroupCluster],
+	["setGroupCluster",                SQFM_fnc_setGroupCluster],
+	["getAvgPos",                          SQFM_fnc_groupAvgPos],
+
+	/**********************{COMBAT}****************************/
+	["battleInit",                     SQFM_fnc_groupBattleInit],
+	["battleEnd",                       SQFM_fnc_groupBattleEnd],
+	["addShot",                          SQFM_fnc_addGroupShots],
+	["getBattle",  {SQFM_battles get (_self get "battlefield")}],
+	["inBattle",                         SQFM_fnc_groupInBattle],
+	["canInitBattle",               SQFM_fnc_groupCanInitBattle],
+	["sinceBattle",           SQFM_fnc_timeSinceLastGroupBattle],
+	["isNotSuppressing",           SQFM_fnc_grpIsNotSuppressing],
+	["returnFire",                     SQFM_fnc_groupReturnFire],
+	["endReturnFire",   {_self spawn SQFM_fnc_endGrpReturnFire}]
+];
+
+private _data = createHashmapObject [_dataArr];
+
+_data call ["setGroupCluster"];
+private _veh1 = (_data call ["getVehiclesInUse"])#0;
+if((!isNil "_veh1")
+&&{_veh1 getVariable ["SQFM_transport", false]})
+then{
+	_data set ["transportCrew",    true];
+	_data set ["transportVehicle", _veh1];
+};
+
+_group setVariable ["SQFM_grpData", _data, true];
+
+_data;
+};
 // SQFM_fnc_groupBattleInit             = {};
 // SQFM_fnc_groupBattleEnd              = {};
 // SQFM_fnc_groupAvgPos                 = {};
@@ -28,6 +130,30 @@ addToGroups = SQFM_fnc_addToDataAllGroups;
 // SQFM_fnc_initGroupTravel             = {};
 // SQFM_fnc_groupEjectFromAllVehicles   = {};
 // SQFM_fnc_groupBoardThenTravel        = {};
+// SQFM_fnc_decimals                    = {};
+// SQFM_fnc_shapeFitsShape              = {};
+// SQFM_fnc_objectShape                 = {};
+// SQFM_fnc_transportVehicleData        = {};
+// SQFM_Custom3Dpositions               = [];
+// SQFM_fnc_transportSpawnPosClear      = {};
+// SQFM_fnc_spawnerGetVehicleType       = {};
+// SQFM_fnc_transportSpawnPos           = {};
+// SQFM_fnc_drawTransportModuleNoInit   = {};
+// SQFM_fnc_drawTransportModule         = {};
+// SQFM_fnc_onPickupWpTransporter       = {};
+// SQFM_fnc_onDropOffWpTransporter      = {};
+// SQFM_fnc_onReturnWpTransporter       = {};
+// SQFM_fnc_groupPickupPos              = {};
+// SQFM_fnc_sendTransport               = {};
+// SQFM_fnc_initTransportSpawner        = {};
+// SQFM_fnc_spawnTransport              = {};
+// SQFM_fnc_initTaskData                = {};
+// SQFM_fnc_endTask                     = {};
+// SQFM_fnc_addTaskWaypoint             = {};
+// SQFM_fnc_getGroupsZone               = {};
+// SQFM_fnc_groupGetTransportSpawner    = {};
+// SQFM_fnc_groupCanCallTransport       = {};
+// SQFM_fnc_groupCallTransport          = {};
 
 /*********************************/
 /*
@@ -62,27 +188,7 @@ The action should be displayed by the Icon.
 The boarding status should be displayed by a second Icon
 */
 
-// SQFM_fnc_decimals               = {};
-// SQFM_fnc_shapeFitsShape         = {};
-// SQFM_fnc_objectShape            = {};
-// SQFM_fnc_transportVehicleData   = {};
-// SQFM_Custom3Dpositions             = [];
-// SQFM_fnc_transportSpawnPosClear    = {};
-// SQFM_fnc_spawnerGetVehicleType     = {};
-// SQFM_fnc_transportSpawnPos         = {};
-// SQFM_fnc_drawTransportModuleNoInit = {};
-// SQFM_fnc_drawTransportModule       = {};
-// SQFM_fnc_onPickupWpTransporter  = {};
-// SQFM_fnc_onDropOffWpTransporter = {};
-// SQFM_fnc_onReturnWpTransporter  = {};
-// SQFM_fnc_groupPickupPos         = {};
-// SQFM_fnc_sendTransport          = {};
-// SQFM_fnc_initTransportSpawner = {};
-// SQFM_fnc_spawnTransport       = {};
-// SQFM_fnc_initTaskData         = {};
-// SQFM_fnc_endTask              = {};
-// SQFM_fnc_addTaskWaypoint      = {};
-// SQFM_fnc_getGroupsZone        = {};
+
 
 /*
 Post-Init transport-Group
@@ -102,92 +208,13 @@ Post-Init transport-Group
 - If disabeled delete driver, delete vehicle on timeLimit
 
 private _trnsprtOnWay = _grpData call ["callTransport", [destination]];
-
-"callTransport" = {
-	sort modules by distance.
-	first module with capacity is selected 
-	module is requested for transport.
-	Radio message informing side of request result.
-	if(true)then{
-		_mdlData call ["sendTransport", [_group, _pickup, _dropOff]]
-	};
-}
-
-"sendTransport" = {
-	1) spawn vehicle
-	2) spawn crew (Init group)
-	3) Subtract from VehiclePool
-	4) Add 3 waypoints. (Board / unboard logic added)
-	5) SQFM_transports pushBackUnique transport;
-	6) Set timeLimit
-	7) Add data as variable to the vehicle
-	8) Dissalow getout in combat.
-};
-
-{
-	1) check if it is moving 
-	2) check if it has cargo 
-	3) check if timeLimit has expired
-	4) if time > timeLimit & alive delete and re-add to pool
-	5) if time > timeLimit & !alive delete
-	6) Check if waypoint has failed (see unstuck)
-	
-} forEach SQFM_transports;
-
-
 */
 
 
-
-
-// SQFM_fnc_onPickupWpPassenger = { 
-// params[
-// 	["_group", nil, [grpNull]]
-// ];
-// private _grpData = _group getVariable "SQFM_grpData";
-
-
-// };
-
-
-
 // [grp1] call SQFM_fnc_initGroup;
-// private _spawner   = TS1 getVariable "SQFM_spawnerData";
-// private _trGroup   = grp1;
-// private _pickUpPos = [6296.67,3508.34,0];
-// private _dropPos   = [5662.64,4219.16,0];
-
-// _spawner set ["assetCount", 3];
-// _spawner set ["sendTransport", SQFM_fnc_sendTransport];
-// _spawner call ["sendTransport",  [_trGroup, _dropPos]];
-// deleteVehicle cursorObject;
-
-// {
-// 	[_x] call SQFM_fnc_initTransportSpawner;
-	
-// } forEach (entities "SQFSM_TransportSpawner");
-
-// [TS1] call SQFM_fnc_initTransportSpawner;
-// copyToClipboard str allVariables TS1;
-
-// hint str (_data get "lastSpawnTime");
-// _data set  ["spawnTransport", SQFM_fnc_spawnTransport];
-// _data call ["spawnTransport", [15]];
-// ooo= str ([v3] call SQFM_fnc_transportVehicleData);
-// group move position
-
-/************************************************************/
-// private _pos      = getPosATLVisual player;
-// private _taskName = "reinforce";
-// private _params   = [_pos, _taskName];
-
-// [testGrp] call SQFM_fnc_initGroup;
-// private _data = testGrp getVariable "SQFM_grpData";
-// then{Hint "Yaaa"};
-// _data call ["initTravel", _params];
-/************************************************************/
-
-/**************************************************************/
+private _dropPos = [6296.67,3508.34,0];
+private _data    = grp1 getVariable "SQFM_grpData";
+_data call ["callTransport", [_dropPos]];
 
 /*********************************/
 systemChat "devfiled read";

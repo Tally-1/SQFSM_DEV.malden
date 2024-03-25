@@ -9,7 +9,7 @@ private _dataArr = [
 	["zone",                                               _zone],
 	["positions",                                     _positions],
 	["params",                                       _taskParams],
-	["status",                                     "initialized"],
+	["state",                                     "initialized"],
 	["owner",                                  (_self get "grp")],
 	["ownerData", {_self get "owner" getVariable "SQFM_grpData"}],
 	["active",                                              true],

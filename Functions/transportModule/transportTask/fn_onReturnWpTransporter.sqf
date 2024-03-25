@@ -15,7 +15,9 @@ private _restoreAssetCount = alive _vehicle && {_vehicle distance _spawnerModule
 if(_restoreAssetCount)then{
 	private _count = _spawnData get"assetCount";
 	_spawnData set ["assetCount", _count+1];
-};
+	"Transport vehicle returned to base" call dbgm;
+}
+else{"Transport vehicle lost" call dbgm};
 
 _taskData call ["endTask"];
 deleteVehicle _vehicle;

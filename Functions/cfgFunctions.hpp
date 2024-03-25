@@ -130,6 +130,7 @@ class CfgFunctions
 		{
 			file = "Functions\transportModule\transportTask";
 			class sendTransport           {};
+			class transportAvailability   {};
 			class onPickupWpTransporter   {};
 			class onDropOffWpTransporter  {};
 			class onReturnWpTransporter   {};
@@ -231,7 +232,9 @@ class CfgFunctions
 			class initGroupTravel           {};
 			class execGroupTravel           {};
 			class groupPickupPos            {};
-			
+			class groupGetTransportSpawner  {};
+			class groupCanCallTransport     {};
+			class groupCallTransport        {};
 		};
 
 		class groups_boarding
@@ -281,6 +284,7 @@ class CfgFunctions
 			class group3DNoData       {};
 			class group3DIcon         {};
 			class group3DColor        {};
+			class group3DText         {};
 		};
 
 		class init

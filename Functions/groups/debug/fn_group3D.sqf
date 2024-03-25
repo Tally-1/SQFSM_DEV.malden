@@ -7,9 +7,9 @@ exitwith{[_group] call SQFM_fnc_group3DNoData;};
 
 private _eyePos  = ASLToATL aimPos vehicle leader _group;
 private _iconPos = [_eyePos, 5.5] call SQFM_fnc_AddZ;
-private _icon    = "\A3\ui_f\data\map\groupicons\selector_selectedFriendly_ca.paa";
-private _color   = [side _group] call SQFM_fnc_sideColor;;
-private _text    = _data get "action";
+private _icon    = [_group] call SQFM_fnc_group3DIcon;//"\A3\ui_f\data\map\groupicons\selector_selectedFriendly_ca.paa";
+private _color   = [_group] call SQFM_fnc_group3DColor;
+private _text    = [_group] call SQFM_fnc_group3DText;
 private _camPos  = (positionCameraToWorld [0,0,0]);
 
 

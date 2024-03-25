@@ -5,7 +5,6 @@ private _vehicles     = [];
 private _capacities   = [];
 private _parkingSpots = [];
 private _side         = call compile (_module getVariable "sqfm_side");
-private _assetCount   = 
 
 {
 	deleteVehicleCrew _x;
@@ -28,11 +27,12 @@ private _dataArr = [
 	["assetCount", _module getVariable "sqfm_assetcount"],
 	["maxCapacity",                                  nil],
 /***********************************************************/
-	["timeSinceSpawn",{time-(_self get "lastSpawnTime")}],
-	["spawnTransport",           SQFM_fnc_spawnTransport],
-	["sendTransport",             SQFM_fnc_sendTransport],
-	["getVehicleType",    SQFM_fnc_spawnerGetVehicleType],
-	["selectSpawnPos",        SQFM_fnc_transportSpawnPos]
+	["timeSinceSpawn",    {time-(_self get "lastSpawnTime")}],
+	["spawnTransport",               SQFM_fnc_spawnTransport],
+	["sendTransport",                 SQFM_fnc_sendTransport],
+	["transportAvailability", SQFM_fnc_transportAvailability],
+	["getVehicleType",        SQFM_fnc_spawnerGetVehicleType],
+	["selectSpawnPos",            SQFM_fnc_transportSpawnPos]
 ];
 private _maxCapacity = selectMax _capacities;
 private _hashMap     = createHashmapObject [_dataArr];

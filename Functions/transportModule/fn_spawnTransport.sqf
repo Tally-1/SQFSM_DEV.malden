@@ -22,15 +22,17 @@ private _vehicle = createVehicle [
 	"CAN_COLLIDE"
 ];
 
-_self set ["assetCount", _count-1];
+_self set ["assetCount",_count-1];
+_self set ["lastSpawnTime", time];
 
 _vehicle allowDamage false;
 _vehicle setDir      _spawnDir;
 _vehicle setPosATL   _spawnPos;
-_vehicle setVariable ["SQFM_transport", true, true];
+_vehicle setVariable ["SQFM_transport",             true, true];
+_vehicle setVariable ["SQFM_Module",(_self get "module"), true];
 _vehicle setUnloadInCombat [true, false];
 
-createVehicleCrew _vehicle;
+(_self get "side") createVehicleCrew _vehicle;
 
 {_x addCuratorEditableObjects [[_vehicle],true];} forEach allCurators;
 
