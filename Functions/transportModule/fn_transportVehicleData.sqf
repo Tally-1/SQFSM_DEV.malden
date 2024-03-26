@@ -16,6 +16,7 @@ private _direction   = getDirVisual    _vehicle;
 private _className   = typeOf _vehicle;
 private _shape       = [_vehicle] call SQFM_fnc_objectShape;
 private _displayName = getText (configfile >> "CfgVehicles" >> (typeOf _x) >> "displayName");
+private _icon        = getText (configfile >> "CfgVehicles" >> (typeOf _x) >> "Icon");
 
 if(_hasGunner)then{_crewNeeded = _crewNeeded+1};
 if(_hasCmmndr)then{_crewNeeded = _crewNeeded+1};
@@ -27,6 +28,7 @@ exitWith{"Vehicle with no transport capacity passed to Spawner" call dbgm; nil;}
 private _dataArr = [
 	["type",      _className],
 	["name",    _displayName],
+	["icon",           _icon],
 	["capacity",   _capacity],
 	["crew",     _crewNeeded],
 	["pos",        _position],

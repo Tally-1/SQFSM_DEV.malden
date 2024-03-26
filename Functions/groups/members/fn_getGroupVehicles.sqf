@@ -1,6 +1,5 @@
 _self call ["leaveInvalidVehicles"];
 private _group    = _self get "grp";
-private _grpPos   = _self get"groupCluster"get"position";
 private _inUse    = _self call ["getGrpMembers"] select {[_x] call SQFM_fnc_isLandVehicle};
 private _assigned = assignedVehicles _group select {alive _x;};
 private _all      = [];

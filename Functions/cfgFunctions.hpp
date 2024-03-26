@@ -134,6 +134,7 @@ class CfgFunctions
 			class onPickupWpTransporter   {};
 			class onDropOffWpTransporter  {};
 			class onReturnWpTransporter   {};
+			class transportPostboarding   {};
 		};
 
 		class man
@@ -224,10 +225,9 @@ class CfgFunctions
 			file = "Functions\groups\travel";
 			class validGroupVehicle         {};
 			class leaveInvalidVehicles      {};
-			class getGroupVehicles          {};
 			class nearGroupVehicles         {};
 			class allAvailableGroupVehicles {};
-			class onTravelWpComplete        {};
+			class onArrival                 {};
 			class deleteWps                 {};
 			class initGroupTravel           {};
 			class execGroupTravel           {};
@@ -266,6 +266,7 @@ class CfgFunctions
 			class getGroupCluster          {};
 			class setGroupCluster          {};
 			class groupAvgPos              {};
+			class getGroupVehicles         {};
 		};
 
 		class groups_tasks

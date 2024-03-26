@@ -22,11 +22,11 @@ drawIcon3D [
 
 {
 	drawIcon3D [
-        "\A3\ui_f\data\map\markers\handdrawn\start_CA.paa",            
+        (_x get "icon"),            
         [1,1,1,1],
         (_x get "pos"),
-        0.6,
-        0.6,
+        1,
+        1,
         0,       
         (_x get "name"),
         2,             

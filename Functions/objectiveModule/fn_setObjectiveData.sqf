@@ -17,7 +17,6 @@ if(_module getVariable "allowWest")        then {_sides pushBack west;};
 
 private _dataArr = [
 	["position",    getPosATLVisual _module],
-	["3dData",                      _data3d],
 	["distance",                  _distance],
 	["type",                          _type],
 	["description",            _description],
@@ -25,9 +24,11 @@ private _dataArr = [
 	["count",                   _assetcount],
 	["owner",                   sideUnknown],
 	["contested",                     false],
-	["draw3D", SQFM_fnc_drawObjectiveModule],
+	
+	["3dData",                      _data3d],
 	["3dColor",                   [1,1,1,1]],
-	["3dIcon",    "\A3\ui_f\data\map\markers\military\objective_CA.paa"]
+	["3dIcon",    "\A3\ui_f\data\map\markers\military\objective_CA.paa"],
+	["draw3D", SQFM_fnc_drawObjectiveModule]
 ];
 
 private _data = createhashMapObject [_dataArr];

@@ -2,7 +2,8 @@ params[
 	["_taskName",   nil,      [""]], // The name of the task.
 	["_zone",       nil,      [[]]],
 	["_positions",  nil,      [[]]],  // [pos, rad] (where the task will take place)
-	["_taskParams", nil,      [[]]]
+	["_taskParams", nil,      [[]]],
+	["_endCode",    nil,      [{}]]
 ];
 private _dataArr = [
 	["name",                                           _taskName],
@@ -17,6 +18,7 @@ private _dataArr = [
 	["startTime",                                           time],
 	["timeSinceStart",          {time - (_self get "startTime")}],
 	["addWaypoint",                     SQFM_fnc_addTaskWaypoint],
+	["endCode",                                         _endCode],
 	["endTask",                                 SQFM_fnc_endTask]
 ];
 private _taskData = createHashmapObject [_dataArr];

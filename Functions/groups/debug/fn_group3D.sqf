@@ -12,18 +12,12 @@ private _color   = [_group] call SQFM_fnc_group3DColor;
 private _text    = [_group] call SQFM_fnc_group3DText;
 private _camPos  = (positionCameraToWorld [0,0,0]);
 
+//Main 3D Icon.
+drawIcon3D[_icon,_color,_iconPos,2,2,0,_text,2,0.04];
 
-drawIcon3D[
-    _icon,            
-    _color,
-    _iconPos,    
-    2,         
-    2,         
-    0,              
-    _text, 
-    2,             
-    0.04
-];
+// Inner text.
+drawIcon3D["",[1,1,1,1],_iconPos,0,0,0,(_data get"groupType"),2,0.03];
+
 drawLine3D [_eyePos, _iconPos, _color];
 
 if(!isNull (findDisplay 312))then{ 

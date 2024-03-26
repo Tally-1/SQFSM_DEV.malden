@@ -25,6 +25,13 @@ _passengerGrp addVehicle _vehicle;
 
 [_men, _vehicle] call SQFM_fnc_menGetInSingleVehicle;
 
+[
+	_men, 
+	_vehicle,
+	_passengerGrp
+
+] spawn SQFM_fnc_transportPostboarding;
+
 _taskData set ["state", "Dropping off"];
 
 true;

@@ -41,6 +41,6 @@ _transportTask set ["state",           "Picking up passengers"];
 _callerData    set ["action",          "Waiting for transport"];
 _callerData    set ["transportVehicle", _transportVehicle];
 
-"Transport vehicle spawned in"
+"Transport vehicle spawned in" call dbgm;
 
 _transportVehicle;
