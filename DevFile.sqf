@@ -31,6 +31,7 @@ private _dataArr = [
     ["groupCluster",             nil],
     ["transportCrew",          false],
     ["transportVehicle",     objNull],
+    ["objective",            objNull],
     ["taskData",           _emptyMap], 
 
 //  {METHODS}
@@ -78,7 +79,10 @@ private _dataArr = [
     ["ejectAll",             SQFM_fnc_groupEjectFromAllVehicles],
 
 	/********************{OBJECTIVES}***************************/
-	["takeObjective",                    SQFM_fnc_takeObjective],
+	["validObjective",            SQFM_fnc_group_validObjective],
+    ["objectiveInRange",         SQFM_fnc_groupObjectiveInRange],
+    ["getNearObjectives",       SQFM_fnc_groupGetNearObjectives],
+    ["assignObjective",           SQFM_fnc_groupAssignObjective],
     
     /********************{GROUP MEMBERS}************************/
     ["getUnits",                         SQFM_fnc_getGroupUnits],
@@ -87,9 +91,11 @@ private _dataArr = [
     ["getGrpMembers",                    SQFM_fnc_getGrpMembers],
 	["crewMen",                              SQFM_fnc_groupCrew],
 	["nonCrewMen",                        SQFM_fnc_groupNonCrew],
+    ["tallyAssets",                   SQFM_fnc_groupTallyAssets],
     ["getGroupCluster",                SQFM_fnc_getGroupCluster],
     ["setGroupCluster",                SQFM_fnc_setGroupCluster],
     ["getAvgPos",                          SQFM_fnc_groupAvgPos],
+    ["getStrSide",                     SQFM_fnc_groupGetStrSide],
 
 	/**********************{GROUP CLASS}************************/
 	["isUnarmedMotorized",     SQFM_fnc_groupIsUnarmedMotorized],
@@ -128,12 +134,18 @@ _group setVariable ["SQFM_grpData", _data, true];
 _data;
 };
 
+// {drawLine3D _x}forEach(_self get "edgeLines");
 
 SQFM_fnc_setObjectiveData = { 
 params[
     ["_module", nil, [objNull]]
 ];
+private _position    = getPosATLVisual _module;
 private _data3d      = [_module] call SQFM_fnc_module3dData;
+private _area        = _data3d get "area";
+private _radius      = selectMax [100, _area#1, _area#2];
+private _zone        = [_position, _radius];
+private _zoneLines   = [_position, _radius, 16, [0,1,0,1]] call SQFM_fnc_getCircleLines;
 private _type        = _module getVariable "objectiveType";
 private _description = [_type] call SQFM_fnc_objectiveDescription;
 private _assetType   = _module getVariable "assetType";
@@ -146,22 +158,41 @@ if(_module getVariable "allowEast")        then {_sides pushBack east;};
 if(_module getVariable "allowWest")        then {_sides pushBack west;};
 if(_module getVariable "allowIndependent") then {_sides pushBack independent;};
 
+(_data3d get "lines")insert [0, _zoneLines, true];
+
+private _assignedGroups = createHashmapObject [[
+    ["east",        []],
+    ["west",        []],
+    ["independent", []]
+]];
+
 private _dataArr = [
-    ["position",    getPosATLVisual _module],
-    ["distance",                  _distance],
-    ["type",                          _type],
-    ["description",            _description],
-    ["asset",                    _assetType],
-    ["count",                   _assetcount],
-    ["owner",                   sideUnknown],
-	["assignedGroups",                   []],
-	["groupsInArea",                     []],
-    ["contested",                     false],
-    
-    ["3dData",                      _data3d],
-    ["3dColor",                   [1,1,1,1]],
+    ["module",                                      _module],
+    ["position",                                  _position],
+	["area",                                          _area],
+	["zone",                                          _zone],
+    ["range",                                     _distance],
+    ["type",                                          _type],
+    ["description",                            _description],
+    ["asset",                                    _assetType],
+    ["count",                                   _assetcount],
+    ["owner",                                   sideUnknown],
+    ["allowedSides",                                 _sides],
+    ["groupsPresent",                                    []],
+	["assignedGroups",                      _assignedGroups],
+    ["contested",                                     false],
+    ["3dData",                                      _data3d],
+    ["3dColor",                                   [1,1,1,1]],
     ["3dIcon",    "\A3\ui_f\data\map\markers\military\objective_CA.paa"],
-    ["draw3D", SQFM_fnc_drawObjectiveModule]
+	
+	/**********************{METHODS}***********************/
+	["getGroupsInZone",{(_self get"zone") call SQFM_fnc_groupsInZone}],
+    ["getAssignedAssets",         SQFM_fnc_objectiveGetAssignedAssets],
+    ["troopsNeeded",                    SQFM_fnc_objectiveNeedsTroops],
+    ["assignGroup",                     SQFM_fnc_objectiveAssignGroup],
+    ["unAssignGroup",                 SQFM_fnc_objectiveUnAssignGroup],
+	["draw3D",                           SQFM_fnc_drawObjectiveModule]
+
 ];
 
 private _data = createhashMapObject [_dataArr];
@@ -204,202 +235,130 @@ The action should be displayed by the Icon.
 The boarding status should be displayed by a second Icon
 */
 
-SQFM_fnc_initGroupTravel = { 
-params[
-    ["_movePos",  nil,    [[]]],
-    ["_taskName", "move", [""]]
-];
-// _self call ["setGroupCluster"];
+// SQFM_fnc_initGroupTravel            = {};
+// SQFM_fnc_groupCrew                  = {};
+// SQFM_fnc_groupNonCrew               = {};
+// SQFM_fnc_vehicleDescription         = {};
+// SQFM_fnc_vehicleClass               = {};
+// SQFM_fnc_groupIsUnarmedMotorized    = {};
+// SQFM_fnc_groupIsInfantrySquad       = {};
+// SQFM_fnc_groupType                  = {};
+// SQFM_fnc_assetTypesMatch            = {};
+// SQFM_fnc_                           = {};
+// SQFM_fnc_isArmedCar                 = {};
+// SQFM_fnc_isLightArmor               = {};
+// SQFM_fnc_isHeavyArmor               = {};
+// SQFM_fnc_sideToStrSide              = {};
+// SQFM_fnc_groupGetStrSide            = {};
+// SQFM_fnc_removeNull                 = {};
+// SQFM_fnc_objectiveAssignGroup       = {};
+// SQFM_fnc_objectiveUnAssignGroup     = {};
+// SQFM_fnc_groupTallyAssets           = {};
+// SQFM_fnc_objectiveGetAssignedAssets = {};
+// SQFM_fnc_objectiveNeedsTroops       = {};
 
-private _grpPos         = _self call ["getAvgPos"];
-private _distance       = _movePos distance2D _grpPos;
-private _boardingStatus = _self call ["boardingStatus"];
-private _travelNow      = _distance < 500 || {_boardingStatus isEqualTo "boarded"};
-private _params         = [_movePos, _taskName];
 
-if(_travelNow)
-exitWith{
-	_self call ["execTravel", _params]; 
-	true;
-};
+// SQFM_fnc_group_validObjective = { 
+// params[
+// 	["_objectiveModule",nil,[objNull]]
+// ];
+// private _objctvData  = _objectiveModule getVariable "SQFM_objectiveData";
+// private _assetWanted = _objctvData get "asset";
+// private _groupType   = _self       get "groupType";
+// private _matches     = [_assetWanted, _groupType] call SQFM_fnc_assetTypesMatch;
 
-if(_self call ["canBoardNow"]
-&&{_self call ["boardThenTravel", _params]})
-exitWith{true;};
+// if!(_matches)exitWith{false;};
 
-if!(_self call ["canCallTransport"])
-exitWith{false;};
-
-private _transport = _self call ["callTransport", [_movePos]];
-if(isNull _transport)
-exitWith{false;};
-
-true;
-};
-
-SQFM_fnc_groupCrew = { 
-private _vehicles = _self call ["getVehiclesInUse"];
-private _crewMen  = [];
-
-{
-	private _driver = driver    _x;
-	private _gunner = gunner    _x;
-	private _cmmndr = commander _x;
-	if(alive _driver)then{_crewMen pushBackUnique _driver};
-	if(alive _gunner)then{_crewMen pushBackUnique _gunner};
-	if(alive _cmmndr)then{_crewMen pushBackUnique _cmmndr};
-	
-} forEach _vehicles;
-
-_crewMen;
-};
-
-SQFM_fnc_groupNonCrew = { 
-private _units   = _self call ["getUnits"];
-private _crewMen = _self call ["crewMen"];
-private _nonCrew = _units select {!(_x in _crewMen)};
-
-_nonCrew;
-};
+// true;
+// };
 
 
 
-SQFM_fnc_vehicleDescription = { 
-params[
-	["_vehicle", nil, [objNull]]
-];
-private _vehicleData     = [_vehicle]     call objScan_fnc_vehicleData;
-private _description     = [_vehicleData] call ObjScan_fnc_vehicleDescription;
-private _class           = _vehicleData get"chassis"get"chassisID";
-private _classDesc       = _vehicleData get"chassis"get"chassisDescription";
+// SQFM_fnc_takeObjective = { 
+// params[
+// 	["_objectiveModule",nil,[objNull]]
+// ];
 
-if("Artillery" in _description)
-then{_class = 6;};
-
-[_class, _classDesc, _description];
-};
-
-
-SQFM_fnc_vehicleClass = { 
-// This description is tailored for SQFSM, 
-// for a more precise description use the DCO unitScanner.
-params[
-	["_class", nil, [0]]
-];
-if(_class isEqualTo 0.8)          exitwith {"static"};
-if(_class>0.8  && {_class < 1.3}) exitwith {"light vehicle"};
-if(_class>=1.3 && {_class < 2.6}) exitwith {"light armor"};
-if(_class isEqualTo 2.6)          exitwith {"heavy armor"};
-if(_class isEqualTo 6)            exitwith {"artillery"};
-
-"unknown";
-};
-
-
-SQFM_fnc_groupIsUnarmedMotorized = { 
-private _vehicles = _self call ["getVehiclesInUse"];
-if(_vehicles isEqualTo [])exitWith{false};
-
-private _vCount = count _vehicles;
-private _mCount = count (_self call ["getUnits"]);
-private _cars   = 0;
-private _armed  = 0;
-
-if(_mCount <= _vCount)exitWith{false};
-
-{
-	private _objKind = [_x] call objScan_fnc_vehicleType;
-	if(_objKind isEqualTo "car"
-	or{_objKind isEqualTo "MRAP"
-	or{_objKind isEqualTo "truck"}})
-	then{_cars=_cars+1};
-
-	if("(" in _objKind
-	or{_objKind isEqualTo "APC"
-	or{_objKind isEqualTo "IFV"
-	or{_objKind isEqualTo "Tank"}}})
-	then{_armed=_armed+1};
-	
-} forEach _vehicles;
-
-if(_armed > 0)exitWith{false;};
-if(_cars  < 1)exitWith{false;};
-
-true;
-};
-
-SQFM_fnc_groupIsInfantrySquad = { 
-if(_self call ["boardingStatus"] isEqualTo "on foot") exitWith{true;};
-if(_self call ["isUnarmedMotorized"])                 exitWith{true;};
-
-false;
-};
-
-SQFM_fnc_groupType = { 
-if(_self call ["isInfantrySquad"])exitWith{"infantry";};
-
-private _vehicles   = _self call ["getVehiclesInUse"];
-private _classes    = _vehicles apply {([_x] call SQFM_fnc_vehicleDescription)#0};
-private _groupClass = selectMax _classes;
-private _classDesc  = [_groupClass] call SQFM_fnc_vehicleClass;
-private _mixedGroup = count(_self call ["nonCrewMen"])>2;
-
-if(_mixedGroup)then{_classDesc = [_classDesc, " (infantry)"]joinString""};
-
-_classDesc;
-};
-
-SQFM_fnc_assetTypesMatch = { 
-params[
-	["_assetType",nil,[""]],
-	["_groupType",nil,[""]]	
-];
-if(_assetType isEqualTo "infantry"
-&&{"infantry" in _groupType})
-exitWith{true;};
-
-if(_assetType isEqualTo "cars"
-&&{"light vehicle" in _groupType})
-exitWith{true;};
-
-if(_assetType isEqualTo "armor_l"
-&&{"light armor" in _groupType})
-exitWith{true;};
-
-if(_assetType isEqualTo "armor_h"
-&&{"heavy armor" in _groupType})
-exitWith{true;};
-
-false;
-};
-
-SQFM_fnc_canTakeObjective = { 
+// };
+SQFM_fnc_groupObjectiveInRange = { 
 params[
 	["_objectiveModule",nil,[objNull]]
 ];
-private _objctvData  = _objectiveModule getVariable "SQFM_objectiveData";
-private _assetWanted = _objctvData get "asset";
-private _groupType   = _self       get "groupType";
-private _matches     = [_assetWanted, _groupType] call SQFM_fnc_assetTypesMatch;
+private _objctvData = _objectiveModule getVariable "SQFM_objectiveData";
+private _pos        = _self get"groupCluster"get"position";
+private _range      = _objctvData get "range";
+private _distance   = _pos distance2D _objectiveModule;
+private _inRange    = _distance < _range;
 
-if!(_matches)exitWith{false;};
+_inRange;
+};
+
+
+SQFM_fnc_group_validObjective = { 
+params[
+	["_objectiveModule",nil,[objNull]]
+];
+private _objctvData   = _objectiveModule getVariable "SQFM_objectiveData";
+private _assetWanted  = _objctvData get "asset";
+private _allowedSides = _objctvData get "allowedSides";
+private _groupType    = _self       get "groupType";
+private _side         = side (_self get "grp");
+private _matches      = [_assetWanted, _groupType] call SQFM_fnc_assetTypesMatch;
+private _inRange      = _self call ["objectiveInRange",[_objectiveModule]];
+
+if!(_side in _allowedSides) exitWith{false;};
+if!(_matches)               exitWith{false;};
+if!(_inRange)               exitWith{false;};
 
 true;
 };
 
+SQFM_fnc_groupGetNearObjectives = { 
+_self call ["setGroupCluster"];
 
-SQFM_fnc_takeObjective = { 
+private _pos        = _self get"groupCluster"get"position";
+private _objectives = (_pos nearEntities ["SQFSM_Objective", SQFM_maxObjectiveRange])select{_self call ["validObjective", [_x]]};
+
+_objectives;
+};
+
+
+SQFM_fnc_groupAssignObjective = { 
 params[
 	["_objectiveModule",nil,[objNull]]
 ];
+private _objctvData = _objectiveModule getVariable "SQFM_objectiveData";
+private _group      = _self get "grp";
 
 };
+
+
 
 [testGrp] call SQFM_fnc_initGroupData;
-[o1]      call SQFM_fnc_setObjectiveData;
 private _grpData  = testGrp getVariable "SQFM_grpData";
-private _obctData = o1 getVariable "SQFM_objectiveData";
-hint str (_obctData get "asset");
+hint str (_grpData call ["getNearObjectives"]);
+
+// [grp1] call SQFM_fnc_initGroupData;
+// [grp2] call SQFM_fnc_initGroupData;
+// [grp3] call SQFM_fnc_initGroupData;
+// {[_x] call SQFM_fnc_initGroupData;} forEach allGroups;
+// {[_x] call SQFM_fnc_setObjectiveData;} forEach entities "SQFSM_Objective";
+// [o1]      call ;
+// private _grpData  = grp2 getVariable "SQFM_grpData";
+// private _obctData = o_3 getVariable "SQFM_objectiveData";
+// hint str (_obctData call ["getGroupsInZone"]);
+// hint str (_obctData get "assignedGroups" get "west");
+
+// _obctData call ["assignGroup",[grp1]];
+// _obctData call ["assignGroup",[grp2]];
+
+// hint str (_grpData call ["tallyAssets"]);
+// hint str (_obctData get "assignedGroups" get "west");
+// hint str (_obctData call ["getAssignedAssets",["west"]]);
+// systemChat str (_obctData call ["troopsNeeded",["west"]]);
+// 
+// 
+// 
 // SQFM_fnc_execGroupTravel = { 
 // params[
 // 	["_movePos",          nil,[[]]],

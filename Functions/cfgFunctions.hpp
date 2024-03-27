@@ -73,7 +73,9 @@ class CfgFunctions
 		class misc
 		{
 			file = "Functions\misc";
-			class copyHashmap {};
+			class copyHashmap   {};
+			class sideToStrSide {};
+			class removeNull    {};
 
 		};
 
@@ -109,9 +111,14 @@ class CfgFunctions
 		class objectiveModule
 		{
 			file = "Functions\objectiveModule";
-			class initObjective             {};
-			class setObjectiveData          {};
-			class objectiveDescription      {};
+			class initObjective              {};
+			class setObjectiveData           {};
+			class objectiveDescription       {};
+			class assetTypesMatch            {};
+			class objectiveAssignGroup       {};
+			class objectiveUnAssignGroup     {};
+			class objectiveGetAssignedAssets {};
+			class objectiveNeedsTroops       {};
 		};
 
 		class transportModule
@@ -168,6 +175,11 @@ class CfgFunctions
 			class sortTravelVehicleList    {};
 			class menOrderGetInVehicles    {};
 			class vehicleEjectDeadAndUncon {};
+			class vehicleDescription       {};
+			class vehicleClass             {};
+			class isArmedCar               {};
+			class isLightArmor             {};
+			class isHeavyArmor             {};
 
 		};
 
@@ -189,6 +201,7 @@ class CfgFunctions
 			class initGroupData            {};
 			class addToDataAllGroups       {};
 			class getGroupsZone            {};
+			class groupsInZone             {};
 		};
 
 		class groups_combat
@@ -267,6 +280,13 @@ class CfgFunctions
 			class setGroupCluster          {};
 			class groupAvgPos              {};
 			class getGroupVehicles         {};
+			class groupCrew                {};
+			class groupNonCrew             {};
+			class groupTallyAssets         {};
+			class groupIsUnarmedMotorized  {};
+			class groupIsInfantrySquad     {};
+			class groupType                {};
+			class groupGetStrSide          {};
 		};
 
 		class groups_tasks
@@ -280,12 +300,18 @@ class CfgFunctions
 		class groups_debug
 		{
 			file = "Functions\groups\debug";
-			class groups3D            {};
-			class group3D             {};
-			class group3DNoData       {};
-			class group3DIcon         {};
-			class group3DColor        {};
-			class group3DText         {};
+			class groups3D             {};
+			class group3D              {};
+			class group3DNoData        {};
+			class group3DIcon          {};
+			class group3DColor         {};
+			class group3DText          {};
+		};
+
+		class groups_objectives
+		{
+			file = "Functions\groups\objectives";
+			class group_validObjective {};
 		};
 
 		class init
