@@ -33,6 +33,6 @@ if!(_onFoot)then{_psngrData call ["ejectAll"]};
 _taskData set ["state", "Returning to base"];
 (driver _vehicle)enableAI "path";
 
-
+_psngrData call ["onArrival"];
 
 true;

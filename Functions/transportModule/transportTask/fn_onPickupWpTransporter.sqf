@@ -31,7 +31,7 @@ _passengerGrp addVehicle _vehicle;
 	_passengerGrp
 
 ] spawn SQFM_fnc_transportPostboarding;
-
-_taskData set ["state", "Dropping off"];
+_psngrData set ["state", "Being dropped off"];
+_taskData  set ["state", "Dropping off"];
 
 true;

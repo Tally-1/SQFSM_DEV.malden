@@ -38,7 +38,6 @@ private _dataArr = [
 
     ["3DIcon",                             SQFM_fnc_group3DIcon],
     ["3DColor",                           SQFM_fnc_group3DColor],
-    ["initTask",                          SQFM_fnc_initTaskData],
     
     /**********************{TRAVEL}*****************************/
     ["initTravel",                     SQFM_fnc_initGroupTravel],
@@ -83,7 +82,16 @@ private _dataArr = [
     ["objectiveInRange",         SQFM_fnc_groupObjectiveInRange],
     ["getNearObjectives",       SQFM_fnc_groupGetNearObjectives],
     ["assignObjective",           SQFM_fnc_groupAssignObjective],
-    
+    ["takeObjective",               SQFM_fnc_groupTakeObjective],
+    ["onObjectiveArrival",     SQFM_fnc_groupOnObjectiveArrival],
+
+    /************************{TASKS}****************************/
+    ["initTask",                          SQFM_fnc_initTaskData],
+    ["initObjectiveTask",       SQFM_fnc_groupInitObjectiveTask],
+
+    /************************{MOVES}****************************/
+    ["garrison",                         SQFM_fnc_groupGarrison],
+
     /********************{GROUP MEMBERS}************************/
     ["getUnits",                         SQFM_fnc_getGroupUnits],
     ["getUnitsOnfoot",             SQFM_fnc_getGroupUnitsOnFoot],
@@ -293,6 +301,51 @@ private _inRange    = _distance < _range;
 _inRange;
 };
 
+SQFM_fnc_roadsInArea = { 
+private _targetPos = (_this#0)#0;
+params[
+  ["_area",           nil,                 [[]]],
+  ["_minRoadCount",    2,                   [0]],
+  ["_proxyPos",       _targetPos, [[], objNull]],
+  ["_allowExpansion", true,              [true]]  
+];
+
+private _radius = selectMax[_area#1, _area#2];
+private _center    = _area#0;
+private _roads     = _center nearRoads _radius;
+private _roadCount = count _roads;
+private _attempts  = 0;
+
+while{_allowExpansion
+&&   {_roadCount < _minRoadCount
+&&   {_attempts  < 10}}}
+do{
+    _radius    = _radius+50;
+    _attempts  = _attempts+1;
+    _roads     = _center nearRoads _radius;
+    _roadCount = count _roads;
+};
+
+_roads = [_roads, [], {_proxyPos distance _x}, "ASCEND"] call BIS_fnc_sortBy;
+
+_roads;
+};
+
+
+SQFM_fnc_getAreaParkingPos = { 
+private _targetPos = (_this#0)#0;
+params[
+  ["_area",           nil,                 [[]]],
+  ["_minRoadCount",    2,                   [0]],
+  ["_proxyPos",       _targetPos, [[], objNull]], // The road nearest to this position will be used. Default is center of area.
+  ["_allowExpansion", true,              [true]]  
+];
+private _roadPos    = getPosATLVisual (([_area, _minRoadCount, _proxyPos, _allowExpansion] call SQFM_fnc_roadsInArea)#0);
+private _parkingPos = [_roadPos] call SQFM_fnc_findParkingSpot;
+
+_parkingPos;
+};
+
 
 SQFM_fnc_group_validObjective = { 
 params[
@@ -322,6 +375,20 @@ private _objectives = (_pos nearEntities ["SQFSM_Objective", SQFM_maxObjectiveRa
 _objectives;
 };
 
+SQFM_fnc_groupGarrison = { 
+private _pos       = _self call ["getAvgPos"];
+private _buildings =  [_pos, 75] call SQFM_fnc_nearBuildings;
+
+if(_buildings isEqualTo [])exitWith{};
+
+_pos = getPosATLVisual (selectRandom _buildings);
+
+private _wp = (_self get "grp") addWaypoint [_pos, 0];
+_wp setWaypointType "GARRISON";
+_wp setWaypointScript "\x\cba\addons\ai\fnc_waypointGarrison.sqf";
+
+_wp;
+};
 
 SQFM_fnc_groupAssignObjective = { 
 params[
@@ -330,17 +397,127 @@ params[
 private _objctvData = _objectiveModule getVariable "SQFM_objectiveData";
 private _group      = _self get "grp";
 
+_objctvData call ["assignGroup",[_group]];
+
+
+true;
+};
+
+SQFM_fnc_groupOnObjectiveArrival = { 
+private _taskData  = _self get "taskData";
+private _zone      = _taskData get "zone";
+private _pos       = _zone#0;
+
+_self set ["state", ""];
+_self set ["action", "Clearing area"];
+
+private _statement = 'group this getVariable "SQFM_grpData"get"taskData"call["endTask"]';
+_taskData call ["addWaypoint", [_pos,_statement,"SAD"]];
+
+};
+
+SQFM_fnc_groupInitObjectiveTask = { 
+params[
+	["_objectiveModule", nil,        [objNull]],
+    ["_taskName",        "Take Objective",[""]]
+];
+
+private _objctvData = _objectiveModule getVariable "SQFM_objectiveData";
+private _zone       = _objctvData get "zone";
+private _pos        = _objctvData get "position";
+private _onArrival  = {(_self call ["ownerData"]) call ["onObjectiveArrival"]};
+private _task       = _self call ["initTask",
+[
+    "Take Objective",    // Taskname     ["name"]
+    _zone,               // Task zone    ["zone"]
+    [_pos],              // Positions    ["positions"]
+    [_objectiveModule],  // TaskParams   ["params"]
+    _onArrival,          // Arrival-code ["arrivalCode"]
+    {}                   // End-code     ["endCode"]
+]];
+
+_task;
+};
+
+
+SQFM_fnc_initGroupTravel = { 
+params[
+    ["_movePos",  nil,    [[]]],
+    ["_taskName", "move", [""]]
+];
+private _grpPos         = _self call ["getAvgPos"];
+private _distance       = _movePos distance2D _grpPos;
+private _boardingStatus = _self call ["boardingStatus"];
+private _travelNow      = _distance < 500 || {_boardingStatus isEqualTo "boarded"};
+private _params         = [_movePos, _taskName];
+
+// The group moves to its destination as is.
+if(_travelNow)
+exitWith{ 
+	_self call ["execTravel", _params]; 
+	true;
+};
+
+// The group Boards available vehicles, then moves to its destination.
+if(_self call ["canBoardNow"]
+&&{_self call ["boardThenTravel", _params]})
+exitWith{true;};
+
+// The group cannot call for transport, the move is aborted.
+if!(_self call ["canCallTransport"])
+exitWith{
+    "Cannot call transport" call dbgm;
+    false;
+};
+
+// Transport is called, if denied the move is aborted.
+private _transport = _self call ["callTransport", [_movePos]];
+if(isNull _transport)
+exitWith{false;};
+
+true;
+};
+
+
+SQFM_fnc_groupTakeObjective = { 
+params[
+	["_objModule",nil,[objNull]]
+];
+private _area      = _objModule getVariable "SQFM_objectiveData"get"area";
+private _pos       = _area#0;
+private _leader    = leader(_self get"grp");
+private _dropPos   = [_area, 3, _leader, true] call SQFM_fnc_getAreaParkingPos;
+private _canTravel = _self call ["initTravel",[_dropPos]];
+// systemChat str _dropPos;
+
+// 
+
+if!(_canTravel)exitWith{false;};
+
+_self call ["initObjectiveTask",[_objModule]];
+_self call ["assignObjective",  [_objModule]];
+
+true;
 };
 
 
 
-[testGrp] call SQFM_fnc_initGroupData;
-private _grpData  = testGrp getVariable "SQFM_grpData";
-hint str (_grpData call ["getNearObjectives"]);
 
-// [grp1] call SQFM_fnc_initGroupData;
-// [grp2] call SQFM_fnc_initGroupData;
-// [grp3] call SQFM_fnc_initGroupData;
+private _group = grp3;
+private _objct = o_4;
+// [_group] call SQFM_fnc_initGroupData;
+private _grpData  = _group getVariable "SQFM_grpData";
+_grpData call ["takeObjective", [_objct]];
+
+// private _pos      = getPosATLVisual o_4;
+// hint str(_grpData call ["initTravel",[_pos]]);
+// _grpData call ["initObjectiveTask",[o_1]];
+// _grpData call ["assignObjective",  [_objModule]];
+// _grpData call ["garrison"];
+
+// hint str (_grpData call ["getNearObjectives"]);
+
+
 // {[_x] call SQFM_fnc_initGroupData;} forEach allGroups;
 // {[_x] call SQFM_fnc_setObjectiveData;} forEach entities "SQFSM_Objective";
 // [o1]      call ;

@@ -306,6 +306,7 @@ class CfgFunctions
 			class group3DIcon          {};
 			class group3DColor         {};
 			class group3DText          {};
+			class units3D              {};
 		};
 
 		class groups_objectives

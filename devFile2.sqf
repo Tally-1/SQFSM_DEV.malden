@@ -1,5 +1,5 @@
 if(true)exitWith{};
-SQFM_fnc_group3D = {
+SQFM_fnc_group3D = { 
 params [
 	["_group", nil, [grpNull]]
 ];
@@ -9,23 +9,17 @@ exitwith{[_group] call SQFM_fnc_group3DNoData;};
 
 private _eyePos  = ASLToATL aimPos vehicle leader _group;
 private _iconPos = [_eyePos, 5.5] call SQFM_fnc_AddZ;
-private _icon    = _data call ["3DIcon"]; 
-private _color   = _data call ["3DColor"]; 
-private _text    = _data get "action";
+private _icon    = [_group] call SQFM_fnc_group3DIcon;//"\A3\ui_f\data\map\groupicons\selector_selectedFriendly_ca.paa";
+private _color   = [_group] call SQFM_fnc_group3DColor;
+private _text    = [_group] call SQFM_fnc_group3DText;
 private _camPos  = (positionCameraToWorld [0,0,0]);
 
+//Main 3D Icon.
+drawIcon3D[_icon,_color,_iconPos,2,2,0,_text,2,0.04];
 
-drawIcon3D[
-    _icon,            
-    _color,
-    _iconPos,    
-    2,         
-    2,         
-    0,              
-    _text, 
-    2,             
-    0.04
-];
+// Inner text.
+drawIcon3D["",[1,1,1,1],_iconPos,0,0,0,(_data get"groupType"),2,0.03];
+
 drawLine3D [_eyePos, _iconPos, _color];
 
 if(!isNull (findDisplay 312))then{ 

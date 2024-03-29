@@ -5,11 +5,12 @@ params [
 private _data        = _group getVariable "SQFM_grpData";
 private _taskData    = _data get "taskData";
 private _taskName    = _taskData get "name";
-private _defaultIcon = "\A3\ui_f\data\map\groupicons\selector_selectedFriendly_ca.paa";
-private _icon        = _defaultIcon;
+private _icon        = "\A3\ui_f\data\map\groupicons\selector_selectedFriendly_ca.paa";
+private _objective   = _data get "objective";
+
+if(!isNull _objective)then{_icon = "\A3\ui_f\data\map\markers\military\circle_CA.paa";};
 
 if(isNil "_taskName")exitWith{_icon};
-
 
 if(_taskName isEqualTo "transport")exitWith{
 	private _state = _taskData get "state";
