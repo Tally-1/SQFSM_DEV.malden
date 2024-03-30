@@ -2,11 +2,12 @@ params [
 	["_group", nil, [grpNull]]
 ];
 
-private _data        = _group getVariable "SQFM_grpData";
-private _taskData    = _data get "taskData";
-private _taskName    = _taskData get "name";
-private _icon        = "\A3\ui_f\data\map\groupicons\selector_selectedFriendly_ca.paa";
-private _objective   = _data get "objective";
+private _data      = _group getVariable "SQFM_grpData";
+private _taskData  = _data get "taskData";
+private _taskName  = _taskData get "name";
+private _objective = _data get "objective";
+private _icon      = "\A3\ui_f\data\map\groupicons\selector_selectedFriendly_ca.paa";
+
 
 if(!isNull _objective)then{_icon = "\A3\ui_f\data\map\markers\military\circle_CA.paa";};
 

@@ -82,29 +82,32 @@ class CfgFunctions
 		class math
 		{
 			file = "Functions\math";
-			class module3dData    {};
-			class getModuleArea   {};
-			class getAreaCorners  {};
-			class areaCornerLines {};
-			class sinCosPos       {};
-			class AddZ            {};
-			class roundPos        {};
-			class average         {};
-			class avgPos2D        {};
-			class getMidpoint     {};
-			class straightPosArr  {};
-			class squareGrid      {};
-			class getNearest      {};
-			class pos360          {};
-			class getCircleLines  {};
-			class clearPos        {};
-			class clearPosSqrArea {};
-			class clearPosInArea  {};
-			class findParkingSpot {};
-			class numDiff         {};
-			class decimals        {};
-			class objectShape     {};
-			class shapeFitsShape  {};
+			class module3dData      {};
+			class getModuleArea     {};
+			class getAreaCorners    {};
+			class areaCornerLines   {};
+			class sinCosPos         {};
+			class AddZ              {};
+			class roundPos          {};
+			class average           {};
+			class avgPos2D          {};
+			class getMidpoint       {};
+			class straightPosArr    {};
+			class squareGrid        {};
+			class getNearest        {};
+			class pos360            {};
+			class getCircleLines    {};
+			class clearPos          {};
+			class clearPosSqrArea   {};
+			class clearPosInArea    {};
+			class numDiff           {};
+			class decimals          {};
+			class objectShape       {};
+			class shapeFitsShape    {};
+
+			class roadsInArea       {};
+			class findParkingSpot   {};
+			class getAreaParkingPos {};
 
 		};
 
@@ -199,6 +202,7 @@ class CfgFunctions
 			class validGroup               {};
 			class initGroup                {};
 			class initGroupData            {};
+			class setGroupMethods          {};
 			class addToDataAllGroups       {};
 			class getGroupsZone            {};
 			class groupsInZone             {};
@@ -312,8 +316,25 @@ class CfgFunctions
 		class groups_objectives
 		{
 			file = "Functions\groups\objectives";
-			class group_validObjective {};
+			class group_validObjective        {};
+			class groupObjectiveInRange       {};
+			class groupGetNearObjectives      {};
+			class groupAssignObjective        {};
+			class groupOnObjectiveArrival     {};
+			class groupInitObjectiveTask      {};
+			class groupTakeObjective          {};
+			class groupGuardObjective         {};
+			class groupObjectiveData          {};
+			
 		};
+
+		class groups_tactics
+		{
+			file = "Functions\groups\tactics";
+			class groupGarrison            {};
+
+		};
+
 
 		class init
 		{

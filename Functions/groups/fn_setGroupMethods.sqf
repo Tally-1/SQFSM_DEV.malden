@@ -1,31 +1,11 @@
-params [
-    ["_group", nil, [grpNull]]
+params[
+    ["_groupData",nil,[createHashmap]]
 ];
-private _emptyMap = createHashmapObject[[]];
-private _dataArr = [ 
 
-    ["birth",             round time],
-    ["lastTransportCall", round time],
-    ["grp",                   _group],
-    ["side",             side _group],
-    ["action",                    ""],
-    ["state",                     ""],
-	["groupType",          "unknown"],
-    ["travelData",               nil],
-    ["available",               true],
-    ["battlefield",       [-1,-1,-1]],
-    ["battleTimes",               []],
-    ["shots",                     []],
-    ["groupCluster",             nil],
-    ["transportCrew",          false],
-    ["transportVehicle",     objNull],
-    ["objective",            objNull],
-    ["taskData",           _emptyMap], 
-
-//  {METHODS}
-
+private _methods = [    
     ["3DIcon",                             SQFM_fnc_group3DIcon],
     ["3DColor",                           SQFM_fnc_group3DColor],
+    ["setMethods",      {[_self] call SQFM_fnc_setGroupMethods}],
     
     /**********************{TRAVEL}*****************************/
     ["initTravel",                     SQFM_fnc_initGroupTravel],
@@ -72,6 +52,8 @@ private _dataArr = [
     ["assignObjective",           SQFM_fnc_groupAssignObjective],
     ["takeObjective",               SQFM_fnc_groupTakeObjective],
     ["onObjectiveArrival",     SQFM_fnc_groupOnObjectiveArrival],
+    ["guardObjective",             SQFM_fnc_groupGuardObjective],
+    ["objectiveData",               SQFM_fnc_groupObjectiveData],
 
     /************************{TASKS}****************************/
     ["initTask",                          SQFM_fnc_initTaskData],
@@ -112,19 +94,11 @@ private _dataArr = [
     ["endReturnFire",   {_self spawn SQFM_fnc_endGrpReturnFire}]
 ];
 
-private _data = createHashmapObject [_dataArr];
+{
+    private _name = _x#0;
+    private _code = _x#1;
+    _groupData set [_name, _code];
+    
+} forEach _methods;
 
-_data call ["setGroupCluster"];
-_data call ["setGroupType"];
-
-private _veh1 = (_data call ["getVehiclesInUse"])#0;
-if((!isNil "_veh1")
-&&{_veh1 getVariable ["SQFM_transport", false]})
-then{
-    _data set ["transportCrew",    true];
-    _data set ["transportVehicle", _veh1];
-};
-
-_group setVariable ["SQFM_grpData", _data, true];
-
-_data;
+true;

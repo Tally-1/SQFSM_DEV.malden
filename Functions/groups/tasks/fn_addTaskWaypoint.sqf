@@ -2,13 +2,15 @@ params[
 	["_pos",       nil,[[]]],
 	["_statement", nil,[""]],
 	["_type",      nil,[""]],
+	
 	["_speed",     nil,[""]],
-	["_behaviour", nil,[""]]
+	["_behaviour", nil,[""]],
+	["_pRadius",   0,   [0]]
 ];
 
 private _group     = _self get "owner";
 private _groupData = _group getVariable "SQFM_grpData";
-private _wayPoint  = _group addWaypoint [_pos, 0];
+private _wayPoint  = _group addWaypoint [_pos, _pRadius];
 
 if(!isNil "_type")      then {_wayPoint setWaypointType _type;};
 if(!isNil "_statement") then {_wayPoint setWaypointStatements ["true", _statement];};

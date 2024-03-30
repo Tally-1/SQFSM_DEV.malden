@@ -3,3 +3,4 @@ params[
 ];
 
 [_module] call SQFM_fnc_setObjectiveData;
+// [_module] call SQFM_fnc_objectiveMarkers;

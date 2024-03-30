@@ -10,7 +10,7 @@ private _params         = [_movePos, _taskName];
 
 // The group moves to its destination as is.
 if(_travelNow)
-exitWith{
+exitWith{ 
 	_self call ["execTravel", _params]; 
 	true;
 };
@@ -22,7 +22,10 @@ exitWith{true;};
 
 // The group cannot call for transport, the move is aborted.
 if!(_self call ["canCallTransport"])
-exitWith{false;};
+exitWith{
+    "Cannot call transport" call dbgm;
+    false;
+};
 
 // Transport is called, if denied the move is aborted.
 private _transport = _self call ["callTransport", [_movePos]];
