@@ -37,7 +37,7 @@ _vehicle setUnloadInCombat [true, false];
 {_x addCuratorEditableObjects [[_vehicle],true];} forEach allCurators;
 
 _vehicle spawn{
-	sleep 1; 
+	sleep 5; 
 	_this allowDamage true;
 };
 

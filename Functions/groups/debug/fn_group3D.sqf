@@ -13,6 +13,9 @@ private _text      = [_group] call SQFM_fnc_group3DText;
 private _camPos    = (positionCameraToWorld [0,0,0]);
 private _objective = _data get "objective";
 
+if(isNil "_icon")then{_icon = ""};
+if(isNil "_text")then{_text = ""};
+
 //Main 3D Icon.
 drawIcon3D[_icon,_color,_iconPos,2,2,0,_text,2,0.04];
 

@@ -23,7 +23,11 @@ if(_hasCmmndr)then{_crewNeeded = _crewNeeded+1};
 _capacity = _capacity-_crewNeeded;
 
 if(_capacity < 1)
-exitWith{"Vehicle with no transport capacity passed to Spawner" call dbgm; nil;};
+exitWith{
+	// private _message = joinstring"";
+	[[_displayName, " cannot be used as a transport vehicle."]] call dbgm; 
+	nil;
+};
 
 private _dataArr = [
 	["type",      _className],

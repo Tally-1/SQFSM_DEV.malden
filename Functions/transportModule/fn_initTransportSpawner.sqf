@@ -22,10 +22,11 @@ if(_vehicles isEqualTo [])exitWith{["Transport-spawner cannot init", "hint"]call
 private _dataArr = [
 	["vehicles",                               _vehicles],
 	["module",                                   _module],
-	["lastSpawnTime",                            time-10],
+	["lastSpawnTime",                               time],
 	["side",                                       _side],
 	["assetCount", _module getVariable "sqfm_assetcount"],
 	["maxCapacity",                                  nil],
+	["waitingToSpawn",                             false],
 /***********************************************************/
 	["timeSinceSpawn",    {time-(_self get "lastSpawnTime")}],
 	["spawnTransport",               SQFM_fnc_spawnTransport],

@@ -28,35 +28,34 @@ private _assignedGroups = createHashmapObject [[
 ]];
 
 private _dataArr = [
-    ["module",                                      _module],
-    ["position",                                  _position],
-	["area",                                          _area],
-	["zone",                                          _zone],
-    ["range",                                     _distance],
-    ["type",                                          _type],
-    ["description",                            _description],
-    ["asset",                                    _assetType],
-    ["count",                                   _assetcount],
-    ["owner",                                   sideUnknown],
-    ["allowedSides",                                 _sides],
-    ["groupsPresent",                                    []],
-	["assignedGroups",                      _assignedGroups],
-    ["contested",                                     false],
-    ["3dData",                                      _data3d],
-    ["3dColor",                                   [1,1,1,1]],
-    ["3dIcon",    "\A3\ui_f\data\map\markers\military\objective_CA.paa"],
-	
-	/**********************{METHODS}***********************/
-	["getGroupsInZone",{(_self get"zone") call SQFM_fnc_groupsInZone}],
-    ["getAssignedAssets",         SQFM_fnc_objectiveGetAssignedAssets],
-    ["troopsNeeded",                    SQFM_fnc_objectiveNeedsTroops],
-    ["assignGroup",                     SQFM_fnc_objectiveAssignGroup],
-    ["unAssignGroup",                 SQFM_fnc_objectiveUnAssignGroup],
-	["draw3D",                           SQFM_fnc_drawObjectiveModule]
+    ["module",                                               _module],
+    ["position",                                           _position],
+	["area",                                                   _area],
+	["zone",                                                   _zone],
+    ["range",                                              _distance],
+    ["type",                                                   _type],
+    ["description",                                     _description],
+    ["asset",                                             _assetType],
+    ["count",                                            _assetcount],
+    ["owner",                                            sideUnknown],
+    ["allowedSides",                                          _sides],
+    ["groupsPresent",                                             []],
+    ["sidesPresent",                                              []],
+	["assignedGroups",                               _assignedGroups],
+    ["contested",                                              false],
+    ["captureTime",                                             time],
 
+    /*************************{DEBUG DATA}**************************/
+    ["defaultIcon",    "\A3\ui_f\data\map\markers\military\objective_CA.paa"],
+    ["contestedIcon",    "\A3\ui_f\data\map\markers\military\warning_CA.paa"],
+    ["capturedIcon",     "\A3\ui_f\data\map\markers\handdrawn\pickup_CA.paa"],
+    ["3dData",                                                       _data3d],
+    ["3dColor",                                                    [1,1,1,1]]
 ];
 
+
 private _data = createhashMapObject [_dataArr];
+[_data] call SQFM_fnc_setObjectiveMethods;
 
 _module setVariable ["SQFM_objectiveData", _data];
 

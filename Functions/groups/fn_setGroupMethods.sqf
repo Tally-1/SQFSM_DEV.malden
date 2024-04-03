@@ -6,11 +6,17 @@ private _methods = [
     ["3DIcon",                             SQFM_fnc_group3DIcon],
     ["3DColor",                           SQFM_fnc_group3DColor],
     ["setMethods",      {[_self] call SQFM_fnc_setGroupMethods}],
+
+    /*************************{MISC}***************************/
+    ["isIdle",                             SQFM_fnc_groupIsIdle],
+    ["isValid", {[(_self get "grp")] call SQFM_fnc_validGroup;}],
+    ["activeWp",                              SQFM_fnc_activeWp],
     
     /**********************{TRAVEL}*****************************/
     ["initTravel",                     SQFM_fnc_initGroupTravel],
     ["execTravel",                     SQFM_fnc_execGroupTravel],
     ["onArrival",                            SQFM_fnc_onArrival],
+    ["isTraveling",                   SQFM_fnc_groupIsTraveling],
     ["deleteWaypoints",                      SQFM_fnc_deleteWps],
     ["execTravel",                     SQFM_fnc_execGroupTravel],
     ["getOwnVehicles",                SQFM_fnc_getGroupVehicles],
@@ -50,6 +56,7 @@ private _methods = [
     ["objectiveInRange",         SQFM_fnc_groupObjectiveInRange],
     ["getNearObjectives",       SQFM_fnc_groupGetNearObjectives],
     ["assignObjective",           SQFM_fnc_groupAssignObjective],
+    ["autoAssignObjective",   SQFM_fnc_groupAutoAssignObjective],
     ["takeObjective",               SQFM_fnc_groupTakeObjective],
     ["onObjectiveArrival",     SQFM_fnc_groupOnObjectiveArrival],
     ["guardObjective",             SQFM_fnc_groupGuardObjective],
@@ -59,7 +66,7 @@ private _methods = [
     ["initTask",                          SQFM_fnc_initTaskData],
     ["initObjectiveTask",       SQFM_fnc_groupInitObjectiveTask],
 
-    /************************{MOVES}****************************/
+    /**********************{TACTICS}***************************/
     ["garrison",                         SQFM_fnc_groupGarrison],
 
     /********************{GROUP MEMBERS}************************/

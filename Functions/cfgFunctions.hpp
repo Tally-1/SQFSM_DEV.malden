@@ -72,10 +72,12 @@ class CfgFunctions
 
 		class misc
 		{
-			file = "Functions\misc";
-			class copyHashmap   {};
-			class sideToStrSide {};
-			class removeNull    {};
+			file =    "Functions\misc";
+			class copyHashmap       {};
+			class sideToStrSide     {};
+			class removeNull        {};
+			class getData           {};
+			class sidesFromGroupArr {};
 
 		};
 
@@ -113,15 +115,24 @@ class CfgFunctions
 
 		class objectiveModule
 		{
-			file = "Functions\objectiveModule";
-			class initObjective              {};
-			class setObjectiveData           {};
-			class objectiveDescription       {};
-			class assetTypesMatch            {};
-			class objectiveAssignGroup       {};
-			class objectiveUnAssignGroup     {};
-			class objectiveGetAssignedAssets {};
-			class objectiveNeedsTroops       {};
+			file =    "Functions\objectiveModule";
+			class initObjective                {};
+			class setObjectiveData             {};
+			class setObjectiveMethods          {};
+			class updateMethodsAllObjectives   {};
+			class objectiveDescription         {};
+			class assetTypesMatch              {};
+			class objectiveAssignGroup         {};
+			class objectiveUnAssignGroup       {};
+			class objectiveGetAssignedAssets   {};
+			class objectiveNeedsTroops         {};
+			class objectiveGetContested        {};
+			class objectiveGetSidesInZone      {};
+			class objectiveUpdate              {};
+			class updateAllObjectives          {};
+			class objectiveCountAssignedAssets {};
+			class objectivesSorted             {};
+
 		};
 
 		class transportModule
@@ -206,6 +217,7 @@ class CfgFunctions
 			class addToDataAllGroups       {};
 			class getGroupsZone            {};
 			class groupsInZone             {};
+			class updateMethodsAllGroups   {};
 		};
 
 		class groups_combat
@@ -252,6 +264,7 @@ class CfgFunctions
 			class groupGetTransportSpawner  {};
 			class groupCanCallTransport     {};
 			class groupCallTransport        {};
+			class groupIsTraveling          {};
 		};
 
 		class groups_boarding
@@ -325,6 +338,9 @@ class CfgFunctions
 			class groupTakeObjective          {};
 			class groupGuardObjective         {};
 			class groupObjectiveData          {};
+			class groupAutoAssignObjective    {};
+			class assignGroupListToObectives  {};
+			class assignAllGroupsToObjective  {};
 			
 		};
 
@@ -332,6 +348,15 @@ class CfgFunctions
 		{
 			file = "Functions\groups\tactics";
 			class groupGarrison            {};
+
+		};
+
+		class groups_misc
+		{
+			file = "Functions\groups\misc";
+			class groupIsIdle           {};
+			class activeWp              {};
+			class getIdleGroups         {};
 
 		};
 

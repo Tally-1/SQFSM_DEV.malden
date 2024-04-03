@@ -5,7 +5,7 @@ private _allSpawners = [(entities "SQFSM_TransportSpawner"), [], {_grpPos distan
 
 {
 	if(!isNil "_nearestSpawner")exitWith{};
-	private _data = _x getVariable "SQFM_spawnerData";
+	private _data = _x call getData;
 	private _canSpawn = (_data call ["transportAvailability", [_squadSize]])#0 &&{_data get "side" isEqualTo (_self get "side")};
 	if(_canSpawn)exitWith{_nearestSpawner = _data;};
 	

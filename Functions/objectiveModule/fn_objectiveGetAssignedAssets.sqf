@@ -8,7 +8,7 @@ private _lightArmor = 0;
 private _heavyArmor = 0;
 
 {
-    private _assetTally=(_x getVariable "SQFM_grpData")call["tallyAssets"];
+    private _assetTally=(_x call getData)call["tallyAssets"];
 
     _men        = _men+        (_assetTally#0);
     _armedCars  = _armedCars+  (_assetTally#1);
@@ -17,12 +17,14 @@ private _heavyArmor = 0;
     
 } forEach _groups;
 
+private _total    = _men+(_armedCars*2)+(_lightArmor*3)+(_heavyArmor*4);
 private _assetMap = createHashmapObject 
 [[
     ["infantry",  _men],
     ["cars",     _armedCars],
     ["armor_l",  _lightArmor],
-    ["armor_h",  _heavyArmor]
+    ["armor_h",  _heavyArmor],
+    ["sum",      _total]
 ]];
 
 _assetMap;
