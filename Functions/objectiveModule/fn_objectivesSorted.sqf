@@ -12,6 +12,10 @@ if(_max isEqualTo 0)then{_max = 0.0001;};
 private _algorythm = {
     private _distance   = _pos distance2D _x;
     private _assetCount = (_x call getData) call ["countAssignedAssets",[_side]];
+    
+    if  (_assetCount ==   0)
+    then{_assetCount =  0.1};
+    
     private _coef       = _assetCount / _max;
     private _sortingVal = _distance*_coef;
     _sortingVal;

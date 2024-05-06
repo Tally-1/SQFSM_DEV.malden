@@ -6,48 +6,48 @@ class CfgFunctions
 		class battlefield
 		{
 			file = "Functions\battlefield";
-			class initBattle              {};
-			class initBattleMap           {};
-			class initBattleBuildings     {};
-			class getUrbanZones           {};
-			class postInitBattle          {};
-			class updateBattle            {};
-			class battlefieldRadius       {};
-			class battlefieldDimensions   {};
-			class getBattleGrid           {};
+			class initBattle                   {};
+			class initBattleMap                {};
+			class initBattleBuildings          {};
+			class getUrbanZones                {};
+			class postInitBattle               {};
+			class updateBattle                 {};
+			class battlefieldRadius            {};
+			class battlefieldDimensions        {};
+			class getBattleGrid                {};
 
-			class posInBattleZone         {};
-			class nearestBattlePosRad     {};
-			class initBattleGroups        {};
-			class endBattleGroups         {};
-			class onBattleFirstShot       {};
-			class timeSinceLastBattleShot {};
+			class posInBattleZone              {};
+			class nearestBattlePosRad          {};
+			class initBattleGroups             {};
+			class endBattleGroups              {};
+			class onBattleFirstShot            {};
+			class timeSinceLastBattleShot      {};
 			
-			class endBattle               {};
+			class endBattle                    {};
 
 		};
 
 		class building
 		{
 			file = "Functions\building";
-			class isHouse       {};
-			class nearBuildings {};
+			class isHouse            {};
+			class nearBuildings      {};
 		};
 
 		class clusters
 		{
 			file = "Functions\clusters";
-			class clusterRadius      {};
-			class objArrData         {};
-			class hashifyClusterData {};
-			class cluster            {};
-			class setClusterGrid     {};
+			class clusterRadius           {};
+			class objArrData              {};
+			class hashifyClusterData      {};
+			class cluster                 {};
+			class setClusterGrid          {};
 
 		};
 		
 		class debug
 		{
-			file = "Functions\debug";
+			file =    "Functions\debug";
 			// class clientLoop             {};
 			class debugMessage              {};
 			class sendDbgMsg                {};
@@ -73,43 +73,43 @@ class CfgFunctions
 		class misc
 		{
 			file =    "Functions\misc";
-			class copyHashmap       {};
-			class sideToStrSide     {};
-			class removeNull        {};
-			class getData           {};
-			class sidesFromGroupArr {};
+			class copyHashmap            {};
+			class sideToStrSide          {};
+			class removeNull             {};
+			class getData                {};
+			class sidesFromGroupArr      {};
 
 		};
 
 		class math
 		{
 			file = "Functions\math";
-			class module3dData      {};
-			class getModuleArea     {};
-			class getAreaCorners    {};
-			class areaCornerLines   {};
-			class sinCosPos         {};
-			class AddZ              {};
-			class roundPos          {};
-			class average           {};
-			class avgPos2D          {};
-			class getMidpoint       {};
-			class straightPosArr    {};
-			class squareGrid        {};
-			class getNearest        {};
-			class pos360            {};
-			class getCircleLines    {};
-			class clearPos          {};
-			class clearPosSqrArea   {};
-			class clearPosInArea    {};
-			class numDiff           {};
-			class decimals          {};
-			class objectShape       {};
-			class shapeFitsShape    {};
+			class module3dData           {};
+			class getModuleArea          {};
+			class getAreaCorners         {};
+			class areaCornerLines        {};
+			class sinCosPos              {};
+			class AddZ                   {};
+			class roundPos               {};
+			class average                {};
+			class avgPos2D               {};
+			class getMidpoint            {};
+			class straightPosArr         {};
+			class squareGrid             {};
+			class getNearest             {};
+			class pos360                 {};
+			class getCircleLines         {};
+			class clearPos               {};
+			class clearPosSqrArea        {};
+			class clearPosInArea         {};
+			class numDiff                {};
+			class decimals               {};
+			class objectShape            {};
+			class shapeFitsShape         {};
 
-			class roadsInArea       {};
-			class findParkingSpot   {};
-			class getAreaParkingPos {};
+			class roadsInArea            {};
+			class findParkingSpot        {};
+			class getAreaParkingPos      {};
 
 		};
 
@@ -218,6 +218,7 @@ class CfgFunctions
 			class getGroupsZone            {};
 			class groupsInZone             {};
 			class updateMethodsAllGroups   {};
+			class isPlayerGroup            {};
 		};
 
 		class groups_combat
@@ -396,6 +397,5 @@ class CfgFunctions
 			class handleDeadGroups {};
 			class updateAllGroups  {};
 		};
-
 	};
 };

@@ -28,7 +28,10 @@ private _capacityNeeded   = count(_callerData call ["getUnitsOnfoot"]);
 private _transportVehicle = _self call ["spawnTransport", [_capacityNeeded]];
 
 if(isNil "_transportVehicle")
-exitWith{"Vehicle could not spawn" call dbgm;nil;};
+exitWith{
+	"Vehicle could not spawn" call dbgm; 
+	objNull;
+};
 
 private _transportGroup   = group _transportVehicle;
 private _timer            = time + 2;

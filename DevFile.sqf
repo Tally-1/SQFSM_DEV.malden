@@ -17,8 +17,7 @@ addToGroups = SQFM_fnc_addToDataAllGroups;
 /*********************************/
 /*
 TODO:
-    
-    
+
 */
 
 // SQFM_fnc_groupInitObjectiveTask       = {};

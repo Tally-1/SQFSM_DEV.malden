@@ -8,14 +8,19 @@ private _lightArmor = 0;
 private _heavyArmor = 0;
 
 {
-    private _assetTally=(_x call getData)call["tallyAssets"];
+    private _data = _x call getData;
+    if((!isNil "_data")
+    &&{_data call ["isValid"]})
+    then{
 
-    _men        = _men+        (_assetTally#0);
-    _armedCars  = _armedCars+  (_assetTally#1);
-    _lightArmor = _lightArmor+ (_assetTally#2);
-    _heavyArmor = _heavyArmor+ (_assetTally#3);
+        private _assetTally= _data call["tallyAssets"];
+
+        _men        = _men+        (_assetTally#0);
+        _armedCars  = _armedCars+  (_assetTally#1);
+        _lightArmor = _lightArmor+ (_assetTally#2);
+        _heavyArmor = _heavyArmor+ (_assetTally#3);
     
-} forEach _groups;
+}} forEach _groups;
 
 private _total    = _men+(_armedCars*2)+(_lightArmor*3)+(_heavyArmor*4);
 private _assetMap = createHashmapObject 

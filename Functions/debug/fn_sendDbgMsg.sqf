@@ -1,5 +1,5 @@
 params[ 
-	["_text",        nil, [true]],
+	["_text",        nil,   [""]],
     ["_displayType", nil,   [""]],
 	["_origin",      nil,   [""]]
 ];
