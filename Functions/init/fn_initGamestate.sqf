@@ -3,6 +3,10 @@
 private _objectiveRanges = (entities "SQFSM_Objective")apply{_x getVariable "activationDistance"};
 private _maxObjRange     = selectMax _objectiveRanges;
 
+SQFM_manValue          = 1;
+SQFM_carValue          = 3;
+SQFM_ApcValue          = 5;
+SQFM_MbtValue          = 9;
 SQFM_maxObjectiveRange = _maxObjRange;
 SQFM_newGroups         = [];
 SQFM_deadGroups        = [];

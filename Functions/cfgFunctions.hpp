@@ -72,12 +72,13 @@ class CfgFunctions
 
 		class misc
 		{
-			file =    "Functions\misc";
+			file = "Functions\misc";
 			class copyHashmap            {};
 			class sideToStrSide          {};
 			class removeNull             {};
 			class getData                {};
 			class sidesFromGroupArr      {};
+			class getTextTexture         {};
 
 		};
 
@@ -305,6 +306,9 @@ class CfgFunctions
 			class groupIsInfantrySquad     {};
 			class groupType                {};
 			class groupGetStrSide          {};
+			class groupSetStrengthIcon     {};
+			class getGroupStrength         {};
+
 		};
 
 		class groups_tasks
@@ -356,11 +360,11 @@ class CfgFunctions
 		{
 			file = "Functions\groups\misc";
 			class groupIsIdle           {};
+			class groupUpdate           {};
 			class activeWp              {};
 			class getIdleGroups         {};
 
 		};
-
 
 		class init
 		{
@@ -375,10 +379,12 @@ class CfgFunctions
 		class globalEvents
 		{
 			file = "Functions\globalEvents";
-			class groupSpawnedEh      {};
-			class projectileCreated   {};
-			class onProjectileCreated {};
-
+			class groupSpawnedEh             {};
+			class projectileCreated          {};
+			class onProjectileCreated        {};
+			class entityKilledEh             {};
+			class ACE_MedicalEvents          {};
+			class ACE_Medical_OnStatusChange {};
 		};
 
 		class taskManager

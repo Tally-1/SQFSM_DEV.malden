@@ -7,13 +7,8 @@ if(isNil "_side")exitWith{
     false;
 };
 
-private _wantedAsset    = _self get "asset";
-private _wantedCount    = _self get "count";
-private _assignedAssets = _self call ["getAssignedAssets",[_side]];
-private _assignedCount  = _assignedAssets get _wantedAsset;
-
-if(isNil "_assignedCount")then{_assignedCount = 0;};
-
-private _moreNeeded     = _assignedCount < _wantedCount;
+private _strengthNeeded   = _self get "assetStrength";
+private _assignedStrength = (_self call ["getAssignedAssets", [_side]])get"sum";
+private _moreNeeded = _assignedStrength < _strengthNeeded;
 
 _moreNeeded;
