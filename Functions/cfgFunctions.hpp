@@ -220,6 +220,8 @@ class CfgFunctions
 			class groupsInZone             {};
 			class updateMethodsAllGroups   {};
 			class isPlayerGroup            {};
+			class groupBehaviourSettings   {};
+			class groupGetBehaviorModule   {};
 		};
 
 		class groups_combat
@@ -322,13 +324,15 @@ class CfgFunctions
 		class groups_debug
 		{
 			file = "Functions\groups\debug";
-			class groups3D             {};
-			class group3D              {};
-			class group3DNoData        {};
-			class group3DIcon          {};
-			class group3DColor         {};
-			class group3DText          {};
-			class units3D              {};
+			class groups3D                {};
+			class group3D                 {};
+			class group3DNoData           {};
+			class group3DIcon             {};
+			class group3DColor            {};
+			class group3DText             {};
+			class units3D                 {};
+			class groupDebugText          {};
+			class groupDebugTextAbilities {};
 		};
 
 		class groups_objectives
@@ -346,6 +350,7 @@ class CfgFunctions
 			class groupAutoAssignObjective    {};
 			class assignGroupListToObectives  {};
 			class assignAllGroupsToObjective  {};
+			class groupTypeMatchObjective     {};
 			
 		};
 
@@ -363,6 +368,8 @@ class CfgFunctions
 			class groupUpdate           {};
 			class activeWp              {};
 			class getIdleGroups         {};
+			class getCategorizedGroups  {};
+			class getGroupAbilities     {};
 
 		};
 
@@ -385,6 +392,8 @@ class CfgFunctions
 			class entityKilledEh             {};
 			class ACE_MedicalEvents          {};
 			class ACE_Medical_OnStatusChange {};
+			class curatorEvents              {};
+			class onCuratorGroupSelection    {};
 		};
 
 		class taskManager

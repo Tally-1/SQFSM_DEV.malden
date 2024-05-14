@@ -13,6 +13,18 @@ SQFM_fnc_initGroupData = {
 params [
     ["_group", nil, [grpNull]]
 ]; 
+[_group] call SQFM_fnc_groupBehaviourSettings
+params[
+    ["_squadClass",    nil,    [""]],
+    ["_defend",        nil,  [true]],
+    ["_attack",       nil,  [true]],
+    ["_hunt",          nil,  [true]],
+    ["_reinforce",     nil,  [true]],
+    ["_callReinforce", nil,  [true]],
+    ["_callAir",       nil,  [true]],
+    ["_callArty",      nil,  [true]]
+];
+
 private _3Dtxt    = ["100%", 0.546, "#ffffff", "#00000000", "PuristaBold"]call SQFM_fnc_getTextTexture;
 private _emptyMap = createHashmapObject[[]];
 private _dataArr  = [ 
@@ -24,6 +36,7 @@ private _dataArr  = [
     ["action",                    ""],
     ["state",                     ""],
 	["groupType",          "unknown"],
+    ["squadClass",       _squadClass],
     ["travelData",               nil],
     ["available",               true],
     ["battlefield",       [-1,-1,-1]],
@@ -35,7 +48,16 @@ private _dataArr  = [
     ["initialStrength",            0],
     ["strengthIndicator",     _3Dtxt],
     ["objective",            objNull],
-    ["taskData",           _emptyMap]
+    ["taskData",           _emptyMap],
+
+    /******Behaviour settings*******/
+    ["canDefend",                    _defend],
+    ["canAttack",                   _attack],
+    ["canHunt",                        _hunt],
+    ["canReinforce",              _reinforce],
+    ["canCallReinforcements", _callReinforce],
+    ["canCallAir",                  _callAir],
+    ["canCallArty",                _callArty]
 ];
 
 private _data = createHashmapObject [_dataArr];
@@ -57,7 +79,7 @@ then{
 };
 
 _data set ["initialStrength", _strength];
-
+_data call ["update"];
 
 _group setVariable ["SQFM_grpData", _data, true];
 
@@ -73,6 +95,7 @@ private _methods = [
     ["3DIcon",                             SQFM_fnc_group3DIcon],
     ["3DColor",                           SQFM_fnc_group3DColor],
     ["setMethods",      {[_self] call SQFM_fnc_setGroupMethods}],
+    ["debugText",                       SQFM_fnc_groupDebugText],
 
     /*************************{MISC}***************************/
     ["isIdle",                             SQFM_fnc_groupIsIdle],
@@ -127,6 +150,7 @@ private _methods = [
     ["onObjectiveArrival",     SQFM_fnc_groupOnObjectiveArrival],
     ["guardObjective",             SQFM_fnc_groupGuardObjective],
     ["objectiveData",               SQFM_fnc_groupObjectiveData],
+    ["typeMatchObjective",     SQFM_fnc_groupTypeMatchObjective],
 
     /************************{TASKS}****************************/
     ["initTask",                          SQFM_fnc_initTaskData],
@@ -215,8 +239,8 @@ else{
     if(_module getVariable "allowreconcapture")      then {_assetTypes pushBack "recon";};
     if(_module getVariable "allowinfantrycapture")   then {_assetTypes pushBack "infantry";};
     if(_module getVariable "allowcarcapture")        then {_assetTypes pushBack "cars";};
-    if(_module getVariable "allowlightarmorcapture") then {_assetTypes pushBack "armor_l";};
-    if(_module getVariable "allowheavyarmorcapture") then {_assetTypes pushBack "armor_h";};
+    if(_module getVariable "allowlightarmorcapture") then {_assetTypes pushBack "light armor";};
+    if(_module getVariable "allowheavyarmorcapture") then {_assetTypes pushBack "heavy armor";};
 };
 
 
@@ -239,6 +263,7 @@ private _dataArr = [
     ["assetStrength",                                   _capStrength],
     ["owner",                                                 _owner],
     ["allowedSides",                                          _sides],
+    ["allowedAssets",                                    _assetTypes],
     ["groupsPresent",                                             []],
     ["sidesPresent",                                              []],
 	["assignedGroups",                               _assignedGroups],
@@ -295,12 +320,7 @@ true;
 };
 
 /*********************************/
-/*
-TODO:
-// - Set 3D-Debug distance for big objectives higher.(Dist+objSize?)
-- Understand and fix group assignment algo 
 
-*/
 SQFM_fnc_fiveMinTasks={};
 // SQFM_fnc_groupInitObjectiveTask       = {};
 // SQFM_fnc_groupOnObjectiveArrival      = {};
@@ -322,37 +342,202 @@ SQFM_fnc_fiveMinTasks={};
 // SQFM_fnc_assignGroupListToObectives   = {};
 // SQFM_fnc_assignAllGroupsToObjective   = {};
 // SQFM_fnc_groupSetStrengthIcon         = {};
-
-
 // SQFM_fnc_ACE_Medical_OnStatusChange = {};
 // SQFM_fnc_objectiveDescription       = {};
 // SQFM_fnc_group_validObjective       = {};
 // SQFM_fnc_groupUpdate                = {};
 // SQFM_fnc_getGroupStrength           = {};
 // SQFM_fnc_objectiveGetAssignedAssets = {};
-
-// systemChat str ((grp1 call getData)get"initialStrength");
 // SQFM_fnc_objectiveNeedsTroops       = {};
 // SQFM_fnc_groupGetNearObjectives     = {};
 // SQFM_fnc_getAttackGroups            = {};
-// SQFM_fnc_assignAllGroupsToObjective = {};
+// SQFM_fnc_getTextTexture             = {};
+// SQFM_fnc_groupAutoAssignObjective   = {};
+// SQFM_fnc_groupAutoAssignObjective   = {};
+// SQFM_fnc_groupGetBehaviorModule     = {};
+// SQFM_fnc_groupType                  = {};
+// SQFM_fnc_groupBehaviourSettings     = {};
+// SQFM_fnc_groupDebugTextAbilities    = {};
+// SQFM_fnc_groupDebugText             = {};
+// SQFM_fnc_onCuratorGroupSelection    = {};
+// SQFM_fnc_getGroupAbilities          = {};
+// SQFM_fnc_getCategorizedGroups       = {};
+
+/************************New Functions*******************************/
+
+/*
+TODO:
+1) Fix bug where some available Squads are not assigned.
+2) Limit battle-size (Important in order to implement reinforcements)
+3) Set building changed eventhandler for BFFs and Objectives (In order to implement defensive tactics)
+4) Make sure Objectives are actually captured
+5) Make attack-only squads keep pushing to the next Objective once the current one is taken.
+6) Send defensive squads.
+7) Combat insertion.
+8) Transport react to fire.
+
+
+*/
+
+SQFM_fnc_groupUpdate = { 
+_self call ["setGroupCluster"];
+_self call ["setGroupType"];
+_self call ["setStrengthIcon"];
+};
+
+
+// SQFM_fnc_groupTypeMatchObjective = {};
+
+
+SQFM_fnc_group_validObjective = { 
+params[
+	["_objModul",nil,[objNull]]
+];
+private _objData       = _objModul call getData;
+private _allowedSides  = _objData get "allowedSides";
+private _groupType     = _self    get "groupType";
+private _side          = _self    get "side";
+private _strSide       = _self call ["getStrSide"];
+private _inRange       = _self call ["objectiveInRange",[_objModul]];
+
+if!(_inRange)                                      exitWith{"Out of range" call dbgm;false;};
+if!(_side in _allowedSides)                        exitWith{"Wong side" call dbgm;false;};
+if!(_objData call ["troopsNeeded",[_strSide]])     exitWith{"Has troops" call dbgm;false;};
+if!(_self call ["typeMatchObjective",[_objModul]]) exitWith{"No match" call dbgm;false;};
+
+true;
+};
+
+
+SQFM_fnc_groupGetNearObjectives = { 
+params[
+    ["_excluded",[],[[]]] // Objectives excluded from the search
+];
+
+_self call ["setGroupCluster"];
+
+private _pos        = _self get"groupCluster"get"position";
+private _objectives = (_pos nearEntities ["SQFSM_Objective", SQFM_maxObjectiveRange]);
+// systemChat str _objectives;
+_objectives = _objectives select{
+    _self call ["validObjective", [_x]] &&
+    {!(_x in _excluded)}
+};
+
+_objectives;
+};
+
+
+SQFM_fnc_groupAutoAssignObjective = { 
+params[
+    ["_excluded",[],[[]]] // Objectives excluded from the search
+];
+private _group      = _self get "grp";
+private _side       = _self call ["getStrSide"];//side _group;
+private _objectives = _self call ["getNearObjectives",[_excluded]] select {(_x call getData)call ["troopsNeeded",[_side]]};
+if(_objectives isEqualTo [])exitWith{[]};
+
+private _targetObjective = ([_objectives, _group] call SQFM_fnc_objectivesSorted)#0;
+
+[_self, _targetObjective] spawn {(_this#0) call ["takeObjective", [(_this#1)]]};
+
+sleep 1;
+
+[_group, _targetObjective];
+};
 
 
 
-// SQFM_fnc_getTextTexture = {};
+SQFM_fnc_assignAttackGroups = { 
+params[
+    ["_groupsMap", nil,            [createHashmap]],
+    ["_category",  "attackSquads",            [""]]
+]; 
+private _available          = _groupsMap call ["getAvailable",[_category]];
+private _assignedGroups     = [];
+private _assignedObjectives = [];
+{
+    private _grpObj = (_x call getData)call ["autoAssignObjective",[_assignedObjectives]];
+    if(_grpObj isNotEqualTo [])
+    then{
+        _assignedGroups     pushBackUnique (_grpObj#0);
+        _assignedObjectives pushBackUnique (_grpObj#1);
+    };
+    
+} forEach _available;
 
-// SQFM_fnc_groupAutoAssignObjective
+_assignedGroups;
+};
 
 
-// SQFM_fnc_groupAutoAssignObjective = {};
+SQFM_fnc_assignAllGroupTasks = { 
+private _groupMap     = call SQFM_fnc_getCategorizedGroups;
 
+private _groups = [_groupMap, "recon"] call SQFM_fnc_assignAttackGroups;
+_groupMap call ["removeMultiple",[_groups]];
+
+_groups = [_groupMap, "attackSquads"] call SQFM_fnc_assignAttackGroups;
+_groupMap call ["removeMultiple",[_groups]];
+
+};
+
+SQFM_fnc_groupTypeMatchObjective = { 
+params[
+	["_objModul",nil,[objNull]]
+];
+private _objData       = _objModul call getData;
+private _allowedAssets = _objData get "allowedAssets";
+private _groupType     = _self    get "groupType";
+
+if(_groupType in _allowedAssets)exitWith{true;};
+
+private _match = false;
+{
+    if(_x in _groupType)exitWith{_match = true;};
+    systemChat str [_groupType, _x];
+    
+} forEach _allowedAssets;
+
+_match;
+};
+
+// params ["_curator", "_group"];
 call SQFM_fnc_updateMethodsAllGroups;
 call SQFM_fnc_updateMethodsAllObjectives;
+// call SQFM_fnc_assignAllGroupTasks;
+
+
+// SQFM_fnc_getAreaParkingPos = {};
+// call ["validObjective", [_x]]
+private _grp = grp_1  call getData;
+// private _obj = town_1 call getData;
+// hint str(_grp call ["getNearObjectives",[[]]]);
+hint str(_grp call ["autoAssignObjective"]);
+// private _objective = town_2 call getData;
+// _grp call ["typeMatchObjective", [town_1]];
+// systemChat ((_grp call getData)get"squadClass");
+// hint str (_grp call ["typeMatchObjective", [recon_1]]);
+
+// private _area      = (_objective call getData)get"area";
+// private _pos       = _area#0;
+// private _leader    = leader _grp;
+// private _dropPos   = [_area, 6, _leader, true] call SQFM_fnc_getAreaParkingPos;
+// SQFM_Custom3Dpositions =[[_dropPos]]
+
+// (grp_1 call getData) call ["takeObjective", [obj_3]]; //call ["autoAssignObjective"];
+// (grp_2 call getData)call ["autoAssignObjective"];
+// call SQFM_fnc_assignAllGroupTasks;
+
+// private _groupMap = call SQFM_fnc_getCategorizedGroups;
+// [_groupMap] call SQFM_fnc_copyHashmap;
+// hint str  (_groupMap call ["getAvailable",["attackSquads"]]);
 
 // call SQFM_fnc_assignAllGroupsToObjective;
-// [obj_1] call SQFM_fnc_setObjectiveData;
-private _objData = obj_1 call getData;
-private _grpData = grp_1 call getData;
+// [grp_1] call SQFM_fnc_initGroupData;
+// [grp_1] call SQFM_fnc_groupBehaviourSettings;
+// private _objData = obj_1 call getData;
+// private _grpData = grp_3 call getData;
+// _grpData call ["update"];
 // hint str (_objData call ["troopsNeeded",["east"]]);
 // private _objs  = _grpData call ["getNearObjectives"];
 // hint str _objs;

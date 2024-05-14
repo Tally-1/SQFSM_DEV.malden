@@ -4,6 +4,7 @@ call SQFM_fnc_groupSpawnedEh;
 call SQFM_fnc_projectileCreated;
 call SQFM_fnc_entityKilledEh;
 call SQFM_fnc_ACE_MedicalEvents;
+call SQFM_fnc_curatorEvents;
 // call SQFM_fnc_initAllTransportModules;
 
 {[_x] call SQFM_fnc_initGroup;} forEach allGroups;

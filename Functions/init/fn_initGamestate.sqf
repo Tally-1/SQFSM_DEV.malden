@@ -1,7 +1,11 @@
 // Contains global variables used all over the mod.
 // I may turn it into a hashmap to allow for OOP programming.
+
 private _objectiveRanges = (entities "SQFSM_Objective")apply{_x getVariable "activationDistance"};
 private _maxObjRange     = selectMax _objectiveRanges;
+
+if((-1) in _objectiveRanges)
+then{_maxObjRange = worldSize;};
 
 SQFM_manValue          = 1;
 SQFM_carValue          = 3;

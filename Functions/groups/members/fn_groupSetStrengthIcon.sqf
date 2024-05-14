@@ -6,7 +6,7 @@ if(_initial isEqualTo 0
 or{_current isEqualTo 0})
 then{_prcnt = 0}
 else{_prcnt = round((_current / _initial)*100)};
-private _color = "#adff2f";
+private _color = "#86ff35";
 if(_prcnt < 75)then{_color = "#ffe96f";};
 if(_prcnt < 26)then{_color = "#ff4f4f";};
 
