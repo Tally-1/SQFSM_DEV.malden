@@ -362,186 +362,56 @@ SQFM_fnc_fiveMinTasks={};
 // SQFM_fnc_onCuratorGroupSelection    = {};
 // SQFM_fnc_getGroupAbilities          = {};
 // SQFM_fnc_getCategorizedGroups       = {};
+// SQFM_fnc_groupTypeMatchObjective  = {};
+// SQFM_fnc_group_validObjective     = {};
+// SQFM_fnc_groupGetNearObjectives   = {};
+// SQFM_fnc_groupAutoAssignObjective = {};
+// SQFM_fnc_assignAttackGroups       = {};
+// SQFM_fnc_assignAllGroupTasks      = {};
+// SQFM_fnc_groupTypeMatchObjective  = {};
+// SQFM_fnc_distanceToNearestBattle = {};
+// SQFM_fnc_nearestObjective        = {};
+// SQFM_fnc_initBattle              = {};
+// SQFM_fnc_battlefieldRadius       = {};
+// SQFM_fnc_battlefieldCenter       = {};
+// SQFM_fnc_battlefieldDimensions   = {};
+// SQFM_fnc_groupUpdate             = {};
 
 /************************New Functions*******************************/
 
 /*
 TODO:
-1) Fix bug where some available Squads are not assigned.
-2) Limit battle-size (Important in order to implement reinforcements)
-3) Set building changed eventhandler for BFFs and Objectives (In order to implement defensive tactics)
-4) Make sure Objectives are actually captured
-5) Make attack-only squads keep pushing to the next Objective once the current one is taken.
-6) Send defensive squads.
-7) Combat insertion.
-8) Transport react to fire.
-
-
+-Posponed-1)  Fix bug where some available Squads are not assigned.
+-Complete-2)  Limit battle-size -min/max- (Important in order to implement reinforcements)
+-Complete-3)  Set building changed eventhandler for BFFs and Objectives (In order to implement defensive tactics)
+-Posponed-4)  Make sure Objectives are actually captured
+5)  Make attack-only squads keep pushing to the next Objective once the current one is taken.
+6)  Send defensive squads.
+7)  Call/Send reinforcements.
+8)  Combat insertion.
+9)  Transport react to fire / Enemy spotted.
+10) Transport Pickup fail handling.
+11) Battlefield Map markers
+12) Objective   Map markers
 */
 
-SQFM_fnc_groupUpdate = { 
-_self call ["setGroupCluster"];
-_self call ["setGroupType"];
-_self call ["setStrengthIcon"];
-};
+// SQFM_fnc_isHouse = {};
+// SQFM_fnc_buildingChangedEh = {};
 
 
-// SQFM_fnc_groupTypeMatchObjective = {};
-
-
-SQFM_fnc_group_validObjective = { 
-params[
-	["_objModul",nil,[objNull]]
-];
-private _objData       = _objModul call getData;
-private _allowedSides  = _objData get "allowedSides";
-private _groupType     = _self    get "groupType";
-private _side          = _self    get "side";
-private _strSide       = _self call ["getStrSide"];
-private _inRange       = _self call ["objectiveInRange",[_objModul]];
-
-if!(_inRange)                                      exitWith{"Out of range" call dbgm;false;};
-if!(_side in _allowedSides)                        exitWith{"Wong side" call dbgm;false;};
-if!(_objData call ["troopsNeeded",[_strSide]])     exitWith{"Has troops" call dbgm;false;};
-if!(_self call ["typeMatchObjective",[_objModul]]) exitWith{"No match" call dbgm;false;};
-
-true;
-};
-
-
-SQFM_fnc_groupGetNearObjectives = { 
-params[
-    ["_excluded",[],[[]]] // Objectives excluded from the search
-];
-
-_self call ["setGroupCluster"];
-
-private _pos        = _self get"groupCluster"get"position";
-private _objectives = (_pos nearEntities ["SQFSM_Objective", SQFM_maxObjectiveRange]);
-// systemChat str _objectives;
-_objectives = _objectives select{
-    _self call ["validObjective", [_x]] &&
-    {!(_x in _excluded)}
-};
-
-_objectives;
-};
-
-
-SQFM_fnc_groupAutoAssignObjective = { 
-params[
-    ["_excluded",[],[[]]] // Objectives excluded from the search
-];
-private _group      = _self get "grp";
-private _side       = _self call ["getStrSide"];//side _group;
-private _objectives = _self call ["getNearObjectives",[_excluded]] select {(_x call getData)call ["troopsNeeded",[_side]]};
-if(_objectives isEqualTo [])exitWith{[]};
-
-private _targetObjective = ([_objectives, _group] call SQFM_fnc_objectivesSorted)#0;
-
-[_self, _targetObjective] spawn {(_this#0) call ["takeObjective", [(_this#1)]]};
-
-sleep 1;
-
-[_group, _targetObjective];
-};
-
-
-
-SQFM_fnc_assignAttackGroups = { 
-params[
-    ["_groupsMap", nil,            [createHashmap]],
-    ["_category",  "attackSquads",            [""]]
-]; 
-private _available          = _groupsMap call ["getAvailable",[_category]];
-private _assignedGroups     = [];
-private _assignedObjectives = [];
-{
-    private _grpObj = (_x call getData)call ["autoAssignObjective",[_assignedObjectives]];
-    if(_grpObj isNotEqualTo [])
-    then{
-        _assignedGroups     pushBackUnique (_grpObj#0);
-        _assignedObjectives pushBackUnique (_grpObj#1);
-    };
-    
-} forEach _available;
-
-_assignedGroups;
-};
-
-
-SQFM_fnc_assignAllGroupTasks = { 
-private _groupMap     = call SQFM_fnc_getCategorizedGroups;
-
-private _groups = [_groupMap, "recon"] call SQFM_fnc_assignAttackGroups;
-_groupMap call ["removeMultiple",[_groups]];
-
-_groups = [_groupMap, "attackSquads"] call SQFM_fnc_assignAttackGroups;
-_groupMap call ["removeMultiple",[_groups]];
-
-};
-
-SQFM_fnc_groupTypeMatchObjective = { 
-params[
-	["_objModul",nil,[objNull]]
-];
-private _objData       = _objModul call getData;
-private _allowedAssets = _objData get "allowedAssets";
-private _groupType     = _self    get "groupType";
-
-if(_groupType in _allowedAssets)exitWith{true;};
-
-private _match = false;
-{
-    if(_x in _groupType)exitWith{_match = true;};
-    systemChat str [_groupType, _x];
-    
-} forEach _allowedAssets;
-
-_match;
-};
-
-// params ["_curator", "_group"];
+/**************Update group and objective methods***********************/
 call SQFM_fnc_updateMethodsAllGroups;
 call SQFM_fnc_updateMethodsAllObjectives;
+/************************Code to execute*******************************/
+
+// SQFM_fnc_updateBattleBuildings = {};
+
+
+
 // call SQFM_fnc_assignAllGroupTasks;
-
-
-// SQFM_fnc_getAreaParkingPos = {};
-// call ["validObjective", [_x]]
-private _grp = grp_1  call getData;
 // private _obj = town_1 call getData;
+// private _grp = grp_1  call getData;
+// hint str(_grp call ["autoAssignObjective"]);
 // hint str(_grp call ["getNearObjectives",[[]]]);
-hint str(_grp call ["autoAssignObjective"]);
-// private _objective = town_2 call getData;
-// _grp call ["typeMatchObjective", [town_1]];
-// systemChat ((_grp call getData)get"squadClass");
-// hint str (_grp call ["typeMatchObjective", [recon_1]]);
-
-// private _area      = (_objective call getData)get"area";
-// private _pos       = _area#0;
-// private _leader    = leader _grp;
-// private _dropPos   = [_area, 6, _leader, true] call SQFM_fnc_getAreaParkingPos;
-// SQFM_Custom3Dpositions =[[_dropPos]]
-
-// (grp_1 call getData) call ["takeObjective", [obj_3]]; //call ["autoAssignObjective"];
-// (grp_2 call getData)call ["autoAssignObjective"];
-// call SQFM_fnc_assignAllGroupTasks;
-
-// private _groupMap = call SQFM_fnc_getCategorizedGroups;
-// [_groupMap] call SQFM_fnc_copyHashmap;
-// hint str  (_groupMap call ["getAvailable",["attackSquads"]]);
-
-// call SQFM_fnc_assignAllGroupsToObjective;
-// [grp_1] call SQFM_fnc_initGroupData;
-// [grp_1] call SQFM_fnc_groupBehaviourSettings;
-// private _objData = obj_1 call getData;
-// private _grpData = grp_3 call getData;
-// _grpData call ["update"];
-// hint str (_objData call ["troopsNeeded",["east"]]);
-// private _objs  = _grpData call ["getNearObjectives"];
-// hint str _objs;
-
-/*********************************/
 
 systemChat "devfiled read";

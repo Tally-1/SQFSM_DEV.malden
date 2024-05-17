@@ -6,11 +6,13 @@ private _methods = [
     ["3DIcon",                             SQFM_fnc_group3DIcon],
     ["3DColor",                           SQFM_fnc_group3DColor],
     ["setMethods",      {[_self] call SQFM_fnc_setGroupMethods}],
+    ["debugText",                       SQFM_fnc_groupDebugText],
 
     /*************************{MISC}***************************/
     ["isIdle",                             SQFM_fnc_groupIsIdle],
     ["isValid", {[(_self get "grp")] call SQFM_fnc_validGroup;}],
     ["activeWp",                              SQFM_fnc_activeWp],
+    ["update",                            SQFM_fnc_groupUpdate],
     
     /**********************{TRAVEL}*****************************/
     ["initTravel",                     SQFM_fnc_initGroupTravel],
@@ -59,6 +61,7 @@ private _methods = [
     ["onObjectiveArrival",     SQFM_fnc_groupOnObjectiveArrival],
     ["guardObjective",             SQFM_fnc_groupGuardObjective],
     ["objectiveData",               SQFM_fnc_groupObjectiveData],
+    ["typeMatchObjective",     SQFM_fnc_groupTypeMatchObjective],
 
     /************************{TASKS}****************************/
     ["initTask",                          SQFM_fnc_initTaskData],
@@ -72,6 +75,8 @@ private _methods = [
     ["getUnitsOnfoot",                  SQFM_fnc_getGroupUnitsOnFoot],
     ["getVehiclesInUse",         {(_self call ["getOwnVehicles"])#2}],
     ["getGrpMembers",                         SQFM_fnc_getGrpMembers],
+    ["getStrength",                        SQFM_fnc_getGroupStrength],
+    ["setStrengthIcon",                SQFM_fnc_groupSetStrengthIcon],
 	["crewMen",                                   SQFM_fnc_groupCrew],
 	["nonCrewMen",                             SQFM_fnc_groupNonCrew],
     ["tallyAssets",                        SQFM_fnc_groupTallyAssets],

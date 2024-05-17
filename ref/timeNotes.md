@@ -1,10 +1,8 @@
-~10.25 hrs (615 minutes)
-
-[68m]  misc
-[50m]  Behaviour settings init, behaviour debug.
-[70m]  Group ability categorisation.
-[155m] Recon & attack groups assignment (Inf)
-[110m] Group selection debug text.
-[51m]  Refactoring, debug text tweak
-[64m]  Group task assignment, refactoring.
-[47m]  Testing, bugfixing, planning next session(See "TODO:" in devfile.sqf).
+[11m]  Uploading & writing changelog.
+[31m]  Refactoring, Testing.
+[60m]  Battlefield Radius limits
+[88m]  Battlefield dimensions update (Align with objectives && avoid BFF overlaps)
+[39m]  Refactoring, Testing.
+[110m] Battlefield Buildings update.
+339 minutes
+(5.65 hours)

@@ -5,7 +5,7 @@ call SQFM_fnc_projectileCreated;
 call SQFM_fnc_entityKilledEh;
 call SQFM_fnc_ACE_MedicalEvents;
 call SQFM_fnc_curatorEvents;
-// call SQFM_fnc_initAllTransportModules;
+call SQFM_fnc_buildingChangedEh;
 
 {[_x] call SQFM_fnc_initGroup;} forEach allGroups;
 {[_x] call SQFM_fnc_initObjective;} forEach entities "SQFSM_Objective";

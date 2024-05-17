@@ -7,13 +7,16 @@ private _maxObjRange     = selectMax _objectiveRanges;
 if((-1) in _objectiveRanges)
 then{_maxObjRange = worldSize;};
 
-SQFM_manValue          = 1;
-SQFM_carValue          = 3;
-SQFM_ApcValue          = 5;
-SQFM_MbtValue          = 9;
-SQFM_maxObjectiveRange = _maxObjRange;
-SQFM_newGroups         = [];
-SQFM_deadGroups        = [];
-SQFM_battleList        = [];
-SQFM_validSides        = [east, west, independent];
-SQFM_battles           = createHashmapObject [[]];
+SQFM_manValue           = 1;
+SQFM_carValue           = 3;
+SQFM_ApcValue           = 5;
+SQFM_MbtValue           = 9;
+SQFM_maxObjectiveRange  = _maxObjRange;
+SQFM_newGroups          = [];
+SQFM_deadGroups         = [];
+SQFM_battleList         = [];
+SQFM_validSides         = [east, west, independent];
+SQFM_battles            = createHashmapObject [[]];
+SQFM_maxBattleSize      = 2000;
+SQFM_minBattleSize      = 200;
+SQFM_lastBuildingChange = 0;

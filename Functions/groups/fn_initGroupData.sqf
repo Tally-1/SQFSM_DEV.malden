@@ -5,7 +5,7 @@ params [
 params[
     ["_squadClass",    nil,    [""]],
     ["_defend",        nil,  [true]],
-    ["_capture",       nil,  [true]],
+    ["_attack",       nil,  [true]],
     ["_hunt",          nil,  [true]],
     ["_reinforce",     nil,  [true]],
     ["_callReinforce", nil,  [true]],
@@ -40,7 +40,7 @@ private _dataArr  = [
 
     /******Behaviour settings*******/
     ["canDefend",                    _defend],
-    ["canAttack",                _squadClass],
+    ["canAttack",                   _attack],
     ["canHunt",                        _hunt],
     ["canReinforce",              _reinforce],
     ["canCallReinforcements", _callReinforce],

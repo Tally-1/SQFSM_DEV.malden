@@ -1,7 +1,7 @@
 if(isNil "SQFM_debugMode")then{ 
 	SQFSM_Version           = 0.2;
 	SQFM_debugMode          = true; // Debug-mode active 
-	SQFM_boardTeleportDist  = 30;  // How far away a group of men can be in order to teleport into a vehicle.
+	SQFM_boardTeleportDist  = 30;   // How far away a group of men can be in order to teleport into a vehicle.
 	SQFM_manualBoardingDist = 100; 
 	SQFM_travelWalkDist     = 500;
 };

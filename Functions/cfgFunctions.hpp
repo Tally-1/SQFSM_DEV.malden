@@ -9,15 +9,18 @@ class CfgFunctions
 			class initBattle                   {};
 			class initBattleMap                {};
 			class initBattleBuildings          {};
+			class updateBattleBuildings        {};
 			class getUrbanZones                {};
 			class postInitBattle               {};
 			class updateBattle                 {};
 			class battlefieldRadius            {};
 			class battlefieldDimensions        {};
+			class battlefieldCenter            {};
 			class getBattleGrid                {};
 
 			class posInBattleZone              {};
 			class nearestBattlePosRad          {};
+			class distanceToNearestBattle      {};
 			class initBattleGroups             {};
 			class endBattleGroups              {};
 			class onBattleFirstShot            {};
@@ -133,6 +136,7 @@ class CfgFunctions
 			class updateAllObjectives          {};
 			class objectiveCountAssignedAssets {};
 			class objectivesSorted             {};
+			class nearestObjective             {};
 
 		};
 
@@ -348,8 +352,9 @@ class CfgFunctions
 			class groupGuardObjective         {};
 			class groupObjectiveData          {};
 			class groupAutoAssignObjective    {};
-			class assignGroupListToObectives  {};
-			class assignAllGroupsToObjective  {};
+			// class assignGroupListToObectives  {};
+			// class assignAllGroupsToObjective  {};
+			class assignAttackGroups          {};
 			class groupTypeMatchObjective     {};
 			
 		};
@@ -370,6 +375,7 @@ class CfgFunctions
 			class getIdleGroups         {};
 			class getCategorizedGroups  {};
 			class getGroupAbilities     {};
+			class assignAllGroupTasks   {};
 
 		};
 
@@ -394,6 +400,7 @@ class CfgFunctions
 			class ACE_Medical_OnStatusChange {};
 			class curatorEvents              {};
 			class onCuratorGroupSelection    {};
+			class buildingChangedEh          {};
 		};
 
 		class taskManager
