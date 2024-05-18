@@ -1,8 +1,5 @@
-[11m]  Uploading & writing changelog.
-[31m]  Refactoring, Testing.
-[60m]  Battlefield Radius limits
-[88m]  Battlefield dimensions update (Align with objectives && avoid BFF overlaps)
-[39m]  Refactoring, Testing.
-[110m] Battlefield Buildings update.
-339 minutes
-(5.65 hours)
+[14m]  Uploading & writing changelog.
+[112m] Building Attack only Task, Rewriting transport spawn search algo.
+[214m] Building  Danger-zone insert-pos algorythm
+[53m]  Finishing Danger-zone insert-pos algorythm
+~393 minutes (6.55 hours)

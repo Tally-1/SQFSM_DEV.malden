@@ -5,7 +5,6 @@ waituntil {!isNull (findDisplay 46)};
 ["KeyDown", "
 			private _Pressed = false;
 			if ((_this # 1) == 79) then {execVM 'devFile.sqf'; _Pressed = true};
-			if ((_this # 1) == 80) then {hint 'reCompiling...'; [5] call BIS_fnc_recompile; _Pressed = true};
 _Pressed"];
 
 (findDisplay 46) displayAddEventHandler ["KeyDown", {
@@ -24,3 +23,5 @@ _Pressed"];
     false;
 }];
 };
+
+//if ((_this # 1) == 80) then {hint 'reCompiling...'; [5] call BIS_fnc_recompile; _Pressed = true};

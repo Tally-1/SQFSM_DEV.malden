@@ -141,20 +141,29 @@ private _methods = [
     ["ejectAll",             SQFM_fnc_groupEjectFromAllVehicles],
 
 	/********************{OBJECTIVES}***************************/
-	["validObjective",            SQFM_fnc_group_validObjective],
-    ["objectiveInRange",         SQFM_fnc_groupObjectiveInRange],
-    ["getNearObjectives",       SQFM_fnc_groupGetNearObjectives],
-    ["assignObjective",           SQFM_fnc_groupAssignObjective],
-    ["autoAssignObjective",   SQFM_fnc_groupAutoAssignObjective],
-    ["takeObjective",               SQFM_fnc_groupTakeObjective],
-    ["onObjectiveArrival",     SQFM_fnc_groupOnObjectiveArrival],
-    ["guardObjective",             SQFM_fnc_groupGuardObjective],
-    ["objectiveData",               SQFM_fnc_groupObjectiveData],
-    ["typeMatchObjective",     SQFM_fnc_groupTypeMatchObjective],
+	["validObjective",                       SQFM_fnc_group_validObjective],
+    ["objectiveInRange",                    SQFM_fnc_groupObjectiveInRange],
+    ["getNearObjectives",                  SQFM_fnc_groupGetNearObjectives],
+    ["assignObjective",                      SQFM_fnc_groupAssignObjective],
+    ["autoAssignObjective",              SQFM_fnc_groupAutoAssignObjective],
+    ["canAttackOnly",                             SQFM_fnc_groupAttackOnly],
+    ["canDefendOnly",                             SQFM_fnc_groupDefendOnly],
+    ["takeObjective",                          SQFM_fnc_groupTakeObjective],
+    ["attackObjective",                      SQFM_fnc_groupAttackObjective],
+    ["onObjectiveArrival",                SQFM_fnc_groupOnObjectiveArrival],
+    ["guardObjective",                        SQFM_fnc_groupGuardObjective],
+    ["objectiveData",                          SQFM_fnc_groupObjectiveData],
+    ["typeMatchObjective",                SQFM_fnc_groupTypeMatchObjective],
+    ["objectiveHostile",                    SQFM_fnc_groupObjectiveHostile],
+    ["objectiveInsertPos",                SQFM_fnc_groupObjectiveInsertPos],
+    ["objectiveInsertPosStandard",SQFM_fnc_groupObjectiveInsertPosStandard],
+    ["objectiveInsertPosDanger",    SQFM_fnc_groupObjectiveInsertPosDanger],
+    
 
     /************************{TASKS}****************************/
-    ["initTask",                          SQFM_fnc_initTaskData],
-    ["initObjectiveTask",       SQFM_fnc_groupInitObjectiveTask],
+    ["initTask",                              SQFM_fnc_initTaskData],
+    ["initObjectiveTask",           SQFM_fnc_groupInitObjectiveTask],
+    ["getAbilities",      {[_self] call SQFM_fnc_getGroupAbilities}],
 
     /**********************{TACTICS}***************************/
     ["garrison",                         SQFM_fnc_groupGarrison],
@@ -163,6 +172,7 @@ private _methods = [
     ["getUnits",                              SQFM_fnc_getGroupUnits],
     ["getUnitsOnfoot",                  SQFM_fnc_getGroupUnitsOnFoot],
     ["getVehiclesInUse",         {(_self call ["getOwnVehicles"])#2}],
+    ["isVehicleGroup", {count(_self call ["nonCrewMen"])isEqualTo 0}],
     ["getGrpMembers",                         SQFM_fnc_getGrpMembers],
     ["getStrength",                        SQFM_fnc_getGroupStrength],
     ["setStrengthIcon",                SQFM_fnc_groupSetStrengthIcon],
@@ -376,6 +386,9 @@ SQFM_fnc_fiveMinTasks={};
 // SQFM_fnc_battlefieldCenter       = {};
 // SQFM_fnc_battlefieldDimensions   = {};
 // SQFM_fnc_groupUpdate             = {};
+// SQFM_fnc_isHouse               = {};
+// SQFM_fnc_buildingChangedEh     = {};
+// SQFM_fnc_updateBattleBuildings = {};
 
 /************************New Functions*******************************/
 
@@ -394,9 +407,432 @@ TODO:
 11) Battlefield Map markers
 12) Objective   Map markers
 */
+SQFM_fnc_groupAttackOnly = { 
+private _abilities = _self call ["getAbilities"];
+private _canAttack = "attack" in _abilities;
+private _canDefend = "defend" in _abilities;
 
-// SQFM_fnc_isHouse = {};
-// SQFM_fnc_buildingChangedEh = {};
+if (_canDefend)exitWith{false;};
+if!(_canAttack)exitWith{false;};
+
+true;
+};
+
+SQFM_fnc_groupDefendOnly = { 
+private _abilities = _self call ["getAbilities"];
+private _canAttack = "attack" in _abilities;
+private _canDefend = "defend" in _abilities;
+
+if!(_canDefend)exitWith{false;};
+if (_canAttack)exitWith{false;};
+
+true;
+};
+
+
+// [_self, _targetObjective] spawn {(_this#0) call ["takeObjective", [(_this#1)]]};
+
+SQFM_fnc_assignAttackGroups = { 
+params[
+    ["_groupsMap", nil,            [createHashmap]],
+    ["_category",  "attackSquads",            [""]]
+]; 
+private _available          = _groupsMap call ["getAvailable",[_category]];
+private _assignedGroups     = [];
+private _assignedObjectives = [];
+{
+    private _grpObj = (_x call getData)call ["autoAssignObjective",[_assignedObjectives]];
+    if(_grpObj isNotEqualTo [])
+    then{
+        _assignedGroups     pushBackUnique (_grpObj#0);
+        _assignedObjectives pushBackUnique (_grpObj#1);
+    };
+    
+} forEach _available;
+
+_assignedGroups;
+};
+
+
+SQFM_fnc_assignAllGroupTasks = { 
+private _groupMap     = call SQFM_fnc_getCategorizedGroups;
+
+private _groups = [_groupMap, "recon"] call SQFM_fnc_assignAttackGroups;
+_groupMap call ["removeMultiple",[_groups]];
+
+_groups = [_groupMap, "attackSquads"] call SQFM_fnc_assignAttackGroups;
+_groupMap call ["removeMultiple",[_groups]];
+};
+
+
+SQFM_fnc_groupInitObjectiveTask = { 
+private _defTaskName = "Taking Objective";
+private _defArrCode  = {(_self call ["ownerData"]) call ["onObjectiveArrival"]};
+private _defEndCode  = {(_self call ["ownerData"]) call ["guardObjective"]};
+params[
+	["_objectiveModule", nil,     [objNull]],
+    ["_taskName",        _defTaskName, [""]],
+    ["_onArrival",       _defArrCode,  [{}]],
+    ["_onTaskEnd",       _defEndCode,  [{}]]
+];
+
+private _objctvData = _objectiveModule getVariable "SQFM_objectiveData";
+private _zone       = _objctvData get "zone";
+private _pos        = _objctvData get "position";
+private _task       = _self call ["initTask",
+[
+    _taskName,          // Taskname     ["name"]
+    _zone,              // Task zone    ["zone"]
+    [_pos],             // Positions    ["positions"]
+    [_objectiveModule], // TaskParams   ["params"]
+    _onArrival,         // Arrival-code ["arrivalCode"]
+    _onTaskEnd          // End-code     ["endCode"]
+]];
+
+_task;
+};
+
+SQFM_fnc_groupAutoAssignObjective = { 
+params[
+    ["_excluded",[],[[]]] // Objectives excluded from the search
+];
+private _group      = _self get "grp";
+private _side       = _self call ["getStrSide"];//side _group;
+private _objectives = _self call ["getNearObjectives",[_excluded]] select {(_x call getData)call ["troopsNeeded",[_side]]};
+if(_objectives isEqualTo [])exitWith{[]};
+
+private _targetObjective = ([_objectives, _group] call SQFM_fnc_objectivesSorted)#0;
+_self call ["takeObjective", _targetObjective];
+
+sleep 1;
+
+[_group, _targetObjective];
+};
+
+SQFM_fnc_groupTakeObjective = { 
+params["_objModule"];
+[_self, _objModule]spawn{
+params[
+    ["_self",      nil,[createHashmap]],
+	["_objModule", nil,[objNull]]
+];
+
+private _dropPos   = _self call ["objectiveInsertPos",[_objModule]];
+private _canTravel = _self call ["initTravel",[_dropPos]];
+
+if!(_canTravel)exitWith{false;};
+
+_self call ["initObjectiveTask",[_objModule]];
+_self call ["assignObjective",  [_objModule]];
+
+true;
+}};
+
+
+
+SQFM_fnc_groupObjectiveHostile = { 
+params[
+	["_objModule",nil,[objNull]]
+]; 
+private _objData      = _objModule call getData;
+private _side         = _self get "side";
+private _contested    = _objData call ["getContested"];
+private _owner        = _objData get "owner";
+private _hostileOwner = [_side, _owner] call SQFM_fnc_hostile;
+
+if(_contested)                   exitWith{true};
+if(_owner isEqualTo sideUnknown) exitWith{false};
+if(_owner isEqualTo _side)       exitWith{false};
+
+_hostileOwner;
+};
+
+/*
+ATTACK Sequence:
+1) Define Insertion point.
+   - If Infantry or Mixed group a position in a safe distance (cover?)
+     is needed for unloading infantry.
+   - If the objective is not hostile then standard insertion pos is used
+2) Travel to objective.
+3) Once the insertion point is reached then loop a search and destroy
+   sequence.
+4) Once the Objective is secured (Not hostile or contested) then the
+   attackGroup returns to the insertion point and is set as idle ("task"="" & "action"="")
+
+*/
+SQFM_fnc_groupObjectiveInsertPosStandard = { 
+params[
+	["_objModule",nil,[objNull]]
+];
+private _objData = _objModule call getData;
+private _area    = _objData get "area";
+private _leader  = leader(_self get"grp");
+private _insPos  = [_area, 6, _leader, true] call SQFM_fnc_getAreaParkingPos;
+
+_insPos;
+};
+
+
+SQFM_fnc_formatDir = { 
+params[
+    ["_dir",   nil,     [0]],
+    ["_round", false, [true]]
+];
+
+if!(_round)exitWith{((_dir + 360) % 360);};
+_dir = round((_dir + 360) % 360);
+
+_dir;
+};
+
+SQFM_fnc_lineBroken = { 
+params[
+	["_startPosASL", nil,          [[]]],
+	["_endPosASL",   nil,          [[]]],
+	["_ignoreObj1",  objNull, [objNull]],
+	["_ignoreObj2",  objNull, [objNull]],
+    ["_ignoreList",  [],           [[]]]
+];
+
+private _linebreaks = lineIntersectsSurfaces [_startPosASL, _endPosASL, _ignoreObj1, _ignoreObj2, true, 5];
+
+// Select objects that are not men, nor in the ignoreList
+_linebreaks = _linebreaks select { 
+    private _object         = _x#3;
+    private _isMan          = _object isKindOf "man";// isEqualTo false;
+    private _ignored        = _object in _ignoreList;
+    private _validLineBreak = _isMan isEqualTo false && {_ignored isEqualTo false};
+    
+    _validLineBreak;
+};
+
+private _broken = _linebreaks isNotEqualTo [];
+
+_broken;
+};
+
+SQFM_fnc_enemiesInZone = { 
+params[
+    ["_ownSide",  nil, [objNull,west,grpNull,createHashmap]],
+    ["_zone",     nil,                                 [[]]]
+];
+_zone params["_pos","_rad"];
+private _enemies  = [];
+
+{
+    if([_x] call SQFM_fnc_validLandEntity
+    &&{[_ownSide,_x] call SQFM_fnc_hostile})
+    then{_enemies pushBackUnique _x};
+    
+} forEach (_pos nearEntities ["land", _rad]);
+
+_enemies;
+};
+
+SQFM_fnc_clustersFromObjArr = { 
+params[
+    ["_objArr",     nil, [[]]],
+    ["_clusterRad", 50,   [0]]
+];
+private _registeredObjects = [];
+private _allClusters       = [];
+
+{isNil{
+    private _hashMap = [_x, _clusterRad,_registeredObjects] call SQFM_fnc_cluster;
+    private _objects = _hashMap get "objects";
+
+    _registeredObjects insert [0, _objects, true];
+    _allClusters pushBackUnique _hashMap;
+    
+}} forEach _objArr;
+
+_allClusters;
+};
+
+SQFM_fnc_posHasTerrainCover = { 
+params[
+    ["_pos",            nil,  [[]]], // The position that is being evaluated
+    ["_enemyPositions", nil,  [[]]], // A list of positions to hide from
+    ["_z",              3,     [0]]  // Meters above ground (at 0 it may give a false positive)
+];
+if(surfaceIsWater _pos)exitWith{false;};
+
+private _hasCover    = true;
+private _searchEnded = false;
+private _startPos    = [_pos#0, _pos#1, _z];
+
+{
+    if(_searchEnded)exitWith{};
+
+    private _endPos  = [_x#0, _x#1, _z];
+    private _inCover = terrainIntersect [_startPos, _endPos];
+    
+    if!(_inCover)exitWith{
+        _hasCover    = false;
+        _searchEnded = true;
+    };
+
+    
+} forEach _enemyPositions;
+
+_hasCover;
+};
+
+SQFM_fnc_posIsHidden = { 
+params[
+    ["_pos",            nil,  [[]]], // The position that is being evaluated
+    ["_enemyPositions", nil,  [[]]], // A list of positions to hide from
+    ["_z",              0,     [0]], // Meters above ground (at 0 it may give a false positive)
+    ["_objectList",     [],   [[]]]  // A list of units or vehicles that does not break LOS 
+];
+
+private _hidden = true;
+private _startPos = ATLToASL [_pos#0, _pos#1, _z];
+{
+    if!(_hidden)exitWith{};
+
+    private _endPos  = ATLToASL [_x#0, _x#1, _z];
+    private _blocked = [_startPos,_endPos,nil,nil,_objectList] call SQFM_fnc_lineBroken;
+    
+    if!(_blocked)exitWith{_hidden = false;};
+
+} forEach _enemyPositions;
+
+_hidden;
+};
+
+SQFM_fnc_selectSafePositions = { 
+params[
+    ["_posArr",  nil, [[]]], // List of positions to be evaluated
+    ["_enemies", nil, [[]]]  // List of enemies (Units / vehicles that needs to be hidden from)
+];
+private _safePositions = _posArr select {[_x,false,7,10] call SQFM_fnc_clearPos};
+if(_safePositions isEqualTo []) exitWith{[]};
+if(_enemies isEqualTo [])       exitWith{_safePositions};
+
+private _enemyClusters  = [_enemies] call SQFM_fnc_clustersFromObjArr;
+private _enemyPositions = _enemyClusters apply {_x get "position"};
+private _safePositions  = _posArr select {[_x, _enemyPositions, 2] call SQFM_fnc_posHasTerrainCover};
+
+// Terrain is the best cover so if found only those are returned.
+if(_safePositions isNotEqualTo [])exitWith{_safePositions};
+
+_safePositions  = _posArr select {[_x, _enemyPositions, 3, _enemies] call SQFM_fnc_posIsHidden};
+
+_safePositions;
+};
+
+
+SQFM_fnc_dangerZoneInsertionPos = { 
+params[
+    ["_startPos",  nil,                                 [[]]], // The position where you start the calculation
+    ["_zone",      nil,                                 [[]]], // The dangerous area [pos, rad]
+    ["_ownSide",   nil, [objNull,west,grpNull,createHashmap]], // the side of the entity doing the inquiry
+    ["_bufferRad", 0,                                    [0]]  // Added distance to Zone-radius 
+];
+private _dirRange = 70;
+private _center   = _zone#0;
+private _radius   = _zone#1;
+private _maxDist  = _startPos distance2D _center;
+private _finalRad = _radius+_bufferRad;
+
+if(_finalRad > _maxDist)then{_finalRad = _maxDist};
+
+private _enemies  = [_ownSide, [_center, _finalRad]] call SQFM_fnc_enemiesInZone;
+private _zeroDir  = [_center getDir _startPos] call SQFM_fnc_formatDir;
+private _zeroPos  = [_center, _zeroDir, _finalRad] call SQFM_fnc_sinCosPos;
+
+if(_enemies isEqualTo [])exitWith{
+    private _insertPos = [_zeroPos, _startPos] call SQFM_fnc_findParkingSpot;
+    _insertPos;
+};
+
+private _startDir    = [_zeroDir-_dirRange, true]call SQFM_fnc_formatDir;
+private _stepDirDiff = _dirRange*0.2;
+private _positions   = [];
+
+SQFM_Custom3Dpositions = [];// [[getPosATL player, "playerPos"]];
+
+for "_i" from 1 to 10 do {
+    private _pos    = [_center, _startDir, _finalRad] call SQFM_fnc_sinCosPos;
+    private _newDir = _startDir + _stepDirDiff;
+    
+    _startDir = [_newDir] call SQFM_fnc_formatDir;
+    _positions pushBack _pos;
+    SQFM_Custom3Dpositions pushBack [_pos];
+};
+
+private _safePositions = [_positions, _enemies] call SQFM_fnc_selectSafePositions;
+SQFM_Custom3Dpositions append (_safePositions apply{[_x,"",[0,1,0,1]]});
+
+if(_safePositions isEqualTo [])exitWith{
+    private _insertPos = [_zeroPos, _startPos] call SQFM_fnc_findParkingSpot;
+    _insertPos;
+};
+
+private _parkingRadius = selectMax [(_bufferRad*0.5),50];
+private _safePos       = selectRandom _safePositions;
+private _insertPos     = [_safePos, _startPos, _parkingRadius] call SQFM_fnc_findParkingSpot;
+
+SQFM_Custom3Dpositions pushBack [_safePos,   "S",[1,0,0,1]];
+SQFM_Custom3Dpositions pushBack [_insertPos, "I",[0,0,1,1]];
+
+_insertPos;
+};
+
+private _pos    = getPos player;
+private _zone   = (obj_1 call getData)get"zone";
+private _side   = side player;
+private _buffer = 300;
+[
+    _pos,
+    _zone,
+    _side,
+    _buffer
+] call SQFM_fnc_dangerZoneInsertionPos;
+
+
+// private _min45Dir  = [(_zeroDir-45)] call SQFM_fnc_formatDir;
+// private _plus45Dir = [(_zeroDir+45)] call SQFM_fnc_formatDir;
+
+SQFM_fnc_groupObjectiveInsertPosDanger = { 
+params[
+	["_objModule",nil,[objNull]]
+];
+private ["_insertionPos"];
+private _grpPos  = _self call [""];
+private _objPos  = getPosATLVisual _objModule;
+private _objData = _objModule call getData;
+// private _posZero = 
+
+};
+
+SQFM_fnc_groupObjectiveInsertPos = { 
+params[
+	["_objModule",nil,[objNull]]
+];
+private ["_insertionPos"];
+private _danger       = _self call ["objectiveHostile",[_objModule]];
+private _vehicleGroup = _self call ["isVehicleGroup"];
+
+// Vehicle groups do not need to drop infantry, so a standard position is valid.
+if(_danger       isEqualTo false 
+or{_vehicleGroup isEqualTo true})
+then{_insertionPos = _self call ["objectiveInsertPosStandard",[_objModule]]}
+else{_insertionPos = _self call ["objectiveInsertPosDanger",[_objModule]]};
+
+_insertionPos;
+};
+
+SQFM_fnc_groupAttackObjective = { 
+params[
+	["_objModule",nil,[objNull]]
+];
+private _infilPos = _self call ["objectiveInsertPos", [_objModule]];
+
+
+_self call["assignObjective",[_objModule]];
+};
 
 
 /**************Update group and objective methods***********************/
@@ -404,7 +840,7 @@ call SQFM_fnc_updateMethodsAllGroups;
 call SQFM_fnc_updateMethodsAllObjectives;
 /************************Code to execute*******************************/
 
-// SQFM_fnc_updateBattleBuildings = {};
+
 
 
 

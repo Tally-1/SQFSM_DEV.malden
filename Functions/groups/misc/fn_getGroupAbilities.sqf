@@ -1,8 +1,15 @@
 params[
-    ["_group",nil,[grpNull]]
+    ["_group",nil,[grpNull, createHashmap]]
 ];
+private ["_data"];
+
+if(typeName _group isEqualTo "HASHMAP")then{
+    _data  = _group;
+    _group = _data get "grp";
+}
+else{_data = _group call getData};
+
 private _valid      = [_group] call SQFM_fnc_validGroup;
-private _data       = _group call getData;
 private _categories = [];
 
 if (isNil "_data")          exitWith{_categories};

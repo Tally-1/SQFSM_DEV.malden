@@ -30,6 +30,9 @@ exitWith{
 // Transport is called, if denied the move is aborted.
 private _transport = _self call ["callTransport", [_movePos]];
 if(isNull _transport)
-exitWith{false;};
+exitWith{
+    "Transport denied" call dbgm;
+    false;
+};
 
 true;
