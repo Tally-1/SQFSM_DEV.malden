@@ -45,6 +45,7 @@ class CfgFunctions
 			class hashifyClusterData      {};
 			class cluster                 {};
 			class setClusterGrid          {};
+			class clustersFromObjArr      {};
 
 		};
 		
@@ -82,6 +83,7 @@ class CfgFunctions
 			class getData                {};
 			class sidesFromGroupArr      {};
 			class getTextTexture         {};
+			class enemiesInZone          {};
 
 		};
 
@@ -106,6 +108,8 @@ class CfgFunctions
 			class clearPos               {};
 			class clearPosSqrArea        {};
 			class clearPosInArea         {};
+			class posHasTerrainCover     {};
+			class posIsHidden            {};
 			class numDiff                {};
 			class decimals               {};
 			class objectShape            {};
@@ -114,29 +118,40 @@ class CfgFunctions
 			class roadsInArea            {};
 			class findParkingSpot        {};
 			class getAreaParkingPos      {};
+			class formatDir              {};
+			class lineBroken             {};
+			class selectSafePositions    {};
+			class semiCirclePosArr       {};
+			class formatDirRanges        {};
+			class inDirRange             {};
+			class dangerZoneSafePositions{};
 
 		};
 
 		class objectiveModule
 		{
-			file =    "Functions\objectiveModule";
-			class initObjective                {};
-			class setObjectiveData             {};
-			class setObjectiveMethods          {};
-			class updateMethodsAllObjectives   {};
-			class objectiveDescription         {};
-			class assetTypesMatch              {};
-			class objectiveAssignGroup         {};
-			class objectiveUnAssignGroup       {};
-			class objectiveGetAssignedAssets   {};
-			class objectiveNeedsTroops         {};
-			class objectiveGetContested        {};
-			class objectiveGetSidesInZone      {};
-			class objectiveUpdate              {};
-			class updateAllObjectives          {};
-			class objectiveCountAssignedAssets {};
-			class objectivesSorted             {};
-			class nearestObjective             {};
+			file =       "Functions\objectiveModule";
+			class initObjective                   {};
+			class setObjectiveData                {};
+			class setObjectiveMethods             {};
+			class updateMethodsAllObjectives      {};
+			class objectiveDescription            {};
+			class assetTypesMatch                 {};
+			class objectiveAssignGroup            {};
+			class objectiveUnAssignGroup          {};
+			class objectiveGetAssignedAssets      {};
+			class objectiveNeedsTroops            {};
+			class objectiveGetContested           {};
+			class objectiveGetSidesInZone         {};
+			class objectiveUpdate                 {};
+			class updateAllObjectives             {};
+			class objectiveCountAssignedAssets    {};
+			class objectivesSorted                {};
+			class nearestObjective                {};
+			class objectiveStoreSafePosSearch     {};
+			class objectiveGetStoredSafePositions {};
+			class objectiveSafeposMatch           {};
+			class objectiveRemoveSafePosSearches  {};
 
 		};
 
@@ -228,6 +243,14 @@ class CfgFunctions
 			class groupGetBehaviorModule   {};
 		};
 
+		class groups_abilities
+		{
+			file = "Functions\groups\abilities";
+			class getGroupAbilities          {};
+			class groupAttackOnly            {};
+			class groupDefendOnly            {};
+		}
+
 		class groups_combat
 		{
 			file = "Functions\groups\combat";
@@ -237,7 +260,6 @@ class CfgFunctions
 			class groupBattleInit          {};
 			class groupBattleEnd           {};
 			class timeSinceLastGroupBattle {};
-
 		};
 		
 		class groups_suppress
@@ -342,21 +364,25 @@ class CfgFunctions
 		class groups_objectives
 		{
 			file = "Functions\groups\objectives";
-			class group_validObjective        {};
-			class groupObjectiveInRange       {};
-			class groupGetNearObjectives      {};
-			class groupAssignObjective        {};
-			class groupOnObjectiveArrival     {};
-			class groupInitObjectiveTask      {};
-			class groupTakeObjective          {};
-			class groupGuardObjective         {};
-			class groupObjectiveData          {};
-			class groupAutoAssignObjective    {};
-			// class assignGroupListToObectives  {};
-			// class assignAllGroupsToObjective  {};
-			class assignAttackGroups          {};
-			class groupTypeMatchObjective     {};
-			
+			class group_validObjective            {};
+			class groupObjectiveInRange           {};
+			class groupGetNearObjectives          {};
+			class groupAssignObjective            {};
+			class groupOnObjectiveArrival         {};
+			class groupInitObjectiveTask          {};
+			class groupTakeObjective              {};
+			class groupGuardObjective             {};
+			class groupObjectiveData              {};
+			class groupAutoAssignObjective        {};
+			// class assignGroupListToObectives      {};
+			// class assignAllGroupsToObjective      {};
+			class assignAttackGroups              {};
+			class groupTypeMatchObjective         {};
+			class groupObjectiveHostile           {};
+			class groupObjectiveInsertPosStandard {};
+			class groupObjectiveInsertPosDanger   {};
+			class groupObjectiveInsertPos         {};
+
 		};
 
 		class groups_tactics
@@ -374,7 +400,6 @@ class CfgFunctions
 			class activeWp              {};
 			class getIdleGroups         {};
 			class getCategorizedGroups  {};
-			class getGroupAbilities     {};
 			class assignAllGroupTasks   {};
 
 		};

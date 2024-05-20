@@ -20,3 +20,4 @@ SQFM_battles            = createHashmapObject [[]];
 SQFM_maxBattleSize      = 1000;
 SQFM_minBattleSize      = 100;
 SQFM_lastBuildingChange = 0;
+SQFM_safePosLifeTime    = 60;

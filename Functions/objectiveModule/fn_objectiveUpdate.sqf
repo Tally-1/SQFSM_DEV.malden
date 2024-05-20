@@ -1,7 +1,7 @@
 _self call ["setContested"];
+_self call ["removeSafePosSearches"];
 
 private _contested      = _self get "contested";
-
 private _previousOwner  = _self get "owner";
 private _previousGroups = _self get "groupsPresent";
 private _previousSides  = _self get "sidesPresent";
