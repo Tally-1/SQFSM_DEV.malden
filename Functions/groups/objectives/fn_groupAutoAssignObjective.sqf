@@ -1,10 +1,17 @@
 params[
-    ["_excluded",[],[[]]] // Objectives excluded from the search
+    ["_excluded",  [],      [[]]], // Objectives excluded from the search
+    ["_isDefense", false,[false]]
 ];
+if(_self call ["isPlayerGroup"])exitWith{[]};
 
 // Attack groups only assigns to hostile or neutral objectives.
 if(_self call ["canAttackOnly"])
 exitWith{_self call ["assignAttackObjective",[_excluded]]};
+
+// Defense groups only assigns to friendly objectives (including contested objectives).
+if(_self call ["canDefendOnly"]
+||{_isDefense})
+exitWith{_self call ["assignDefenseObjective",[_excluded]]};
 
 private _group      = _self get "grp";
 private _side       = _self call ["getStrSide"];//side _group;
@@ -16,6 +23,8 @@ private _assignmentData  = [_group, _targetObjective];
 
 _self call ["takeObjective", _targetObjective];
 
-sleep 1;
+if(canSuspend)
+then{sleep 1};
+
 
 _assignmentData;

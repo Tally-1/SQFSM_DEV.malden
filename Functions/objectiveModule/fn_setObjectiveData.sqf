@@ -59,6 +59,7 @@ private _dataArr = [
 	["assignedGroups",                               _assignedGroups],
     ["contested",                                              false],
     ["captureTime",                                             time],
+    ["safePosSearches",                                           []],
 
     /*************************{DEBUG DATA}**************************/
     ["defaultIcon",    "\A3\ui_f\data\map\markers\military\objective_CA.paa"],

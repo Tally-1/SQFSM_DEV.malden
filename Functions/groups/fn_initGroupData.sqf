@@ -5,7 +5,7 @@ params [
 params[
     ["_squadClass",    nil,    [""]],
     ["_defend",        nil,  [true]],
-    ["_attack",       nil,  [true]],
+    ["_attack",        nil,  [true]],
     ["_hunt",          nil,  [true]],
     ["_reinforce",     nil,  [true]],
     ["_callReinforce", nil,  [true]],

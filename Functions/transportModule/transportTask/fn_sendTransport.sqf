@@ -58,8 +58,9 @@ private _returnWp = _transportTask call ["addWaypoint",             [_startPos, 
 _waitWp = _callerGroup addWaypoint [_pickupPos, 0];
 
 _pickupWp synchronizeWaypoint [_waitWp];
-_pickupWp setWaypointCompletionRadius 10;
-_droppWp  setWaypointCompletionRadius 20;
+_waitWp   setWaypointCompletionRadius 30;
+_pickupWp setWaypointCompletionRadius 30;
+_droppWp  setWaypointCompletionRadius 30;
 _returnWp setWaypointCompletionRadius 30;
 
 _transportGroup setSpeedMode "FULL";

@@ -6,12 +6,19 @@ private _reinforceSquads = [];
 private _reconSquads     = [];
 private _supportSquads   = [];
 private _getAvailable    = {
-    params[["_category",nil,[""]]];
+    params[
+        ["_category",nil,  [""]],
+        ["_side",    nil,[west]]
+    ];
     _self get _category select { 
-        private _grpDt = _x call getData;
-
-        _grpDt call["isIdle"] &&
-        {!(_grpDt call["isPlayerGroup"])};
+        private _grpDt        = _x call getData;
+        private _notPlayerGrp = !(_grpDt call["isPlayerGroup"]);
+        private _idle         = _grpDt call["isIdle"];
+        private _correctSide  = isNil "_side" || {side _x isEqualTo _side};
+        
+        _notPlayerGrp
+        &&{_idle
+        &&{_correctSide}};
     };
 };
 

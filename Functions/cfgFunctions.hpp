@@ -389,11 +389,12 @@ class CfgFunctions
 			class groupObjectiveInsertPos         {};
 
 			/*Attack*/
-			class assignAttackGroups              {};
+			class assignGroupsAndObjectives       {};
 			class groupAssignAttackObjective      {};
 			class groupObjectiveAttackLoop        {};
 			class groupEndObjectiveAttack         {};
 			class groupAttackObjective            {};
+			class groupAssignDefenseObjective     {};
 
 
 		};

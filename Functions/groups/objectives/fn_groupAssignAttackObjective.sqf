@@ -5,6 +5,7 @@ private _objectives = _self call ["getNearObjectives",[_excluded]];
 private _strSide    = _self call ["getStrSide"];
 private _side       = _self get "side";
 private _group      = _self get "grp";
+private _pos        = getPosATL leader (_self get "grp");
 private _attackOnly = _self call ["canAttackOnly"];
 private _selectionAlgo = { 
     private _objData        = _x call getData;
@@ -26,7 +27,7 @@ private _selectionAlgo = {
 _objectives = _objectives select _selectionAlgo;
 if(_objectives isEqualTo [])exitWith{[]};
 
-private _targetObjective = ([_objectives, _group] call SQFM_fnc_objectivesSorted)#0;
+private _targetObjective = [_pos, _objectives] call SQFM_fnc_getNearest;//([_objectives, _group] call SQFM_fnc_objectivesSorted)#0;
 private _assignmentData  = [_group, _targetObjective];
 _self call ["attackObjective", [_targetObjective]];
 

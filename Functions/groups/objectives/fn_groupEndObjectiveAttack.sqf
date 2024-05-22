@@ -21,13 +21,18 @@ if(_groupPresent)then{_self call ["autoAssignObjective",[]]}
 else{
     (_objData get "zone")params["_pos","_rad"];
     _rad = _rad*0.5;
-    private _onCompletion = '(group this call getData) call ["autoAssignObjective",[]];';
-    private _wayPoint     = _group addWaypoint [_pos, 0];
+    
+    _self set  ["action", "Moving into Objective"];
+
+    private _noActionString = '(group this call getData) set  ["action", ""]; ';
+    private _assignString   = '(group this call getData) call ["autoAssignObjective",[]];';
+    private _onCompletion   = [_noActionString, _assignString] joinString"";
+    private _wayPoint       = _group addWaypoint [_pos, 0];
 
     _wayPoint setWaypointCompletionRadius _rad;
     _wayPoint setWaypointStatements ["true", _onCompletion];
 
-    _self set  ["action", "Moving into Objective"];
+    
 };
 
 true;
