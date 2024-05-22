@@ -17,7 +17,7 @@ params [
 params[
     ["_squadClass",    nil,    [""]],
     ["_defend",        nil,  [true]],
-    ["_attack",       nil,  [true]],
+    ["_attack",        nil,  [true]],
     ["_hunt",          nil,  [true]],
     ["_reinforce",     nil,  [true]],
     ["_callReinforce", nil,  [true]],
@@ -144,12 +144,16 @@ private _methods = [
 	["validObjective",                       SQFM_fnc_group_validObjective],
     ["objectiveInRange",                    SQFM_fnc_groupObjectiveInRange],
     ["getNearObjectives",                  SQFM_fnc_groupGetNearObjectives],
+    ["isInsideObjective",                  SQFM_fnc_groupIsInsideObjective],
     ["assignObjective",                      SQFM_fnc_groupAssignObjective],
+    ["unAssignObjective",                  SQFM_fnc_groupUnAssignObjective],
     ["autoAssignObjective",              SQFM_fnc_groupAutoAssignObjective],
+    ["assignAttackObjective",          SQFM_fnc_groupAssignAttackObjective],
     ["canAttackOnly",                             SQFM_fnc_groupAttackOnly],
     ["canDefendOnly",                             SQFM_fnc_groupDefendOnly],
     ["takeObjective",                          SQFM_fnc_groupTakeObjective],
     ["attackObjective",                      SQFM_fnc_groupAttackObjective],
+    ["endObjectiveAttack",                SQFM_fnc_groupEndObjectiveAttack],
     ["onObjectiveArrival",                SQFM_fnc_groupOnObjectiveArrival],
     ["guardObjective",                        SQFM_fnc_groupGuardObjective],
     ["objectiveData",                          SQFM_fnc_groupObjectiveData],
@@ -158,7 +162,7 @@ private _methods = [
     ["objectiveInsertPos",                SQFM_fnc_groupObjectiveInsertPos],
     ["objectiveInsertPosStandard",SQFM_fnc_groupObjectiveInsertPosStandard],
     ["objectiveInsertPosDanger",    SQFM_fnc_groupObjectiveInsertPosDanger],
-    
+    ["objectiveAttackLoop",              SQFM_fnc_groupObjectiveAttackLoop],
 
     /************************{TASKS}****************************/
     ["initTask",                              SQFM_fnc_initTaskData],
@@ -313,6 +317,7 @@ private _methods =
     ["setContested",{_self set ["contested",_self call["getContested"]]}],
     ["inBattle",          {_self get"zone"call SQFM_fnc_posInBattleZone}],
     ["update",                                  SQFM_fnc_objectiveUpdate],
+    ["onCapture",                            SQFM_fnc_objectiveOnCapture],
     ["troopsNeeded",                       SQFM_fnc_objectiveNeedsTroops],
     ["assignGroup",                        SQFM_fnc_objectiveAssignGroup],
     ["unAssignGroup",                    SQFM_fnc_objectiveUnAssignGroup],
@@ -411,6 +416,28 @@ SQFM_fnc_fiveMinTasks={};
 // SQFM_fnc_groupObjectiveInsertPos         = {};
 // SQFM_fnc_objectiveSafeposMatch           = {};
 // SQFM_fnc_objectiveGetStoredSafePositions = {};
+// SQFM_fnc_describeDistance    = {};
+// SQFM_fnc_describeDir         = {};
+// SQFM_fnc_getLocationNamePos  = {};
+// SQFM_fnc_closestLocationName = {};
+// SQFM_fnc_areaName            = {};
+// SQFM_fnc_getCategorizedGroups       = {};
+// SQFM_fnc_assignAttackGroups         = {};
+// SQFM_fnc_assignAllGroupTasks        = {};
+// SQFM_fnc_groupInitObjectiveTask     = {};
+// SQFM_fnc_group_validObjective       = {};
+// SQFM_fnc_groupGetNearObjectives     = {};
+// SQFM_fnc_groupAssignAttackObjective = {};
+// SQFM_fnc_groupAutoAssignObjective   = {};
+// SQFM_fnc_groupTakeObjective         = {};
+// SQFM_fnc_groupObjectiveHostile      = {};
+// SQFM_fnc_groupOnObjectiveArrival    = {};
+// SQFM_fnc_groupUnAssignObjective     = {};
+// SQFM_fnc_groupIsInsideObjective     = {};
+// SQFM_fnc_groupObjectiveAttackLoop   = {};
+// SQFM_fnc_groupEndObjectiveAttack    = {};
+// SQFM_fnc_groupAttackObjective       = {};
+
 /************************New Functions*******************************/
 
 /*
@@ -418,8 +445,8 @@ TODO:
 -Posponed-1)  Fix bug where some available Squads are not assigned.
 -Complete-2)  Limit battle-size -min/max- (Important in order to implement reinforcements)
 -Complete-3)  Set building changed eventhandler for BFFs and Objectives (In order to implement defensive tactics)
--Posponed-4)  Make sure Objectives are actually captured
-5)  Make attack-only squads keep pushing to the next Objective once the current one is taken.
+-Complete-4)  Make sure Objectives are actually captured
+-Complete-5)  Make attack-only squads keep pushing to the next Objective once the current one is taken.
 6)  Send defensive squads.
 7)  Call/Send reinforcements.
 8)  Combat insertion.
@@ -429,156 +456,35 @@ TODO:
 12) Objective   Map markers
 */
 
-
-
-
-SQFM_fnc_assignAttackGroups = { 
-params[
-    ["_groupsMap", nil,            [createHashmap]],
-    ["_category",  "attackSquads",            [""]]
-]; 
-private _available          = _groupsMap call ["getAvailable",[_category]];
-private _assignedGroups     = [];
-private _assignedObjectives = [];
-{
-    private _grpObj = (_x call getData)call ["autoAssignObjective",[_assignedObjectives]];
-    if(_grpObj isNotEqualTo [])
-    then{
-        _assignedGroups     pushBackUnique (_grpObj#0);
-        _assignedObjectives pushBackUnique (_grpObj#1);
-    };
-    
-} forEach _available;
-
-_assignedGroups;
-};
-
-
-SQFM_fnc_assignAllGroupTasks = { 
-private _groupMap     = call SQFM_fnc_getCategorizedGroups;
-
-private _groups = [_groupMap, "recon"] call SQFM_fnc_assignAttackGroups;
-_groupMap call ["removeMultiple",[_groups]];
-
-_groups = [_groupMap, "attackSquads"] call SQFM_fnc_assignAttackGroups;
-_groupMap call ["removeMultiple",[_groups]];
-};
-
-
-SQFM_fnc_groupInitObjectiveTask = { 
-private _defTaskName = "Taking Objective";
-private _defArrCode  = {(_self call ["ownerData"]) call ["onObjectiveArrival"]};
-private _defEndCode  = {(_self call ["ownerData"]) call ["guardObjective"]};
-params[
-	["_objectiveModule", nil,     [objNull]],
-    ["_taskName",        _defTaskName, [""]],
-    ["_onArrival",       _defArrCode,  [{}]],
-    ["_onTaskEnd",       _defEndCode,  [{}]]
-];
-
-private _objctvData = _objectiveModule getVariable "SQFM_objectiveData";
-private _zone       = _objctvData get "zone";
-private _pos        = _objctvData get "position";
-private _task       = _self call ["initTask",
-[
-    _taskName,          // Taskname     ["name"]
-    _zone,              // Task zone    ["zone"]
-    [_pos],             // Positions    ["positions"]
-    [_objectiveModule], // TaskParams   ["params"]
-    _onArrival,         // Arrival-code ["arrivalCode"]
-    _onTaskEnd          // End-code     ["endCode"]
-]];
-
-_task;
-};
-
-SQFM_fnc_groupAutoAssignObjective = { 
-params[
-    ["_excluded",[],[[]]] // Objectives excluded from the search
-];
-private _group      = _self get "grp";
-private _side       = _self call ["getStrSide"];//side _group;
-private _objectives = _self call ["getNearObjectives",[_excluded]] select {(_x call getData)call ["troopsNeeded",[_side]]};
-if(_objectives isEqualTo [])exitWith{[]};
-
-private _targetObjective = ([_objectives, _group] call SQFM_fnc_objectivesSorted)#0;
-_self call ["takeObjective", _targetObjective];
-
-sleep 1;
-
-[_group, _targetObjective];
-};
-
-SQFM_fnc_groupTakeObjective = { 
-params["_objModule"];
-[_self, _objModule]spawn{
-params[
-    ["_self",      nil,[createHashmap]],
-	["_objModule", nil,[objNull]]
-];
-
-private _dropPos   = _self call ["objectiveInsertPos",[_objModule]];
-private _canTravel = _self call ["initTravel",[_dropPos]];
-
-if!(_canTravel)exitWith{false;};
-
-_self call ["initObjectiveTask",[_objModule]];
-_self call ["assignObjective",  [_objModule]];
-
-true;
-}};
-
-
-
-// SQFM_fnc_groupObjectiveHostile = {};
-
-/*
-ATTACK Sequence:
-1) Define Insertion point.
-   - If Infantry or Mixed group a position in a safe distance (cover?)
-     is needed for unloading infantry.
-   - If the objective is not hostile then standard insertion pos is used
-2) Travel to objective.
-3) Once the insertion point is reached then loop a search and destroy
-   sequence.
-4) Once the Objective is secured (Not hostile or contested) then the
-   attackGroup returns to the insertion point and is set as idle ("task"="" & "action"="")
-
-*/
-// SQFM_fnc_groupObjectiveInsertPosStandard = {};
-
-
-
-
-SQFM_fnc_groupAttackObjective = { 
-params[
-	["_objModule",nil,[objNull]]
-];
-private _infilPos = _self call ["objectiveInsertPos", [_objModule]];
-
-
-_self call["assignObjective",[_objModule]];
-};
-
-
-
+// SQFM_fnc_objectiveOnCapture = {};
+// hint str (obj_2 call getData get "assignedGroups");
 /**************Update group and objective methods***********************/
 call SQFM_fnc_updateMethodsAllGroups;
 call SQFM_fnc_updateMethodsAllObjectives;
 /************************Code to execute*******************************/
-private _time    = time;
-private _data    = group player call getData;
-private _objData = obj_2 call getData;
-private _pos     = getPos player;
-private _zone    = _objData get"zone";
-private _side    = side player;
-private _buffer  = 100;
-private _insPos  = 
+// call SQFM_fnc_assignAllGroupTasks;
+
+private _grpData = grp_3 call getData;
+// hint str (_grpData get "attackObjective");
+_grpData call ["autoAssignObjective"];
+
+
+
+// private _time    = time;
+// private _data    = group player call getData;
+// private _objData = obj_2 call getData;
+// private _pos     = getPos player;
+// private _zone    = _objData get"zone";
+// private _side    = side player;
+// private _buffer  = 100;
+
+
+// hint str ([_objData call ["getSidesInZone"], _objData get "owner"]);
+// private _insPos  = 
 // _data call ["objectiveInsertPosDanger",[obj_2]];
 // _objData call ["getStoredSafePositions",[_side, _pos]];
 // systemChat str (_objData get "safePosSearches");
 // SQFM_Custom3Dpositions = [[_insPos, str (time-_time),[0,1,0,1]]];
-// call SQFM_fnc_assignAllGroupTasks;
 // private _obj = town_1 call getData;
 // private _grp = grp_1  call getData;
 // hint str(_grp call ["autoAssignObjective"]);

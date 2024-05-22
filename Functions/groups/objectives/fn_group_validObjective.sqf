@@ -8,9 +8,9 @@ private _side          = _self    get "side";
 private _strSide       = _self call ["getStrSide"];
 private _inRange       = _self call ["objectiveInRange",[_objModul]];
 
-if!(_inRange)                                      exitWith{false};//{"Out of range" call dbgm;false;};
-if!(_side in _allowedSides)                        exitWith{false};//{"Wong side" call dbgm;false;};
-if!(_objData call ["troopsNeeded",[_strSide]])     exitWith{false};//{"Has troops" call dbgm;false;};
-if!(_self call ["typeMatchObjective",[_objModul]]) exitWith{false};//{"No match" call dbgm;false;};
+if!(_inRange)                                      exitWith{false};//{"Out of range" call dbgm;false;};//
+if!(_side in _allowedSides)                        exitWith{false};//{"Wong side" call dbgm;false;};//
+if!(_objData call ["troopsNeeded",[_strSide]])     exitWith{false};//{"Has troops" call dbgm;false;};//
+if!(_self call ["typeMatchObjective",[_objModul]]) exitWith{false};//{"No match" call dbgm;false;};//
 
 true;

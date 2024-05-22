@@ -53,6 +53,11 @@ _returnRad = selectMax[ceil(_returnRad*1.2), ceil(_returnRad+100)];
 
 // enforce max battlefield size.
 if  (_returnRad > _maxRad)
-then{_returnRad = _maxRad};
+then{
+        _entities    = _pos nearEntities ['land', _maxRad];
+        _entities    = _entities select _filter;
+        _entitiesRad = [_pos, _entities] call SQFM_fnc_clusterRadius;
+        _returnRad   = selectMin[_maxRad, _entitiesRad];
+};
 
 _returnRad;

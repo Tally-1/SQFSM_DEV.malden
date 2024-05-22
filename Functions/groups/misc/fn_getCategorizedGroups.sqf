@@ -1,5 +1,6 @@
 private _allSquads       = [];
 private _attackSquads    = [];
+private _defenseSquads   = [];
 private _hunters         = [];
 private _reinforceSquads = [];
 private _reconSquads     = [];
@@ -32,11 +33,24 @@ private _removeMultiple = {
     true;
 };
 
+private _sortAttackSquads = { 
+    private _value = 1;
+    if((_x call getData)call["canAttackOnly"])then{_value = 0.5};
+    _value;
+};
+
+private _sortDefenseSquads = { 
+    private _value = 1;
+    if((_x call getData)call["canDefendOnly"])then{_value = 0.5};
+    _value;
+};
+
 {isNil{
         private _abilities  = [_x] call SQFM_fnc_getGroupAbilities;
         private _notSupport = !("support" in _abilities);
 
         if("attack"    in _abilities &&{_notSupport}) then{_attackSquads    pushBack _x};
+        if("defend"    in _abilities &&{_notSupport}) then{_defenseSquads   pushBack _x};
         if("hunt"      in _abilities &&{_notSupport}) then{_hunters         pushBack _x};
         if("reinforce" in _abilities &&{_notSupport}) then{_reinforceSquads pushBack _x};
         if("recon"     in _abilities &&{_notSupport}) then{_reconSquads     pushBack _x};
@@ -48,14 +62,14 @@ private _removeMultiple = {
 
 }} forEach allGroups;
 
-{
-    // Current result is saved in variable _x
-    
-} forEach _supportSquads;
+_attackSquads  = [_attackSquads,  [], _sortAttackSquads, "ASCEND"] call BIS_fnc_sortBy;
+_defenseSquads = [_defenseSquads, [], _sortDefenseSquads,"ASCEND"] call BIS_fnc_sortBy;
+
 
 private _allCategories = [
     ["all",                  _allSquads],
     ["attackSquads",      _attackSquads],
+    ["defenseSquads",    _defenseSquads],
     ["hunters",                _hunters],
     ["reinforcements", _reinforceSquads],
     ["recon",              _reconSquads],

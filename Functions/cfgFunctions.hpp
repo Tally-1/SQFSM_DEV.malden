@@ -84,6 +84,9 @@ class CfgFunctions
 			class sidesFromGroupArr      {};
 			class getTextTexture         {};
 			class enemiesInZone          {};
+			class getLocationNamePos     {};
+			class closestLocationName    {};
+			class areaName               {};
 
 		};
 
@@ -125,6 +128,8 @@ class CfgFunctions
 			class formatDirRanges        {};
 			class inDirRange             {};
 			class dangerZoneSafePositions{};
+			class describeDistance       {};
+			class describeDir            {};
 
 		};
 
@@ -152,6 +157,7 @@ class CfgFunctions
 			class objectiveGetStoredSafePositions {};
 			class objectiveSafeposMatch           {};
 			class objectiveRemoveSafePosSearches  {};
+			class objectiveOnCapture              {};
 
 		};
 
@@ -367,21 +373,28 @@ class CfgFunctions
 			class group_validObjective            {};
 			class groupObjectiveInRange           {};
 			class groupGetNearObjectives          {};
+			class groupIsInsideObjective          {};
 			class groupAssignObjective            {};
+			class groupUnAssignObjective          {};
 			class groupOnObjectiveArrival         {};
 			class groupInitObjectiveTask          {};
 			class groupTakeObjective              {};
 			class groupGuardObjective             {};
 			class groupObjectiveData              {};
 			class groupAutoAssignObjective        {};
-			// class assignGroupListToObectives      {};
-			// class assignAllGroupsToObjective      {};
-			class assignAttackGroups              {};
 			class groupTypeMatchObjective         {};
 			class groupObjectiveHostile           {};
 			class groupObjectiveInsertPosStandard {};
 			class groupObjectiveInsertPosDanger   {};
 			class groupObjectiveInsertPos         {};
+
+			/*Attack*/
+			class assignAttackGroups              {};
+			class groupAssignAttackObjective      {};
+			class groupObjectiveAttackLoop        {};
+			class groupEndObjectiveAttack         {};
+			class groupAttackObjective            {};
+
 
 		};
 
