@@ -29,4 +29,4 @@ _groups = [];
 
 if(_groupMap get "all" isEqualTo [])exitWith _allSentMsg;
 
-// "Some groups are still available for tasks." call dbgm;
+"Some groups are still available for tasks." call dbgm;

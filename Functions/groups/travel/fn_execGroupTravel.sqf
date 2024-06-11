@@ -17,12 +17,16 @@ then{_parkingSpot = [_movePos] call SQFM_fnc_findParkingSpot};
 private _targetPos = _parkingSpot;
 
 if(_movePos distance2D _parkingSpot > 100) then{_targetPos = _movePos;};
-
+private _setCompRad = {
+	params[["_CR",nil,[0]]];
+	(_self get "waypoint") setWaypointCompletionRadius _CR;
+};
 private _wp = (_self get "grp") addWaypoint [_targetPos, 0];
 private _dataArr = [
-	["startTime", round time],
-	["waypoint",         _wp],
-	["taskName",   _taskName]
+	["startTime",     round time],
+	["waypoint",             _wp],
+	["taskName",       _taskName],
+	["setCompRad",   _setCompRad]
 ];
 
 private _travelData = createHashmapObject [_dataArr];

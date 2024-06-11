@@ -14,7 +14,7 @@ call SQFM_fnc_buildingChangedEh;
 [] spawn SQFM_fnc_taskManager;
 [] spawn {
 	waitUntil { sleep 1; time>10};
-	// call SQFM_fnc_assignAllGroupsToObjective;
+	call SQFM_fnc_assignAllGroupTasks;
 };
 
 true;
