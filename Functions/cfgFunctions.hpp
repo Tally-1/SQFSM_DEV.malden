@@ -87,6 +87,8 @@ class CfgFunctions
 			class getLocationNamePos     {};
 			class closestLocationName    {};
 			class areaName               {};
+			class validEnum              {};
+			class delayedBaseSideChat    {};
 
 		};
 
@@ -247,6 +249,7 @@ class CfgFunctions
 			class isPlayerGroup            {};
 			class groupBehaviourSettings   {};
 			class groupGetBehaviorModule   {};
+			class getNearestGroup          {};
 		};
 
 		class groups_abilities
@@ -266,6 +269,8 @@ class CfgFunctions
 			class groupBattleInit          {};
 			class groupBattleEnd           {};
 			class timeSinceLastGroupBattle {};
+			class groupNearEnemyGrp        {};
+			class groupAttackGroup         {};
 		};
 		
 		class groups_suppress
@@ -301,6 +306,7 @@ class CfgFunctions
 			class groupCanCallTransport     {};
 			class groupCallTransport        {};
 			class groupIsTraveling          {};
+			class groupAddWayPoint          {};
 		};
 
 		class groups_boarding
@@ -342,6 +348,8 @@ class CfgFunctions
 			class groupGetStrSide          {};
 			class groupSetStrengthIcon     {};
 			class getGroupStrength         {};
+			class groupStrengthCoef        {};
+			class groupMergeWithGroup      {};
 
 		};
 
@@ -415,8 +423,27 @@ class CfgFunctions
 			class getIdleGroups         {};
 			class getCategorizedGroups  {};
 			class assignAllGroupTasks   {};
-
 		};
+
+		class groups_reinforcement_radio
+		{
+			file = "Functions\groups\reinforcement\radio";
+			class groupCallReinforcementRadio {};
+			class reinfRequestRadioResponse   {};
+			class sendReinfRadioResponse      {};
+		};
+		
+		class groups_reinforcement
+		{
+			file = "Functions\groups\reinforcement";
+			class initReinforRequestsMap      {};
+			class groupAddToReinfRequests     {};
+			class groupInitReinforceTask      {};
+			class groupOnReinforceArrival     {};
+			class groupEndReinforcing         {};
+		};
+
+		
 
 		class init
 		{

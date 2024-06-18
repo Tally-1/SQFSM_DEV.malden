@@ -8,8 +8,8 @@ _self call ["deleteWaypoints"];
 private _vehGrp      = _self call ["isVehicleGroup"];
 private _vehicles    = _self call ["getVehiclesInUse"];
 private _singleVeh   = count _vehicles isEqualTo 1;
-private _onCompleted = '(group this getVariable "SQFM_grpData") call ["onArrival"]';
 private _parkingSpot = _movePos; 
+
 
 if(_findParking)
 then{_parkingSpot = [_movePos] call SQFM_fnc_findParkingSpot};
@@ -30,6 +30,11 @@ private _dataArr = [
 ];
 
 private _travelData = createHashmapObject [_dataArr];
+private _onCompleted = '
+	private _data = (group this) call getData;
+	_data call ["onArrival"];
+	_data spawn{_this deleteAt "travelData"};
+';
 _self set ["travelData", _travelData];
 _self set ["action",     "traveling"];
 _self set ["state",      "traveling"];
