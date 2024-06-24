@@ -4,10 +4,11 @@ params[
 _self call ["deleteWaypoints"];
 
 private _targetData = _targetGroup call getData;
-private _cluster    = _targetData get "groupCluster";
-private _pos        = _cluster get "position";
-private _rad        = _cluster get "radius";
+private _pos        = _targetData call ["getAvgPos"];
 
-_self call ["addWaypoint", _pos, _rad, "SAD"];
+if(isNil "_pos")then{_pos = getPos leader _targetGroup};
+
+private _statement  = '(group this call getData) set ["action",""]';
+_self call ["addWaypoint", [_pos, 50, "SAD"]];
 
 true;

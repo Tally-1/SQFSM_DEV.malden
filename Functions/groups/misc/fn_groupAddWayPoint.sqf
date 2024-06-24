@@ -8,7 +8,6 @@ params[
 ];
 
 private _group     = _self get "grp";
-private _groupData = _group getVariable "SQFM_grpData";
 private _wayPoint  = _group addWaypoint [_pos, 0];
 
 if(!isNil "_radius")    then {_wayPoint setWaypointCompletionRadius _radius};

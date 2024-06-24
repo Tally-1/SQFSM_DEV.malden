@@ -1,5 +1,6 @@
-[130m] Reinforcement arrival actions (Attack, move, replenish)
-[35m]  Refactoring, updating functions library.
-[100m] Global reinforcment loop. call -> delegate -> respond
-[147m] Battlefield reinforcment initial build.
-~6.8 hours (412 minutes)
+[111m] Battlefield balance calculator, Undefined-var bugfix
+[42m]  Fixing hashmap bug (Bohemia seems to add the hashmap itself to internal arrays)
+[72m]  Multiple tests, minor bugfixes / tweaks.
+[101m] Reinforcements bugfixes
+[61m]  Refactoring new code, fixing factor bugs
+~387m (6.45 hours)

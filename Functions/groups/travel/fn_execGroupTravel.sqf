@@ -33,7 +33,6 @@ private _travelData = createHashmapObject [_dataArr];
 private _onCompleted = '
 	private _data = (group this) call getData;
 	_data call ["onArrival"];
-	_data spawn{_this deleteAt "travelData"};
 ';
 _self set ["travelData", _travelData];
 _self set ["action",     "traveling"];

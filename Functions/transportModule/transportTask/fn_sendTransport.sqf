@@ -55,13 +55,17 @@ private _pickupWp = _transportTask call ["addWaypoint", [_pickupPos, _onPickupWp
 private _droppWp  = _transportTask call ["addWaypoint",             [_dropOffPos, _onDropWp]];
 private _returnWp = _transportTask call ["addWaypoint",             [_startPos, _onReturnWp]];
 private _waitWp   = _callerGroup addWaypoint [_pickupPos, 0];
+private _danger   = [_transportGroup, _dropOffPos] call SQFM_fnc_posIsHostile;
+private _dropRad  = 50;
 
-_waitWp   setWaypointCompletionRadius 50;
-_pickupWp setWaypointCompletionRadius 50;
+if(_danger)then{_dropRad = 200};
+
+_waitWp   setWaypointCompletionRadius 30;
+_pickupWp setWaypointCompletionRadius 30;
 
 _pickupWp synchronizeWaypoint [_waitWp];
 
-_droppWp  setWaypointCompletionRadius 300;
+_droppWp  setWaypointCompletionRadius _dropRad;
 _returnWp setWaypointCompletionRadius 30;
 
 _transportGroup setSpeedMode "FULL";

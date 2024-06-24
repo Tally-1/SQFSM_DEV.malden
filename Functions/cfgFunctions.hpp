@@ -6,27 +6,33 @@ class CfgFunctions
 		class battlefield
 		{
 			file = "Functions\battlefield";
-			class initBattle                   {};
-			class initBattleMap                {};
-			class initBattleBuildings          {};
-			class updateBattleBuildings        {};
-			class getUrbanZones                {};
-			class postInitBattle               {};
-			class updateBattle                 {};
-			class battlefieldRadius            {};
-			class battlefieldDimensions        {};
-			class battlefieldCenter            {};
-			class getBattleGrid                {};
+			class initBattle                    {};
+			class initBattleMap                 {};
+			class initBattleBuildings           {};
+			class updateBattleBuildings         {};
+			class getUrbanZones                 {};
+			class postInitBattle                {};
+			class updateBattle                  {};
+			class handleNewBattleGroups         {};
+			class handleInvalidBattleGroups     {};
+			class battlefieldRadius             {};
+			class battlefieldDimensions         {};
+			class battlefieldCenter             {};
+			class getBattleGrid                 {};
 
-			class posInBattleZone              {};
-			class nearestBattlePosRad          {};
-			class distanceToNearestBattle      {};
-			class initBattleGroups             {};
-			class endBattleGroups              {};
-			class onBattleFirstShot            {};
-			class timeSinceLastBattleShot      {};
+			class posInBattleZone               {};
+			class nearestBattlePosRad           {};
+			class distanceToNearestBattle       {};
+			class initBattleGroups              {};
+			class endBattleGroups               {};
+			class onBattleFirstShot             {};
+			class timeSinceLastBattleShot       {};
 			
-			class endBattle                    {};
+			class endBattle                     {};
+			class battleReinforcements          {};
+			class battleReinforceSide           {};
+			class battleSideNeedsReinforcements {};
+			// class battleSideNeedsReinforcements {};
 
 		};
 
@@ -89,6 +95,8 @@ class CfgFunctions
 			class areaName               {};
 			class validEnum              {};
 			class delayedBaseSideChat    {};
+			class zoneStrengthBySide     {};
+			class posIsHostile           {};
 
 		};
 
@@ -271,6 +279,7 @@ class CfgFunctions
 			class timeSinceLastGroupBattle {};
 			class groupNearEnemyGrp        {};
 			class groupAttackGroup         {};
+			class groupCombatZone          {};
 		};
 		
 		class groups_suppress
@@ -397,6 +406,7 @@ class CfgFunctions
 			class groupObjectiveInsertPos         {};
 
 			/*Attack*/
+			class assignGroupObjectivesAllSides   {};
 			class assignGroupsAndObjectives       {};
 			class groupAssignAttackObjective      {};
 			class groupObjectiveAttackLoop        {};
@@ -423,6 +433,7 @@ class CfgFunctions
 			class getIdleGroups         {};
 			class getCategorizedGroups  {};
 			class assignAllGroupTasks   {};
+			class groupSetDataDelayed   {};
 		};
 
 		class groups_reinforcement_radio
@@ -438,12 +449,22 @@ class CfgFunctions
 			file = "Functions\groups\reinforcement";
 			class initReinforRequestsMap      {};
 			class groupAddToReinfRequests     {};
-			class groupInitReinforceTask      {};
 			class groupOnReinforceArrival     {};
 			class groupEndReinforcing         {};
+			class assignReinforcementsBySide  {};
+			class assignAllReinforcements     {};
+			class groupReinforceInsertPos     {};
+			class groupInitReinforceTask      {};
+			class groupCanCallReinforcements  {};
+			class groupRequestReinforcements  {};
 		};
 
-		
+		class reinforcements
+		{
+			file = "Functions\reinforcements";
+			class initReinforRequestsMap   {};
+			class addReinfReq              {};
+		};
 
 		class init
 		{
