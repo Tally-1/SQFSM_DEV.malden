@@ -44,6 +44,9 @@ private _dataArr = [
     ["reinforcements",            SQFM_fnc_battleReinforcements],
     ["sideNeedReforce",  SQFM_fnc_battleSideNeedsReinforcements],
     ["reinforceSide",              SQFM_fnc_battleReinforceSide],
+    ["updateStrengthData",    SQFM_fnc_battleUpdateStrengthData],
+    ["updateReforData",          SQFM_fnc_battleUpdateReforData],
+    ["updateBattleHudGlobal",    SQFM_fnc_updateBattleHudGlobal],
     ["onFirstShot",                  SQFM_fnc_onBattleFirstShot],
 	["timeSinceShot",          SQFM_fnc_timeSinceLastBattleShot],
 	["initBuildings",{_self spawn SQFM_fnc_initBattleBuildings}]

@@ -13,6 +13,8 @@ class CfgFunctions
 			class getUrbanZones                 {};
 			class postInitBattle                {};
 			class updateBattle                  {};
+			class battleUpdateStrengthData      {};
+			class battleUpdateReforData         {};
 			class handleNewBattleGroups         {};
 			class handleInvalidBattleGroups     {};
 			class battlefieldRadius             {};
@@ -32,8 +34,21 @@ class CfgFunctions
 			class battleReinforcements          {};
 			class battleReinforceSide           {};
 			class battleSideNeedsReinforcements {};
-			// class battleSideNeedsReinforcements {};
 
+			class battleHudBroadcast            {};
+
+		};
+
+		class battleHud { 
+			file = "Functions\battleHud";
+			class initBattleHud               {};
+			class BattleProgressBars          {};
+			class updateAllBattleProgressBars {};
+			class setBattleBarProgress        {};
+			class setBattleHudStrengthBar     {};
+			class toggleBattleHud             {};
+			class updateBattleHud             {};
+			
 		};
 
 		class building
@@ -80,6 +95,8 @@ class CfgFunctions
 
 		};
 
+		
+
 		class misc
 		{
 			file = "Functions\misc";
@@ -97,6 +114,8 @@ class CfgFunctions
 			class delayedBaseSideChat    {};
 			class zoneStrengthBySide     {};
 			class posIsHostile           {};
+			class formatCtrlPos          {};
+			class newDisplayCtrl         {};
 
 		};
 
@@ -271,15 +290,16 @@ class CfgFunctions
 		class groups_combat
 		{
 			file = "Functions\groups\combat";
-			class groupInBattle            {};
-			class groupCanInitBattle       {};
-			class addGroupShots            {};
-			class groupBattleInit          {};
-			class groupBattleEnd           {};
-			class timeSinceLastGroupBattle {};
-			class groupNearEnemyGrp        {};
-			class groupAttackGroup         {};
-			class groupCombatZone          {};
+			class groupInBattle             {};
+			class groupCanInitBattle        {};
+			class addGroupShots             {};
+			class groupBattleInit           {};
+			class groupBattleEnd            {};
+			class timeSinceLastGroupBattle  {};
+			class groupNearEnemyGrp         {};
+			class groupAttackGroup          {};
+			class groupCombatZone           {};
+			class groupUpdateBattleStrength {};
 		};
 		
 		class groups_suppress
@@ -447,7 +467,6 @@ class CfgFunctions
 		class groups_reinforcement
 		{
 			file = "Functions\groups\reinforcement";
-			class initReinforRequestsMap      {};
 			class groupAddToReinfRequests     {};
 			class groupOnReinforceArrival     {};
 			class groupEndReinforcing         {};
@@ -474,6 +493,7 @@ class CfgFunctions
 			class initSettings  {};
 			class clientInit    {};
 			class initgameState {};
+			// class CBAOptions    {preInit = 1; file = "CBA_Options\main.sqf"};
 		};
 
 		class globalEvents

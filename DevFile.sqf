@@ -140,19 +140,19 @@ TODO:
     - Send function.
         (complete) * Checks all requests and sorts them by time sent.
         (canceled) * Each ReInf squad is selected by proximity of strength to enemy target.
-        * Requests that cannot be fulfilled are denied via radio.
-        * Denied requests are deleted from request Array.
+        (complete) * Requests that cannot be fulfilled are denied via radio.
+        (complete) * Denied requests are deleted from request Array.
     - Can request function:
-        * If a squad already has a reinforcement request it cannot send another.
-        * A squad needs to be inside a battle-zone to request reinforcements.
-        * (optional) There needs to be
+        (complete) * If a squad already has a reinforcement request it cannot send another.
+        (complete) * A squad needs to be inside a battle-zone to request reinforcements.
     - Can respond:
-        * Squad is currently not in a fight.
-        * Squad is not already responding to a request.
-        * Squad does not have any current tasks.
-        * Squad is set to allow reinforcing (Via module, default = true)
+        (complete) * Squad is currently not in a fight.
+        (complete) * Squad is not already responding to a request.
+        (complete) * Squad does not have any current tasks.
+        (complete) * Squad is set to allow reinforcing (Via module, default = true)
 
-8)  Combat insertion.
+(complete) 8)  Combat insertion.
+
 9)  Transport react to fire / Enemy spotted.
 10) Transport Pickup fail handling.
 11) Battlefield Map markers
@@ -167,7 +167,7 @@ TODO:
 */
 /********************New Functions/Methods*****************************/
 
-// SQFM_fnc_validEnum = {};
+// SQFM_fnc_validEnum                   = {};
 // SQFM_fnc_delayedBaseSideChat         = {};
 // SQFM_fnc_groupCallReinforcementRadio = {};
 // SQFM_fnc_initReinforRequestsMap      = {};
@@ -178,7 +178,6 @@ TODO:
 // SQFM_fnc_groupSetStrengthIcon        = {};
 // SQFM_fnc_groupStrengthCoef           = {};
 // SQFM_fnc_groupNearEnemyGrp           = {};
-// 
 // SQFM_fnc_groupAddWayPoint            = {};
 // SQFM_fnc_groupMergeWithGroup         = {};
 // SQFM_fnc_groupEndReinforcing         = {};
@@ -186,37 +185,22 @@ TODO:
 // SQFM_fnc_assignReinforcementsBySide  = {};
 // SQFM_fnc_posIsHostile                = {};
 // SQFM_fnc_groupReinforceInsertPos     = {};
-// SQFM_fnc_groupInitReinforceTask      = {};
-// SQFM_fnc_groupSetDataDelayed         = {};
+// SQFM_fnc_groupInitReinforceTask       = {};
+// SQFM_fnc_groupSetDataDelayed           = {};
 // SQFM_fnc_assignGroupObjectivesAllSides = {};
 // SQFM_fnc_assignAllGroupTasks           = {};
-// SQFM_fnc_assignAllReinforcements = {};
-// SQFM_fnc_groupOnReinforceArrival = {};
-// SQFM_fnc_groupEndReinforcing = {};
-// SQFM_fnc_getNearestGroup = {};
-// SQFM_fnc_groupAddToReinfRequests = {};
-// SQFM_fnc_addReinfReq = {};
-// SQFM_fnc_initReinforRequestsMap = {};
-// SQFM_fnc_groupCombatZone = {};
-
-// SQFM_latestBattle call ["reinforcements"];
-
-// SQFM_fnc_groupCanCallReinforcements = {};
-// SQFM_fnc_groupRequestReinforcements = {};
-// SQFM_fnc_getCategorizedGroups       = {};
-// SQFM_fnc_groupAddWayPoint           = {};
-// SQFM_fnc_groupSetDataDelayed = { 
-// params[
-//     "_key",
-//     "_value", 
-//     ["_delay",0,[0]]
-// ];
-// [_self, _key, _value, _delay]spawn{
-// params["_self","_key","_value", "_delay"];
-// sleep _delay;
-// _self set [_key, _value];
-// true;
-// }};
+// SQFM_fnc_assignAllReinforcements       = {};
+// SQFM_fnc_groupOnReinforceArrival       = {};
+// SQFM_fnc_groupEndReinforcing           = {};
+// SQFM_fnc_getNearestGroup               = {};
+// SQFM_fnc_groupAddToReinfRequests       = {};
+// SQFM_fnc_addReinfReq                   = {};
+// SQFM_fnc_initReinforRequestsMap        = {};
+// SQFM_fnc_groupCombatZone               = {};
+// SQFM_fnc_groupCanCallReinforcements    = {};
+// SQFM_fnc_groupRequestReinforcements    = {};
+// SQFM_fnc_getCategorizedGroups          = {};
+// SQFM_fnc_groupAddWayPoint              = {};
 
 // ["canGetReinforcements"]
 /**************Update group and objective methods***********************/
@@ -225,18 +209,36 @@ TODO:
 // call SQFM_fnc_updateMethodsAllObjectives;
 /************************Code to execute*******************************/
 
-// private _data = grpA call getData;
-// _data call ["callReinforcements"];
-// [_pos, _group, round time]
+// SQFM_fnc_formatCtrlPos            = {};
+// SQFM_fnc_setBattleBarProgress     = {};
+// SQFM_fnc_battleUpdateStrengthData = {};
+// SQFM_fnc_battleUpdateReforData    = {};
+// SQFM_fnc_updateAllBattleProgressBars = {};
+// SQFM_fnc_battleHudBroadcast          = {};
+// SQFM_fnc_newDisplayCtrl = {};
+// SQFM_fnc_BattleProgressBars = {};
+// SQFM_fnc_initBattleHud = {};
+// SQFM_fnc_toggleBattleHud = {};
+// SQFM_fnc_setBattleHudStrengthBar = {};
+// SQFM_fnc_updateBattleHud = {};
+// SQFM_fnc_groupUpdateBattleStrength = {};
 
-private _callerGroup = group player;
-private _callerData  = _callerGroup call getData;
-private _pos         = getPos player;
-private _respondGrp  = grp_5;
-private _time        = round time;
-private _request     = [_pos, _callerGroup, _time];
+// SQFM_fnc_zoneStrengthBySide = {};
 
-private _data = _respondGrp call getData;
+// (findDisplay 46) displayAddEventHandler ["KeyUp", {hint "--"; _this call SQFM_fnc_toggleBattleHud}];
+// call SQFM_fnc_initBattleHud;
+
+
+
+
+// private _callerGroup = group player;
+// private _callerData  = _callerGroup call getData;
+// private _pos         = getPos player;
+// private _respondGrp  = grp_5;
+// private _time        = round time;
+// private _request     = [_pos, _callerGroup, _time];
+
+// private _data = _respondGrp call getData;
 // _data call ["reinforce", _request];
 // call SQFM_fnc_initReinforRequestsMap;
 // _callerData call ["callReinforcements"];

@@ -138,6 +138,7 @@ private _methods = [
 
     ["nearEnemyGrp",                 SQFM_fnc_groupNearEnemyGrp],
     ["attackGroup",                   SQFM_fnc_groupAttackGroup],
+    ["updateBattleStrength", SQFM_fnc_groupUpdateBattleStrength],
     ["combatZone",                     SQFM_fnc_groupCombatZone]
 ];
 
