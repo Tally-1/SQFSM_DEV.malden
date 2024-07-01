@@ -35,7 +35,9 @@ class CfgFunctions
 			class battleReinforceSide           {};
 			class battleSideNeedsReinforcements {};
 
-			class battleHudBroadcast            {};
+			// class battleHudBroadcast            {};
+			class updateBattleHudGlobal         {};
+			class battleReplenishGroups         {};
 
 		};
 
@@ -48,6 +50,7 @@ class CfgFunctions
 			class setBattleHudStrengthBar     {};
 			class toggleBattleHud             {};
 			class updateBattleHud             {};
+
 			
 		};
 
@@ -200,6 +203,8 @@ class CfgFunctions
 			class transportSpawnPos       {};
 			class spawnTransport          {};
 			class initAllTransportModules {};
+			class transportCrewGetOutEh   {};
+			class onTransportCrewGetOut   {};
 		};
 
 		class transportTask
@@ -322,20 +327,21 @@ class CfgFunctions
 		class groups_travel
 		{
 			file = "Functions\groups\travel";
-			class validGroupVehicle         {};
-			class leaveInvalidVehicles      {};
-			class nearGroupVehicles         {};
-			class allAvailableGroupVehicles {};
-			class onArrival                 {};
-			class deleteWps                 {};
-			class initGroupTravel           {};
-			class execGroupTravel           {};
-			class groupPickupPos            {};
-			class groupGetTransportSpawner  {};
-			class groupCanCallTransport     {};
-			class groupCallTransport        {};
-			class groupIsTraveling          {};
-			class groupAddWayPoint          {};
+			class validGroupVehicle          {};
+			class leaveInvalidVehicles       {};
+			class nearGroupVehicles          {};
+			class allAvailableGroupVehicles  {};
+			class onArrival                  {};
+			class deleteWps                  {};
+			class initGroupTravel            {};
+			class execGroupTravel            {};
+			class groupPickupPos             {};
+			class groupGetTransportSpawner   {};
+			class groupCanCallTransport      {};
+			class groupCallTransport         {};
+			class groupIsTraveling           {};
+			class groupAddWayPoint           {};
+			class groupWaitForTransportSpawn {};
 		};
 
 		class groups_boarding
@@ -476,6 +482,22 @@ class CfgFunctions
 			class groupInitReinforceTask      {};
 			class groupCanCallReinforcements  {};
 			class groupRequestReinforcements  {};
+		};
+
+		class groups_replenish
+		{
+			file = "Functions\groups\replenish";
+			class groupCanReplenish             {};
+			class groupCanBeReplenished         {};
+			class groupCanReplenishGroup        {};
+			class groupReplenishGroupDirect     {};
+			class groupReplenishTaskEnd         {};
+			class groupReplenishGroup           {};
+			class groupNeedsCombatReplenish     {};
+			class groupCanCombatReplenish       {};
+			class groupCombatReplenishAlgorythm {};
+			class groupCombatReplenish          {};
+		
 		};
 
 		class reinforcements

@@ -7,119 +7,14 @@ addToGroups = SQFM_fnc_addToDataAllGroups;
 // SQFM_fnc_
 // SQFM_battles
 // SQFSM_TransportSpawner
-
-// SQFM_fnc_initBattleMap = {};
-// SQFM_fnc_initGroupData = {};
-// SQFM_fnc_setGroupMethods = {};
-
-// SQFM_fnc_setObjectiveData    = {};
+// SQFM_fnc_initBattleMap   = {};
+// SQFM_fnc_initGroupData    = {};
+// SQFM_fnc_setGroupMethods   = {};
+// SQFM_fnc_setObjectiveData   = {};
 // SQFM_fnc_setObjectiveMethods = {};
 
 /*********************************/
 
-// SQFM_fnc_fiveMinTasks={};
-// SQFM_fnc_groupInitObjectiveTask       = {};
-// SQFM_fnc_groupOnObjectiveArrival      = {};
-// SQFM_fnc_groupObjectiveData           = {};
-// SQFM_fnc_getData                      = {};
-// SQFM_fnc_sidesFromGroupArr            = {};
-// SQFM_fnc_objectiveGetContested        = {};
-// SQFM_fnc_objectiveGetSidesInZone      = {};
-// SQFM_fnc_sendTransport                = {};
-// SQFM_fnc_updateMethodsAllGroups       = {};
-// SQFM_fnc_updateMethodsAllObjectives   = {};
-// SQFM_fnc_activeWp                     = {};
-// SQFM_fnc_groupIsTraveling             = {};
-// SQFM_fnc_groupIsIdle                  = {};
-// SQFM_fnc_getIdleGroups                = {};
-// SQFM_fnc_objectiveCountAssignedAssets = {};
-// SQFM_fnc_objectivesSorted             = {};
-// SQFM_fnc_groupAutoAssignObjective     = {};
-// SQFM_fnc_assignGroupListToObectives   = {};
-// SQFM_fnc_assignAllGroupsToObjective   = {};
-// SQFM_fnc_groupSetStrengthIcon         = {};
-// SQFM_fnc_ACE_Medical_OnStatusChange = {};
-// SQFM_fnc_objectiveDescription       = {};
-// SQFM_fnc_group_validObjective       = {};
-// SQFM_fnc_groupUpdate                = {};
-// SQFM_fnc_getGroupStrength           = {};
-// SQFM_fnc_objectiveGetAssignedAssets = {};
-// SQFM_fnc_objectiveNeedsTroops       = {};
-// SQFM_fnc_groupGetNearObjectives     = {};
-// SQFM_fnc_getAttackGroups            = {};
-// SQFM_fnc_getTextTexture             = {};
-// SQFM_fnc_groupAutoAssignObjective   = {};
-// SQFM_fnc_groupAutoAssignObjective   = {};
-// SQFM_fnc_groupGetBehaviorModule     = {};
-// SQFM_fnc_groupType                  = {};
-// SQFM_fnc_groupBehaviourSettings     = {};
-// SQFM_fnc_groupDebugTextAbilities    = {};
-// SQFM_fnc_groupDebugText             = {};
-// SQFM_fnc_onCuratorGroupSelection    = {};
-// SQFM_fnc_getGroupAbilities          = {};
-// SQFM_fnc_getCategorizedGroups       = {};
-// SQFM_fnc_groupTypeMatchObjective  = {};
-// SQFM_fnc_group_validObjective     = {};
-// SQFM_fnc_groupGetNearObjectives   = {};
-// SQFM_fnc_groupAutoAssignObjective = {};
-// SQFM_fnc_assignAttackGroups       = {};
-// SQFM_fnc_assignAllGroupTasks      = {};
-// SQFM_fnc_groupTypeMatchObjective  = {};
-// SQFM_fnc_distanceToNearestBattle = {};
-// SQFM_fnc_nearestObjective        = {};
-// SQFM_fnc_initBattle              = {};
-// SQFM_fnc_battlefieldRadius       = {};
-// SQFM_fnc_battlefieldCenter       = {};
-// SQFM_fnc_battlefieldDimensions   = {};
-// SQFM_fnc_groupUpdate             = {};
-// SQFM_fnc_isHouse               = {};
-// SQFM_fnc_buildingChangedEh     = {};
-// SQFM_fnc_updateBattleBuildings = {};
-// SQFM_fnc_groupAttackOnly = {};
-// SQFM_fnc_groupDefendOnly = {};
-// SQFM_fnc_formatDirRanges = {};
-// SQFM_fnc_inDirRange      = {};
-// SQFM_fnc_formatDir                       = {};
-// SQFM_fnc_lineBroken                      = {};
-// SQFM_fnc_enemiesInZone                   = {};
-// SQFM_fnc_clustersFromObjArr              = {};
-// SQFM_fnc_posHasTerrainCover              = {};
-// SQFM_fnc_posIsHidden                     = {};
-// SQFM_fnc_selectSafePositions             = {};
-// SQFM_fnc_objectiveRemoveSafePosSearches  = {};
-// SQFM_fnc_objectiveStoreSafePosSearch     = {};
-// SQFM_fnc_dangerZoneSafePositions         = {};
-// SQFM_fnc_groupObjectiveInsertPosDanger   = {};
-// SQFM_fnc_groupObjectiveInsertPos         = {};
-// SQFM_fnc_objectiveSafeposMatch           = {};
-// SQFM_fnc_objectiveGetStoredSafePositions = {};
-// SQFM_fnc_describeDistance    = {};
-// SQFM_fnc_describeDir         = {};
-// SQFM_fnc_getLocationNamePos  = {};
-// SQFM_fnc_closestLocationName = {};
-// SQFM_fnc_areaName            = {};
-// SQFM_fnc_getCategorizedGroups       = {};
-// SQFM_fnc_assignAttackGroups         = {};
-// SQFM_fnc_assignAllGroupTasks        = {};
-// SQFM_fnc_groupInitObjectiveTask     = {};
-// SQFM_fnc_group_validObjective       = {};
-// SQFM_fnc_groupGetNearObjectives     = {};
-// SQFM_fnc_groupAssignAttackObjective = {};
-// SQFM_fnc_groupAutoAssignObjective   = {};
-// SQFM_fnc_groupTakeObjective         = {};
-// SQFM_fnc_groupObjectiveHostile      = {};
-// SQFM_fnc_groupOnObjectiveArrival    = {};
-// SQFM_fnc_groupUnAssignObjective     = {};
-// SQFM_fnc_groupIsInsideObjective     = {};
-// SQFM_fnc_groupObjectiveAttackLoop   = {};
-// SQFM_fnc_groupEndObjectiveAttack    = {};
-// SQFM_fnc_groupAttackObjective       = {};
-// SQFM_fnc_objectiveOnCapture         = {};
-// SQFM_fnc_getCategorizedGroups        = {};
-// SQFM_fnc_assignAllGroupTasks         = {};
-// SQFM_fnc_assignGroupsAndObjectives   = {};
-// SQFM_fnc_groupAutoAssignObjective    = {};
-// SQFM_fnc_groupAssignDefenseObjective = {};
 
 /************************TODO list*******************************/
 
@@ -166,96 +61,60 @@ TODO:
 15) Do the taskmanager in a forEachFrame loop to avoid scheduler issues.
 */
 /********************New Functions/Methods*****************************/
+// SQFM_fnc_transportCrewGetOutEh = {};
+// SQFM_fnc_groupCanReplenish     = {};
+// SQFM_fnc_groupCanBeReplenished  = {};
+// SQFM_fnc_onTransportCrewGetOut    = {};
+// SQFM_fnc_groupReplenishTaskEnd     = {};
+// SQFM_fnc_groupWaitForTransportSpawn = {};
+// SQFM_fnc_groupIsIdle               = {};
+// SQFM_fnc_initBattleMap            = {};
+// SQFM_fnc_updateBattle            = {};
+// SQFM_fnc_updateBattleHudGlobal    = {};
+// SQFM_fnc_groupNeedsCombatReplenish  = {};
+// SQFM_fnc_groupCanReplenish           = {};
+// SQFM_fnc_groupCanCombatReplenish      = {};
+// SQFM_fnc_groupCombatReplenishAlgorythm = {};
+// SQFM_fnc_groupCombatReplenish         = {};
+// SQFM_fnc_battleReplenishGroups       = {};
+// SQFM_fnc_groupCanReplenishGroup     = {};
 
-// SQFM_fnc_validEnum                   = {};
-// SQFM_fnc_delayedBaseSideChat         = {};
-// SQFM_fnc_groupCallReinforcementRadio = {};
-// SQFM_fnc_initReinforRequestsMap      = {};
-// SQFM_fnc_groupAddToReinfRequests     = {};
-// SQFM_fnc_getNearestGroup             = {};
-// SQFM_fnc_reinfRequestRadioResponse   = {};
-// SQFM_fnc_sendReinfRadioResponse      = {};
-// SQFM_fnc_groupSetStrengthIcon        = {};
-// SQFM_fnc_groupStrengthCoef           = {};
-// SQFM_fnc_groupNearEnemyGrp           = {};
-// SQFM_fnc_groupAddWayPoint            = {};
-// SQFM_fnc_groupMergeWithGroup         = {};
-// SQFM_fnc_groupEndReinforcing         = {};
-// SQFM_fnc_groupAttackGroup            = {};
-// SQFM_fnc_assignReinforcementsBySide  = {};
-// SQFM_fnc_posIsHostile                = {};
-// SQFM_fnc_groupReinforceInsertPos     = {};
-// SQFM_fnc_groupInitReinforceTask       = {};
-// SQFM_fnc_groupSetDataDelayed           = {};
-// SQFM_fnc_assignGroupObjectivesAllSides = {};
-// SQFM_fnc_assignAllGroupTasks           = {};
-// SQFM_fnc_assignAllReinforcements       = {};
-// SQFM_fnc_groupOnReinforceArrival       = {};
-// SQFM_fnc_groupEndReinforcing           = {};
-// SQFM_fnc_getNearestGroup               = {};
-// SQFM_fnc_groupAddToReinfRequests       = {};
-// SQFM_fnc_addReinfReq                   = {};
-// SQFM_fnc_initReinforRequestsMap        = {};
-// SQFM_fnc_groupCombatZone               = {};
-// SQFM_fnc_groupCanCallReinforcements    = {};
-// SQFM_fnc_groupRequestReinforcements    = {};
-// SQFM_fnc_getCategorizedGroups          = {};
-// SQFM_fnc_groupAddWayPoint              = {};
+SQFM_fnc_battlefieldDimensions = { 
+params [
+	["_man",    nil, [objNull]], 
+	["_target", nil, [objNull]]
+];
+private _baseRad = _man distance2D _target;
+private _minRadB = (_baseRad*1.1)+50;
+private _scanRad = ceil(selectMax[_baseRad, SQFM_minBattleSize]);
+private _pos     = [[_man, _target]] call SQFM_fnc_avgPos2D;
+private _list    = _pos nearEntities ["land", _scanRad];
+private _dataArr = [_list] call SQFM_fnc_objArrData;
+private _center  = _dataArr#0;
+private _radius  = _dataArr#1;
 
-// ["canGetReinforcements"]
+// if(_radius > _minRadB)exitWith{[_center, _radius+50]};
+
+
+// private _center  = [_man, _target] call SQFM_fnc_battlefieldCenter;
+// private _radius  = [_center, _baseRad] call SQFM_fnc_battlefieldRadius;
+
+[_center, _radius];
+};
+
+
 /**************Update group and objective methods***********************/
 // call SQFM_fnc_initReinforRequestsMap;
-// call SQFM_fnc_updateMethodsAllGroups;
+call SQFM_fnc_updateMethodsAllGroups;
 // call SQFM_fnc_updateMethodsAllObjectives;
 /************************Code to execute*******************************/
 
-// SQFM_fnc_formatCtrlPos            = {};
-// SQFM_fnc_setBattleBarProgress     = {};
-// SQFM_fnc_battleUpdateStrengthData = {};
-// SQFM_fnc_battleUpdateReforData    = {};
-// SQFM_fnc_updateAllBattleProgressBars = {};
-// SQFM_fnc_battleHudBroadcast          = {};
-// SQFM_fnc_newDisplayCtrl = {};
-// SQFM_fnc_BattleProgressBars = {};
-// SQFM_fnc_initBattleHud = {};
-// SQFM_fnc_toggleBattleHud = {};
-// SQFM_fnc_setBattleHudStrengthBar = {};
-// SQFM_fnc_updateBattleHud = {};
-// SQFM_fnc_groupUpdateBattleStrength = {};
 
-// SQFM_fnc_zoneStrengthBySide = {};
+// []spawn{
+// private _data = grp1 call getData;
+// private _targetGroup = group player;
 
-// (findDisplay 46) displayAddEventHandler ["KeyUp", {hint "--"; _this call SQFM_fnc_toggleBattleHud}];
-// call SQFM_fnc_initBattleHud;
-
-
-
-
-// private _callerGroup = group player;
-// private _callerData  = _callerGroup call getData;
-// private _pos         = getPos player;
-// private _respondGrp  = grp_5;
-// private _time        = round time;
-// private _request     = [_pos, _callerGroup, _time];
-
-// private _data = _respondGrp call getData;
-// _data call ["reinforce", _request];
-// call SQFM_fnc_initReinforRequestsMap;
-// _callerData call ["callReinforcements"];
-// hint str (_callerData get "callReinforcements");
-// sleep 2;
-// hint "";
-// call SQFM_fnc_assignAllReinforcements;
-// hint str(_data get "groupCluster"get"position");
-
-// call SQFM_fnc_assignAllGroupTasks;
-// private _time    = time;
-// private _data    = group player call getData;
-// private _objData = obj_2 call getData;
-// private _pos     = getPos player;
-// private _zone    = _objData get"zone";
-// private _side    = side player;
-// private _buffer  = 100;
-
+// _data call ["replenishGroup", [_targetGroup]];
+// };
 
 systemChat "devfiled read";

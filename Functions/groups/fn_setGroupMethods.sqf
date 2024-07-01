@@ -14,6 +14,7 @@ private _methods = [
     ["activeWp",                              SQFM_fnc_activeWp],
     ["update",                             SQFM_fnc_groupUpdate],
     ["setDataDelayed",             SQFM_fnc_groupSetDataDelayed],
+    ["sinceSpawn",                 {time - (_self get "birth")}],
     // ["availableForNewTask",      SQFM_fnc_groupAvailableForTask],
     
     /**********************{TRAVEL}*****************************/
@@ -35,6 +36,7 @@ private _methods = [
     ["callTransport",                 SQFM_fnc_groupCallTransport],
     ["getTransportSpawner",     SQFM_fnc_groupGetTransportSpawner],
     ["sinceTransportCall", {time-(_self get "lastTransportCall")}],
+    ["waitForTransportSpawn", SQFM_fnc_groupWaitForTransportSpawn],
 
                       /*{boarding}*/
     ["canSelfTransport",         SQFM_fnc_groupCanSelfTransport],
@@ -117,6 +119,18 @@ private _methods = [
     ["getStrSide",                                SQFM_fnc_groupGetStrSide],
     ["isPlayerGroup",       {[_self get"grp"] call SQFM_fnc_isPlayerGroup}],
     ["mergeWithGroup",                        SQFM_fnc_groupMergeWithGroup],
+
+
+    /**********************{REPLENISH}************************/
+    ["canReplenish",                            SQFM_fnc_groupCanReplenish],
+    ["canBeReplenished",                    SQFM_fnc_groupCanBeReplenished],
+    ["canReplenishGroup",                  SQFM_fnc_groupCanReplenishGroup],
+    ["canCombatReplenish",                SQFM_fnc_groupCanCombatReplenish],
+    ["needsCombatReplenish",            SQFM_fnc_groupNeedsCombatReplenish],
+    ["combatReplenish",                      SQFM_fnc_groupCombatReplenish],
+    ["replenishGroup",                        SQFM_fnc_groupReplenishGroup],
+    ["replenishDirect",                 SQFM_fnc_groupReplenishGroupDirect],    
+    
 
 	/**********************{GROUP CLASS}************************/
 	["isUnarmedMotorized",     SQFM_fnc_groupIsUnarmedMotorized],
