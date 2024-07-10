@@ -4,41 +4,28 @@ params[
 private _grpData  = _transportGroup getVariable "SQFM_grpData";
 private _taskData = _grpData get "taskData";
 (_taskData get "params")params[
-	["_passengerGrp",   nil,      [grpNull]],
-	["_vehicle",        nil,      [objNull]]
+	["_passengerGroup", nil,       [grpNull]],
+	["_vehicle",        nil,       [objNull]],
+    ["_psngrData",      nil, [createHashMap]],
+    ["_module",         nil,       [objNull]]
 ];
-private _psngrData  = _passengerGrp getVariable "SQFM_grpData";
-private _timer      = time + round(count units _passengerGrp * 2);
-private _squadCount = count units _passengerGrp;
+private _timer      = time + round(count units _passengerGroup * 2);
+private _returnPos  = getPosATLVisual _module;
+private _onReturnWp = '[group this] call  SQFM_fnc_onReturnWpTransporter';
 
+[
+    _passengerGroup,
+	_timer,
+    _taskData,
+    _vehicle
 
-(driver _vehicle)disableAI "path";
-_vehicle setVelocityModelSpace [0,0,0];
-_taskData set ["state", "Unloading"];
-_psngrData call ["ejectAll"];
+] call SQFM_fnc_transportUnload;
 
-waitUntil { 
-	if(isNil "_passengerGrp") exitWith{true;};
-	
-	private _outCount = count (units _passengerGrp select{vehicle _x isEqualTo _x});
-	private _percent  = round((_outCount/_squadCount)*100);
-	private _onFoot   = _psngrData call ["boardingStatus"] isEqualTo "on foot";
-	private _timedOut = time > _timer;
-	private _stateTxt = ["Unloading (",_percent,"%)"]joinString"";
-	_taskData set ["state", _stateTxt];
-	
-	if((!isNil "_onFoot")&&{_onFoot})     exitWith{true;};
-	if((!isNil "_timedOut")&&{_timedOut}) exitWith{true;};
-	
-	false;
-};
-
-private _onFoot = _psngrData call ["boardingStatus"] isEqualTo "on foot";
-if!(_onFoot)then{_psngrData call ["ejectAll"]};
-
-_taskData set ["state", "Returning to base"];
-(driver _vehicle)enableAI "path";
-
+_taskData  call ["removeEvents"];
+_taskData  set  ["state", "Returning to base"];
+_psngrData set  ["transportVehicle",objNull];
+_psngrData call ["deleteWaypoints"];
 _psngrData call ["onArrival"];
+_grpData   call ["addWaypoint", [_returnPos, 30, "MOVE", _onReturnWp]];
 
 true;

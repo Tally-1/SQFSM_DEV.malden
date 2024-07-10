@@ -5,7 +5,7 @@ class CfgFunctions
 		
 		class battlefield
 		{
-			file = "Functions\battlefield";
+			file = "functions\battlefield";
 			class initBattle                    {};
 			class initBattleMap                 {};
 			class initBattleBuildings           {};
@@ -31,6 +31,7 @@ class CfgFunctions
 			class timeSinceLastBattleShot       {};
 			
 			class endBattle                     {};
+			class globalizeBattles              {};
 			class battleReinforcements          {};
 			class battleReinforceSide           {};
 			class battleSideNeedsReinforcements {};
@@ -42,7 +43,7 @@ class CfgFunctions
 		};
 
 		class battleHud { 
-			file = "Functions\battleHud";
+			file = "functions\battleHud";
 			class initBattleHud               {};
 			class BattleProgressBars          {};
 			class updateAllBattleProgressBars {};
@@ -56,14 +57,14 @@ class CfgFunctions
 
 		class building
 		{
-			file = "Functions\building";
+			file = "functions\building";
 			class isHouse            {};
 			class nearBuildings      {};
 		};
 
 		class clusters
 		{
-			file = "Functions\clusters";
+			file = "functions\clusters";
 			class clusterRadius           {};
 			class objArrData              {};
 			class hashifyClusterData      {};
@@ -75,7 +76,7 @@ class CfgFunctions
 		
 		class debug
 		{
-			file =    "Functions\debug";
+			file =    "functions\debug";
 			// class clientLoop             {};
 			class debugMessage              {};
 			class sendDbgMsg                {};
@@ -102,7 +103,7 @@ class CfgFunctions
 
 		class misc
 		{
-			file = "Functions\misc";
+			file = "functions\misc";
 			class copyHashmap            {};
 			class sideToStrSide          {};
 			class removeNull             {};
@@ -124,7 +125,7 @@ class CfgFunctions
 
 		class math
 		{
-			file = "Functions\math";
+			file = "functions\math";
 			class module3dData           {};
 			class getModuleArea          {};
 			class getAreaCorners         {};
@@ -167,7 +168,7 @@ class CfgFunctions
 
 		class objectiveModule
 		{
-			file =       "Functions\objectiveModule";
+			file =       "functions\objectiveModule";
 			class initObjective                   {};
 			class setObjectiveData                {};
 			class setObjectiveMethods             {};
@@ -179,6 +180,7 @@ class CfgFunctions
 			class objectiveGetAssignedAssets      {};
 			class objectiveNeedsTroops            {};
 			class objectiveGetContested           {};
+			class objectiveSetContested           {};
 			class objectiveGetSidesInZone         {};
 			class objectiveUpdate                 {};
 			class updateAllObjectives             {};
@@ -195,7 +197,7 @@ class CfgFunctions
 
 		class transportModule
 		{
-			file = "Functions\transportModule";
+			file = "functions\transportModule";
 			class initTransportSpawner    {};
 			class transportVehicleData    {};
 			class transportSpawnPosClear  {};
@@ -209,18 +211,41 @@ class CfgFunctions
 
 		class transportTask
 		{
-			file = "Functions\transportModule\transportTask";
+			file = "functions\transportModule\transportTask";
 			class sendTransport           {};
+			class transportInitTask       {};
 			class transportAvailability   {};
 			class onPickupWpTransporter   {};
 			class onDropOffWpTransporter  {};
 			class onReturnWpTransporter   {};
 			class transportPostboarding   {};
+			class transportUnload         {};
+			class transportUnloadStatus   {};
+			class transportCondition      {};
+			class updateTransport         {};
+			class onTransportCombatDrop   {};
+			class onPassengerCombatDrop   {};
+			class emergencyParking        {};
+			class transportAborted        {};
+			class transportEnded          {};
+
+		};
+
+		class transportTask_events
+		{
+			file = "functions\transportModule\transportTask\events";
+			class setTransportEvents    {};
+			class removeTransportEvents {};
+			class onTransportCrewHit    {};
+			class onPassengerHit        {};
+			class onPassengerFired      {};
+			class onTransportCrewFired  {};
+
 		};
 
 		class man
 		{
-			file = "Functions\man";
+			file = "functions\man";
 			class unconscious                 {};
 			class isRealMan                   {};
 			class functionalMan               {};
@@ -233,7 +258,7 @@ class CfgFunctions
 
 		class vehicle
 		{
-			file = "Functions\vehicle";
+			file = "functions\vehicle";
 			class deadCrew                 {};
 			class crewSize                 {};
 			class validVehicle             {};
@@ -259,7 +284,7 @@ class CfgFunctions
 
 		class vehicle_crwData
 		{
-			file = "Functions\vehicle\crwData";
+			file = "functions\vehicle\crwData";
 			class crewData                  {};
 			class cargoSeatData             {};
 			class hashifySeatData           {};
@@ -269,7 +294,7 @@ class CfgFunctions
 
 		class groups_global
 		{
-			file =    "Functions\groups";
+			file =    "functions\groups";
 			class validGroup               {};
 			class initGroup                {};
 			class initGroupData            {};
@@ -282,11 +307,12 @@ class CfgFunctions
 			class groupBehaviourSettings   {};
 			class groupGetBehaviorModule   {};
 			class getNearestGroup          {};
+			class setGroupOwner            {};
 		};
 
 		class groups_abilities
 		{
-			file = "Functions\groups\abilities";
+			file = "functions\groups\abilities";
 			class getGroupAbilities          {};
 			class groupAttackOnly            {};
 			class groupDefendOnly            {};
@@ -294,7 +320,7 @@ class CfgFunctions
 
 		class groups_combat
 		{
-			file = "Functions\groups\combat";
+			file = "functions\groups\combat";
 			class groupInBattle             {};
 			class groupCanInitBattle        {};
 			class addGroupShots             {};
@@ -309,7 +335,7 @@ class CfgFunctions
 		
 		class groups_suppress
 		{
-			file = "Functions\groups\suppress";
+			file = "functions\groups\suppress";
 			class groupReturnFire     {};
 			class grpIsNotSuppressing {};
 			class endGrpReturnFire    {};
@@ -317,16 +343,23 @@ class CfgFunctions
 
 		class groups_events
 		{
-			file = "Functions\groups\events";
-			class grpEvents           {};
-			class onEnemyDetected     {};
-			class onKnowsAboutChanged {};
+			file = "functions\groups\events";
+			class grpEvents                   {};
+			class onEnemyDetected             {};
+			class onKnowsAboutChanged         {};
+			class onSquadManFired             {};
+			class onSquadManSuppressed        {};
+			class onUnitJoined                {};
+			class groupAddUnitEventHandler    {};
+			class groupRemoveUnitEventHandler {};
+			class handleNoCrashDamage         {};
+			class noCrashDamage               {};
 			
 		};
 
 		class groups_travel
 		{
-			file = "Functions\groups\travel";
+			file = "functions\groups\travel";
 			class validGroupVehicle          {};
 			class leaveInvalidVehicles       {};
 			class nearGroupVehicles          {};
@@ -346,7 +379,7 @@ class CfgFunctions
 
 		class groups_boarding
 		{
-			file = "Functions\groups\boarding";
+			file = "functions\groups\boarding";
 			class groupCanSelfTransport     {};
 			class groupBoardOwnVehicles     {};
 			class groupBoardAllAvailable    {};
@@ -366,7 +399,7 @@ class CfgFunctions
 
 		class groups_members
 		{
-			file = "Functions\groups\members";
+			file = "functions\groups\members";
 			class getGrpMembers            {};
 			class getGroupUnits            {};
 			class getGroupUnitsOnFoot      {};
@@ -385,20 +418,23 @@ class CfgFunctions
 			class getGroupStrength         {};
 			class groupStrengthCoef        {};
 			class groupMergeWithGroup      {};
+			class initSquadMembers         {};
 
 		};
 
 		class groups_tasks
 		{
-			file = "Functions\groups\tasks";
+			file = "functions\groups\tasks";
 			class initTaskData    {};
 			class endTask         {};
+			class abortTask       {};
 			class addTaskWaypoint {};
+			class groupRemoveTask {};
 		};
 
 		class groups_debug
 		{
-			file = "Functions\groups\debug";
+			file = "functions\groups\debug";
 			class groups3D                {};
 			class group3D                 {};
 			class group3DNoData           {};
@@ -412,7 +448,7 @@ class CfgFunctions
 
 		class groups_objectives
 		{
-			file = "Functions\groups\objectives";
+			file = "functions\groups\objectives";
 			class group_validObjective            {};
 			class groupObjectiveInRange           {};
 			class groupGetNearObjectives          {};
@@ -445,14 +481,14 @@ class CfgFunctions
 
 		class groups_tactics
 		{
-			file = "Functions\groups\tactics";
+			file = "functions\groups\tactics";
 			class groupGarrison            {};
 
 		};
 
 		class groups_misc
 		{
-			file = "Functions\groups\misc";
+			file = "functions\groups\misc";
 			class groupIsIdle           {};
 			class groupUpdate           {};
 			class activeWp              {};
@@ -464,7 +500,7 @@ class CfgFunctions
 
 		class groups_reinforcement_radio
 		{
-			file = "Functions\groups\reinforcement\radio";
+			file = "functions\groups\reinforcement\radio";
 			class groupCallReinforcementRadio {};
 			class reinfRequestRadioResponse   {};
 			class sendReinfRadioResponse      {};
@@ -472,7 +508,7 @@ class CfgFunctions
 		
 		class groups_reinforcement
 		{
-			file = "Functions\groups\reinforcement";
+			file = "functions\groups\reinforcement";
 			class groupAddToReinfRequests     {};
 			class groupOnReinforceArrival     {};
 			class groupEndReinforcing         {};
@@ -486,7 +522,7 @@ class CfgFunctions
 
 		class groups_replenish
 		{
-			file = "Functions\groups\replenish";
+			file = "functions\groups\replenish";
 			class groupCanReplenish             {};
 			class groupCanBeReplenished         {};
 			class groupCanReplenishGroup        {};
@@ -502,14 +538,14 @@ class CfgFunctions
 
 		class reinforcements
 		{
-			file = "Functions\reinforcements";
+			file = "functions\reinforcements";
 			class initReinforRequestsMap   {};
 			class addReinfReq              {};
 		};
 
 		class init
 		{
-			file = "Functions\init";
+			file = "functions\init";
 			class initSQFSM     {postInit = 1};
 			class serverInit    {};
 			class initSettings  {};
@@ -520,7 +556,7 @@ class CfgFunctions
 
 		class globalEvents
 		{
-			file = "Functions\globalEvents";
+			file = "functions\globalEvents";
 			class groupSpawnedEh             {};
 			class projectileCreated          {};
 			class onProjectileCreated        {};
@@ -534,7 +570,7 @@ class CfgFunctions
 
 		class taskManager
 		{
-			file = "Functions\taskManager";
+			file = "functions\taskManager";
 			class taskManager     {};
 			class tenSecondTasks  {};
 			class minuteTasks     {};
@@ -543,7 +579,7 @@ class CfgFunctions
 
 		class tasks
 		{
-			file = "Functions\taskManager\tasks";
+			file = "functions\taskManager\tasks";
 			class handleNewGroups  {};
 			class handleDeadGroups {};
 			class updateAllGroups  {};

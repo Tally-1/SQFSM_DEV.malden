@@ -7,15 +7,61 @@ addToGroups = SQFM_fnc_addToDataAllGroups;
 // SQFM_fnc_
 // SQFM_battles
 // SQFSM_TransportSpawner
-// SQFM_fnc_initBattleMap   = {};
-// SQFM_fnc_initGroupData    = {};
-// SQFM_fnc_setGroupMethods   = {};
+// SQFM_fnc_initBattleMap     = {};
 // SQFM_fnc_setObjectiveData   = {};
 // SQFM_fnc_setObjectiveMethods = {};
 
 /*********************************/
+SQFM_fnc_initTransportSpawner = { 
+params[
+	["_module",nil,[objNull]]
+];
+private _vehicles     = [];
+private _capacities   = [];
+private _parkingSpots = [];
+private _side         = call compile (_module getVariable "sqfm_side");
+private _globalizeFnc = {(_self get "module") setVariable ["SQFM_spawnerData", _self, true]};
 
+{
+	deleteVehicleCrew _x;
+	private _data = [_x] call SQFM_fnc_transportVehicleData;
+	if(!isNil "_data")then{
+		_vehicles     pushBackUnique  _data;
+		_capacities   pushBackUnique (_data get "capacity");
+		_parkingSpots pushBackUnique [_data get "pos", _data get "dir", _data get "shape"];
+	};
+	deleteVehicle _x;	
+} forEach (synchronizedObjects _module);
 
+if(_vehicles isEqualTo [])exitWith{["Transport-spawner cannot init\nNo vehicles was synced to it", "hint"]call dbgm;};
+
+private _dataArr = [
+	["vehicles",                               _vehicles],
+	["module",                                   _module],
+	["lastSpawnTime",                               time],
+	["side",                                       _side],
+	["assetCount", _module getVariable "sqfm_assetcount"],
+	["maxCapacity",                                  nil],
+	["waitingToSpawn",                             false],
+/***********************************************************/
+	["timeSinceSpawn",    {time-(_self get "lastSpawnTime")}],
+	["spawnTransport",               SQFM_fnc_spawnTransport],
+	["sendTransport",                 SQFM_fnc_sendTransport],
+    ["initTransportTask",SQFM_fnc_transportInitTask],
+	["transportAvailability", SQFM_fnc_transportAvailability],
+	["getVehicleType",        SQFM_fnc_spawnerGetVehicleType],
+	["selectSpawnPos",            SQFM_fnc_transportSpawnPos],
+	["globalize",                              _globalizeFnc]
+];
+private _maxCapacity = selectMax _capacities;
+private _hashMap     = createHashmapObject [_dataArr];
+
+_hashMap set         ["maxCapacity",  _maxCapacity];
+_module  setVariable ["SQFM_spawnerData", _hashMap, true];
+
+true;
+};
+//  
 /************************TODO list*******************************/
 
 /*
@@ -61,60 +107,38 @@ TODO:
 15) Do the taskmanager in a forEachFrame loop to avoid scheduler issues.
 */
 /********************New Functions/Methods*****************************/
-// SQFM_fnc_transportCrewGetOutEh = {};
-// SQFM_fnc_groupCanReplenish     = {};
-// SQFM_fnc_groupCanBeReplenished  = {};
-// SQFM_fnc_onTransportCrewGetOut    = {};
-// SQFM_fnc_groupReplenishTaskEnd     = {};
-// SQFM_fnc_groupWaitForTransportSpawn = {};
-// SQFM_fnc_groupIsIdle               = {};
-// SQFM_fnc_initBattleMap            = {};
-// SQFM_fnc_updateBattle            = {};
-// SQFM_fnc_updateBattleHudGlobal    = {};
-// SQFM_fnc_groupNeedsCombatReplenish  = {};
-// SQFM_fnc_groupCanReplenish           = {};
-// SQFM_fnc_groupCanCombatReplenish      = {};
-// SQFM_fnc_groupCombatReplenishAlgorythm = {};
-// SQFM_fnc_groupCombatReplenish         = {};
-// SQFM_fnc_battleReplenishGroups       = {};
-// SQFM_fnc_groupCanReplenishGroup     = {};
+// SQFM_fnc_groupAddUnitEventHandler    = {};
+// SQFM_fnc_groupRemoveUnitEventHandler = {};
+// SQFM_fnc_initGroup                   = {};
+// SQFM_fnc_initSquadMembers           = {};
+// SQFM_fnc_onSquadManFired           = {};
+// SQFM_fnc_onSquadManSuppressed     = {};
+// SQFM_fnc_onUnitJoined            = {};
+// SQFM_fnc_grpEvents              = {};
+// SQFM_fnc_onTransportCombatDrop = {};
+// SQFM_fnc_onPassengerCombatDrop = {};
+// SQFM_fnc_emergencyParking     = {};
+// SQFM_fnc_transportAborted    = {};
 
-SQFM_fnc_battlefieldDimensions = { 
-params [
-	["_man",    nil, [objNull]], 
-	["_target", nil, [objNull]]
-];
-private _baseRad = _man distance2D _target;
-private _minRadB = (_baseRad*1.1)+50;
-private _scanRad = ceil(selectMax[_baseRad, SQFM_minBattleSize]);
-private _pos     = [[_man, _target]] call SQFM_fnc_avgPos2D;
-private _list    = _pos nearEntities ["land", _scanRad];
-private _dataArr = [_list] call SQFM_fnc_objArrData;
-private _center  = _dataArr#0;
-private _radius  = _dataArr#1;
-
-// if(_radius > _minRadB)exitWith{[_center, _radius+50]};
+SQFM_fnc_assignAllGroupTasks = {};
 
 
-// private _center  = [_man, _target] call SQFM_fnc_battlefieldCenter;
-// private _radius  = [_center, _baseRad] call SQFM_fnc_battlefieldRadius;
 
-[_center, _radius];
-};
+
 
 
 /**************Update group and objective methods***********************/
 // call SQFM_fnc_initReinforRequestsMap;
-call SQFM_fnc_updateMethodsAllGroups;
+// call SQFM_fnc_updateMethodsAllGroups;
 // call SQFM_fnc_updateMethodsAllObjectives;
+// call SQFM_fnc_initAllTransportModules;
 /************************Code to execute*******************************/
 
+private _pos          = getPosATLVisual player;
+private _trnsportData = SP1 call getData;
+private _passengerGrp = grp_1;
 
-// []spawn{
-// private _data = grp1 call getData;
-// private _targetGroup = group player;
+_trnsportData call ["sendTransport",[_passengerGrp, _pos]];
 
-// _data call ["replenishGroup", [_targetGroup]];
-// };
-
+/************************{FILE END}*******************************/
 systemChat "devfiled read";

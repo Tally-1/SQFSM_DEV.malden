@@ -1,9 +1,7 @@
 params[
-	["_callerGroup", nil, [grpNull]],
-	["_dropOffPos",  nil,      [[]]]
+	["_passengerGroup", nil, [grpNull]],
+	["_dropPos",  nil,         [[]]]
 ];
-
-
 // Check if the module is already queing vehicles
 if(_self get "waitingToSpawn")then{
 	waitUntil { 
@@ -21,60 +19,36 @@ if(_self call ["timeSinceSpawn"] < 10)then{
 };
 
 private ["_transportersData"];
-private _callerData       = _callerGroup getVariable "SQFM_grpData";
-        _dropOffPos       = [_dropOffPos] call SQFM_fnc_findParkingSpot;
+private _callerData       = _passengerGroup getVariable "SQFM_grpData";
+        _dropPos       = [_dropPos] call SQFM_fnc_findParkingSpot;
 private _pickupPos        = _callerData call ["getPickupPos"];
 private _capacityNeeded   = count(_callerData call ["getUnitsOnfoot"]);
 private _transportVehicle = _self call ["spawnTransport", [_capacityNeeded]];
 
 if(isNil "_transportVehicle")
 exitWith{
+	_self call ["globalize"];
 	"Vehicle could not spawn" call dbgm; 
 	objNull;
 };
 
-private _transportGroup   = group _transportVehicle;
-private _timer            = time + 2;
+private _transportGroup = group _transportVehicle;
+private _timer          = time + 2;
+
 waitUntil {
 	_transportersData = _transportGroup getVariable "SQFM_grpData";
 	(_timer < time) or 
 	{!isNil "_transportersData"}; 
 };
 
+_self call ["initTransportTask",[
+    _passengerGroup,
+    _transportVehicle,
+    _pickupPos,
+    _dropPos
+]];
 
-private _module           = _self get "module";
-private _startPos         = getPosATLVisual _module;
-private _transportParams  = [_callerGroup, _transportVehicle, _callerData, _module];
-private _Zone             = [_callerGroup, _transportGroup] call SQFM_fnc_getGroupsZone;
-private _transportTask    = _transportersData call ["initTask", ["transport", _Zone,  [_pickupPos, _dropOffPos], _transportParams]];
-private _onPickupWp       = '[group this] call  SQFM_fnc_onPickupWpTransporter';
-private _onDropWp         = '[group this] spawn SQFM_fnc_onDropOffWpTransporter';
-private _onReturnWp       = '[group this] call  SQFM_fnc_onReturnWpTransporter';
+_transportGroup setVariable ["SQFM_transportVehcicle",  _transportVehicle];
+_transportGroup setVariable ["SQFM_transportModule", (_self get "module")];
 
-private _pickupWp = _transportTask call ["addWaypoint", [_pickupPos, _onPickupWp,nil,"FULL"]];
-private _droppWp  = _transportTask call ["addWaypoint",             [_dropOffPos, _onDropWp]];
-private _returnWp = _transportTask call ["addWaypoint",             [_startPos, _onReturnWp]];
-private _waitWp   = _callerGroup addWaypoint [_pickupPos, 0];
-private _danger   = [_transportGroup, _dropOffPos] call SQFM_fnc_posIsHostile;
-private _dropRad  = 50;
-
-if(_danger)then{_dropRad = 200};
-
-_waitWp   setWaypointCompletionRadius 30;
-_pickupWp setWaypointCompletionRadius 30;
-
-_pickupWp synchronizeWaypoint [_waitWp];
-
-_droppWp  setWaypointCompletionRadius _dropRad;
-_returnWp setWaypointCompletionRadius 30;
-
-_transportGroup setSpeedMode "FULL";
-_transportGroup setBehaviour "SAFE";
-
-_transportTask set ["state",           "Picking up passengers"];
-_callerData    set ["action",          "Waiting for transport"];
-_callerData    set ["transportVehicle", _transportVehicle];
-
-"Transport vehicle spawned in" call dbgm;
-
-_transportVehicle;
+true;

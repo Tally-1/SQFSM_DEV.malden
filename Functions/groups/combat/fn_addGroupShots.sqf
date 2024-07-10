@@ -29,6 +29,6 @@ if(_shotCount > 100)
 then{_shotList deleteAt 0};
 
 if(_firstShot)
-then{_battlefield call ["onFirstShot", [_shooter, _projectile, _target]]};
+then{_battlefield call ["onFirstShot", [_shooter, _target]]};
 
 true;

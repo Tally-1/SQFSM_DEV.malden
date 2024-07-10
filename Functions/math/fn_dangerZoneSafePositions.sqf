@@ -4,7 +4,7 @@ params[
     ["_ownSide",   nil, [objNull,west,grpNull,createHashmap]], // the (side of the) entity doing the inquiry
     ["_bufferRad", nil,                                  [0]], // Added distance to Zone-radius 
     ["_dirRange",  nil,                                  [0]], // The width in degrees (0-359)
-    ["_posDist",   nil,                                  [0]]  // Distance between the returned positions.
+    ["_posDist",   nil,                                  [0]]//, // Distance between the returned positions.
 ];
 private _safePositions = [];
 

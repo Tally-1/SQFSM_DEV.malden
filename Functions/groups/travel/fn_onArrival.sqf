@@ -3,7 +3,7 @@ private _taskCode = _taskData get"arrivalCode";
 
 if((!isNil "_taskCode")
 &&{_taskCode isNotEqualTo {}})
-exitWith{_taskData call ["arrivalCode"];};
+exitWith{_taskData call ["arrivalCode"]};
 
 _self call ["deleteWaypoints"];
 

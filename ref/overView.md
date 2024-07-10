@@ -1,20 +1,14 @@
-[Group-tasks]
-1) Capture Objectives
-2) Defend Objectives
-3) Support calls:
-    * Reinforcements  (High pri)
-    * Artillery       (Low pri)
-    * CAS             (Low pri)
+ unit: Object - object the event handler is assigned to
+ selection: String - name of the selection where the unit was damaged.
+ damage: Number - resulting level of damage for the selection
+ source: Object - the source unit that caused the damage
+ projectile: String - classname of the projectile that caused inflicted the damage. ("" for unknown)
+ hitPartIndex: Number - hit part index of the hit point, -1 otherwise
+ instigator: Object - person who pulled the triggerision damage, etc.
+ context: Number - some additional context for the event:
 
-4) Hunt nearby enemies.
-    * "Standard" Squads seek and destroy enemies in the vincinity.
-    * "Recon"    Squads calls for support on observed enemies, but does not attack directly.
-    * "Support"  Squads does not hunt.
-
-[Role-Limitations]
-1) Who can capture a specific Objective
-    - Group assets allowed (Armor / Inf / Cars )
-    - Group classes
-        * Standard class can attack any objective except "recon" objectives
-        * Recon class can capture "recon" objectives and "standard" objectives when permitted
-        * Support class never captures any objectives regardless of settings
+0 : TotalDamage - total damage adjusted before iteration through hitpoints
+1 : HitPoint - some hit point processed during iteration
+2 : LastHitPoint - the last hitpoint from iteration is processed
+3 : FakeHeadHit - head hit that is added/adjusted
+4 : TotalDamageBeforeBleeding - total damage is adjusted before calculating bleeding
