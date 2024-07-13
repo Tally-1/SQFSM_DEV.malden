@@ -21,6 +21,7 @@ private _dataArr = [
     ["startTime",               time],
     ["sides",                 _sides],
     ["groups",               _groups],
+    ["forcedEnd",              false],
     ["buildings",                 []],
     ["grid",                   _grid],
 	["edgeLines",         _edgeLines],

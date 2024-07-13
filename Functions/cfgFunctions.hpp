@@ -7,6 +7,7 @@ class CfgFunctions
 		{
 			file = "functions\battlefield";
 			class initBattle                    {};
+			class posRadInitBattle              {};
 			class initBattleMap                 {};
 			class initBattleBuildings           {};
 			class updateBattleBuildings         {};
@@ -534,6 +535,19 @@ class CfgFunctions
 			class groupCombatReplenishAlgorythm {};
 			class groupCombatReplenish          {};
 		
+		};
+
+		class groups_hunt
+		{
+			file = "functions\groups\hunt";
+			class groupAbleToHunt             {};
+			class isHuntGroup                 {};
+			class sendHuntGroups              {};
+			class groupHuntCondition          {};
+			class groupInitHunt               {};
+			class groupInitHuntTask           {};
+			class onGroupHuntWp               {};
+			class onGroupHuntEnd              {};
 		};
 
 		class reinforcements

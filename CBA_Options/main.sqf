@@ -47,7 +47,7 @@ private _versionName = ["DCO Squad FSM | ", SQFSM_Version] joinString "";
 	_versionName,
 	[
 		200,   	//minimum 
-		2000,   //max
+		worldSize,   //max
 		500,    //default
 		0,	    //decimals
 		false

@@ -5,6 +5,7 @@ private _abilityKeys = [
     "canDefend",
     "canAttack",
     "canHunt",
+    "huntDistance",
     "canReinforce",
     "canCallReinforcements",
     "canCallAir",
@@ -15,8 +16,16 @@ private _abilityKeys = [
     private _name   = (_x select [3, count _x])+"s";//[, _maxLetterCount] call SQFM_fnc_textInsertSpace;
     private _color  = _green;
     private _value  = _self get _x;
+    private _number = typeName _value isEqualTo "SCALAR";
 
-    if!(_value)then{_color = _red};
+    if(_number)then{_color = _aqua};
+    if(_value isEqualTo false 
+    ||{_value isEqualTo 0})
+    then{_color = _red};
+    if(_x isEqualTo "huntDistance")
+    then{_name = "Hunt Distance"};
+    
+
     if("Call" in _x)then{
         _name = ["Can call ", (_x select [7, count _x])]joinstring"";
     };

@@ -1,5 +1,7 @@
 scr = [] execVM "devFile2.sqf";
 waitUntil {scriptDone scr;};
+scr = [] execVM "SFSM_Devfile.sqf";
+waitUntil {scriptDone scr;};
 // if(true)exitWith{systemChat "devfile exited"};
 systemChat "devfiled found";
 addToGroups = SQFM_fnc_addToDataAllGroups;
@@ -10,57 +12,12 @@ addToGroups = SQFM_fnc_addToDataAllGroups;
 // SQFM_fnc_initBattleMap     = {};
 // SQFM_fnc_setObjectiveData   = {};
 // SQFM_fnc_setObjectiveMethods = {};
+// SQFM_fnc_initTransportSpawner = {};
 
 /*********************************/
-SQFM_fnc_initTransportSpawner = { 
-params[
-	["_module",nil,[objNull]]
-];
-private _vehicles     = [];
-private _capacities   = [];
-private _parkingSpots = [];
-private _side         = call compile (_module getVariable "sqfm_side");
-private _globalizeFnc = {(_self get "module") setVariable ["SQFM_spawnerData", _self, true]};
 
-{
-	deleteVehicleCrew _x;
-	private _data = [_x] call SQFM_fnc_transportVehicleData;
-	if(!isNil "_data")then{
-		_vehicles     pushBackUnique  _data;
-		_capacities   pushBackUnique (_data get "capacity");
-		_parkingSpots pushBackUnique [_data get "pos", _data get "dir", _data get "shape"];
-	};
-	deleteVehicle _x;	
-} forEach (synchronizedObjects _module);
+// SQFM_fnc_posRadInitBattle = {};
 
-if(_vehicles isEqualTo [])exitWith{["Transport-spawner cannot init\nNo vehicles was synced to it", "hint"]call dbgm;};
-
-private _dataArr = [
-	["vehicles",                               _vehicles],
-	["module",                                   _module],
-	["lastSpawnTime",                               time],
-	["side",                                       _side],
-	["assetCount", _module getVariable "sqfm_assetcount"],
-	["maxCapacity",                                  nil],
-	["waitingToSpawn",                             false],
-/***********************************************************/
-	["timeSinceSpawn",    {time-(_self get "lastSpawnTime")}],
-	["spawnTransport",               SQFM_fnc_spawnTransport],
-	["sendTransport",                 SQFM_fnc_sendTransport],
-    ["initTransportTask",SQFM_fnc_transportInitTask],
-	["transportAvailability", SQFM_fnc_transportAvailability],
-	["getVehicleType",        SQFM_fnc_spawnerGetVehicleType],
-	["selectSpawnPos",            SQFM_fnc_transportSpawnPos],
-	["globalize",                              _globalizeFnc]
-];
-private _maxCapacity = selectMax _capacities;
-private _hashMap     = createHashmapObject [_dataArr];
-
-_hashMap set         ["maxCapacity",  _maxCapacity];
-_module  setVariable ["SQFM_spawnerData", _hashMap, true];
-
-true;
-};
 //  
 /************************TODO list*******************************/
 
@@ -107,7 +64,7 @@ TODO:
 15) Do the taskmanager in a forEachFrame loop to avoid scheduler issues.
 */
 /********************New Functions/Methods*****************************/
-// SQFM_fnc_groupAddUnitEventHandler    = {};
+// SQFM_fnc_groupAddUnitEventHandler   = {};
 // SQFM_fnc_groupRemoveUnitEventHandler = {};
 // SQFM_fnc_initGroup                   = {};
 // SQFM_fnc_initSquadMembers           = {};
@@ -119,12 +76,15 @@ TODO:
 // SQFM_fnc_onPassengerCombatDrop = {};
 // SQFM_fnc_emergencyParking     = {};
 // SQFM_fnc_transportAborted    = {};
-
-SQFM_fnc_assignAllGroupTasks = {};
-
-
-
-
+// SQFM_fnc_assignAllGroupTasks = {};
+// SQFM_fnc_groupAbleToHunt    = {};
+// SQFM_fnc_isHuntGroup       = {};
+// SQFM_fnc_sendHuntGroups    = {};
+// SQFM_fnc_groupHuntCondition = {};
+// SQFM_fnc_groupInitHunt     = {};
+// SQFM_fnc_onGroupHuntWp    = {};
+// SQFM_fnc_groupInitHuntTask = {};
+// SQFM_fnc_onGroupHuntEnd   = {};
 
 
 /**************Update group and objective methods***********************/
@@ -133,12 +93,12 @@ SQFM_fnc_assignAllGroupTasks = {};
 // call SQFM_fnc_updateMethodsAllObjectives;
 // call SQFM_fnc_initAllTransportModules;
 /************************Code to execute*******************************/
-
-private _pos          = getPosATLVisual player;
-private _trnsportData = SP1 call getData;
-private _passengerGrp = grp_1;
-
-_trnsportData call ["sendTransport",[_passengerGrp, _pos]];
+// private _data = grpH call getData;
+// _data call ["initHuntTask",[grpV]];
+// private _pos          = getPosATLVisual player;
+// private _trnsportData = SP1 call getData;
+// private _passengerGrp = grp_1;
+// _trnsportData call ["sendTransport",[_passengerGrp, _pos]];
 
 /************************{FILE END}*******************************/
 systemChat "devfiled read";

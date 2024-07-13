@@ -3,6 +3,7 @@ params[
 ];
 
 if (_man getVariable ["SQFM_Excluded", false]) exitWith{false;};
+if (_man getVariable ["SFSM_captive",  false]) exitWith{false;};
 if!(alive _man)                                exitWith{false;};
 if!((side _man) in [west, east, independent])  exitWith{false;};
 if ([_man] call SQFM_fnc_unconscious)          exitWith{false;};

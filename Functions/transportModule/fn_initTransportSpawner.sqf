@@ -18,7 +18,7 @@ private _globalizeFnc = {(_self get "module") setVariable ["SQFM_spawnerData", _
 	deleteVehicle _x;	
 } forEach (synchronizedObjects _module);
 
-if(_vehicles isEqualTo [])exitWith{["Transport-spawner cannot init", "hint"]call dbgm;};
+if(_vehicles isEqualTo [])exitWith{["Transport-spawner cannot init\nNo vehicles was synced to it", "hint"]call dbgm;};
 
 private _dataArr = [
 	["vehicles",                               _vehicles],
@@ -32,6 +32,7 @@ private _dataArr = [
 	["timeSinceSpawn",    {time-(_self get "lastSpawnTime")}],
 	["spawnTransport",               SQFM_fnc_spawnTransport],
 	["sendTransport",                 SQFM_fnc_sendTransport],
+    ["initTransportTask",SQFM_fnc_transportInitTask],
 	["transportAvailability", SQFM_fnc_transportAvailability],
 	["getVehicleType",        SQFM_fnc_spawnerGetVehicleType],
 	["selectSpawnPos",            SQFM_fnc_transportSpawnPos],

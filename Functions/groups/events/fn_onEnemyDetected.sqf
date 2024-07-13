@@ -2,6 +2,8 @@ params [
 	["_group", nil, [grpNull]],
 	["_enemy", nil, [objNull]]
 ];
+
+if(SQFM_soldierFsmOn)                     exitWith{};
 if!(side _group in SQFM_validSides)       exitWith{};
 if!(side _enemy in SQFM_validSides)       exitWith{};
 if!(side group _enemy in SQFM_validSides) exitWith{};

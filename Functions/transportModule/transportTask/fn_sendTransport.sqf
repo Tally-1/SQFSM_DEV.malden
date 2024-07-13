@@ -51,4 +51,4 @@ _self call ["initTransportTask",[
 _transportGroup setVariable ["SQFM_transportVehcicle",  _transportVehicle];
 _transportGroup setVariable ["SQFM_transportModule", (_self get "module")];
 
-true;
+_transportVehicle;

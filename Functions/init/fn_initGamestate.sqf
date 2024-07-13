@@ -3,10 +3,14 @@
 
 private _objectiveRanges = (entities "SQFSM_Objective")apply{_x getVariable "activationDistance"};
 private _maxObjRange     = selectMax _objectiveRanges;
+private _SfsmDeactivated = missionNamespace getVariable ["SFSM_disableSoldierFSM", false];
+private _SFSM            = (!isNil "SFSM_fnc_debugMessage") && {_SfsmDeactivated isEqualTo false};
 
 if((-1) in _objectiveRanges
 or{_objectiveRanges isEqualTo []})
 then{_maxObjRange = worldSize};
+
+missionNamespace setVariable ["SQFM_soldierFsmOn", _SFSM, true];
 
 SQFM_headlessPresent    = (entities "HeadlessClient_F") isNotEqualTo [];
 SQFM_maxObjectiveRange  = _maxObjRange;
@@ -22,5 +26,3 @@ SQFM_minBattleSize      = 100;
 SQFM_lastBuildingChange = 0;
 SQFM_safePosLifeTime    = 60;
 SQFM_lastFireCheck      = 0-300;
-
-
