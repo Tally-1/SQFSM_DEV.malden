@@ -7,6 +7,7 @@ params[
     ["_defend",        nil,  [true]],
     ["_attack",        nil,  [true]],
     ["_hunt",          nil,  [true]],
+    ["_huntDistance",  nil,     [0]],
     ["_reinforce",     nil,  [true]],
     ["_callReinforce", nil,  [true]],
     ["_callAir",       nil,  [true]],
@@ -19,7 +20,9 @@ private _dataArr  = [
 
     ["birth",             round time],
     ["lastTransportCall", round time],
+    ["huntCoolDown",      round time],
     ["lastReinfReq",           0-300],
+    ["lastFireCheck",          0-300],
     ["grp",                   _group],
     ["owner",      groupOwner _group],
     ["side",             side _group],
@@ -41,11 +44,13 @@ private _dataArr  = [
     ["strengthIndicator",     _3Dtxt],
     ["objective",            objNull],
     ["taskData",           _emptyMap],
+    ["unitEvHandlers",            []],
 
     /******Behaviour settings*******/
     ["canDefend",                    _defend],
-    ["canAttack",                   _attack],
+    ["canAttack",                    _attack],
     ["canHunt",                        _hunt],
+    ["huntDistance",           _huntDistance],
     ["canReinforce",              _reinforce],
     ["canCallReinforcements", _callReinforce],
     ["canCallAir",                  _callAir],

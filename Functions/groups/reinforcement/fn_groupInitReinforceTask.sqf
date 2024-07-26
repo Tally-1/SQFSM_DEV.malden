@@ -53,12 +53,19 @@ exitWith{
     "No traveldata" call dbgm;
 };
 
+private _transportGroup = group driver _transportVehicle;
+private _noVeh          = _validVehicle isEqualTo false;
+private _exitCode       = {[_group, (currentWaypoint _group)] setWaypointCompletionRadius 300};
+if(_noVeh)exitWith _exitCode;
 
-if(_validVehicle isEqualTo false)
-exitWith{[_group, (currentWaypoint _group)] setWaypointCompletionRadius 300};
+private _noWpg = count waypoints _group          < 3;
+if(_noWpg)exitWith _exitCode;
+
+private _noWpt = count waypoints _transportGroup < 3;
+if(_noWpt)exitWith _exitCode;
 
 private _side           = side _group;
-private _transportGroup = group driver _transportVehicle;
+
 private _wpG            = (waypoints _group)#2;
 private _wpT            = (waypoints _transportGroup)#2;
 private _danger         = [_side, _insertPos, 100] call SQFM_fnc_posIsHostile;

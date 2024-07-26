@@ -76,7 +76,6 @@ TODO:
 // SQFM_fnc_onPassengerCombatDrop = {};
 // SQFM_fnc_emergencyParking     = {};
 // SQFM_fnc_transportAborted    = {};
-// SQFM_fnc_assignAllGroupTasks = {};
 // SQFM_fnc_groupAbleToHunt    = {};
 // SQFM_fnc_isHuntGroup       = {};
 // SQFM_fnc_sendHuntGroups    = {};
@@ -87,15 +86,41 @@ TODO:
 // SQFM_fnc_onGroupHuntEnd   = {};
 
 
+
+/*
+// 1) Stuck on objective
+2) Push near enemies. (Instead of hunt *namechange)
+3) Knowledge to push slider.
+// 4) Endless defense fix.
+5) Garrison / Take cover when idle.
+6) Mortars
+7) Ammo rearm (Supply-truck / crates).
+*/
+// SQFM_fnc_assignAllGroupTasks = {};
+
+
+
+SQFM_fnc_groupAutoAssignObjective = {};
 /**************Update group and objective methods***********************/
 // call SQFM_fnc_initReinforRequestsMap;
-// call SQFM_fnc_updateMethodsAllGroups;
+call SQFM_fnc_updateMethodsAllGroups;
 // call SQFM_fnc_updateMethodsAllObjectives;
 // call SQFM_fnc_initAllTransportModules;
 /************************Code to execute*******************************/
-// private _data = grpH call getData;
-// _data call ["initHuntTask",[grpV]];
-// private _pos          = getPosATLVisual player;
+
+
+// 
+// SQFM_fnc_testWp = { 
+// params [
+//     ["_group", nil, [grpNull]]
+// ];
+// systemChat str _this;
+// };
+
+// private _function  = "SQFM_fnc_testWp";
+// private _data      = grpH call getData;
+// private _pos       = getPosATLVisual player;
+// private _waypoint  = _data call ["addWaypoint",[_pos,5,"MOVE",_function]];
 // private _trnsportData = SP1 call getData;
 // private _passengerGrp = grp_1;
 // _trnsportData call ["sendTransport",[_passengerGrp, _pos]];

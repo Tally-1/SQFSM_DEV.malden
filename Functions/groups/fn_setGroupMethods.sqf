@@ -1,7 +1,7 @@
 params[
     ["_groupData",nil,[createHashmap]]
 ];
-
+// 
 private _methods = [    
     ["3DIcon",                             SQFM_fnc_group3DIcon],
     ["3DColor",                           SQFM_fnc_group3DColor],
@@ -14,6 +14,8 @@ private _methods = [
     ["activeWp",                              SQFM_fnc_activeWp],
     ["update",                             SQFM_fnc_groupUpdate],
     ["setDataDelayed",             SQFM_fnc_groupSetDataDelayed],
+    ["addUnitEH",             SQFM_fnc_groupAddUnitEventHandler],
+    ["removeUnitEH",       SQFM_fnc_groupRemoveUnitEventHandler],
     ["sinceSpawn",                 {time - (_self get "birth")}],
     // ["availableForNewTask",      SQFM_fnc_groupAvailableForTask],
     
@@ -96,6 +98,9 @@ private _methods = [
     ["initTask",                              SQFM_fnc_initTaskData],
     ["initObjectiveTask",           SQFM_fnc_groupInitObjectiveTask],
     ["getAbilities",      {[_self] call SQFM_fnc_getGroupAbilities}],
+    ["removeTask",                         SQFM_fnc_groupRemoveTask],
+    ["hasTask", {str(_self call ["getTaskData"]) isNotEqualTo "[]"}],
+    ["getTaskData",  {[_self get "grp"] call SQFM_fnc_getGroupTask}],
 
     /**********************{TACTICS}***************************/
     ["garrison",                         SQFM_fnc_groupGarrison],
@@ -153,7 +158,12 @@ private _methods = [
     ["nearEnemyGrp",                 SQFM_fnc_groupNearEnemyGrp],
     ["attackGroup",                   SQFM_fnc_groupAttackGroup],
     ["updateBattleStrength", SQFM_fnc_groupUpdateBattleStrength],
-    ["combatZone",                     SQFM_fnc_groupCombatZone]
+    ["combatZone",                     SQFM_fnc_groupCombatZone],
+
+    /**********************{Hunting}***************************/
+    ["initHunt",                         SQFM_fnc_groupInitHunt],
+    ["initHuntTask",                 SQFM_fnc_groupInitHuntTask],
+    ["ableToHunt",                     SQFM_fnc_groupAbleToHunt]
 ];
 
 {
