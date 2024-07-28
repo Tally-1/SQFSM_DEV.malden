@@ -89,24 +89,44 @@ TODO:
 
 /*
 // 1) Stuck on objective
-2) Push near enemies. (Instead of hunt *namechange)
-3) Knowledge to push slider.
+// 2) Push near enemies. (Instead of hunt *namechange)
+// 3) Knowledge to push slider.
 // 4) Endless defense fix.
 5) Garrison / Take cover when idle.
 6) Mortars
 7) Ammo rearm (Supply-truck / crates).
 */
 // SQFM_fnc_assignAllGroupTasks = {};
+// SQFM_fnc_groupGetNearUrbanZones = {};
+// SQFM_fnc_groupCanIdleGarrison = {};
+// SQFM_fnc_allWaypointPositions = {};
+// SQFM_fnc_groupInitIdleGarrison = {};
+// SQFM_fnc_assignGroupsMapIdleCover = {};
+// SQFM_fnc_assignGroupsIdleCover = {};
 
 
 
-SQFM_fnc_groupAutoAssignObjective = {};
 /**************Update group and objective methods***********************/
-// call SQFM_fnc_initReinforRequestsMap;
 call SQFM_fnc_updateMethodsAllGroups;
 // call SQFM_fnc_updateMethodsAllObjectives;
-// call SQFM_fnc_initAllTransportModules;
 /************************Code to execute*******************************/
+
+private _groups = curatorSelected#1;
+// [_groups] spawn SQFM_fnc_assignGroupsIdleCover;
+// {
+//     private _data = _x call getData;
+//     _data spawn {_this call["initIdleGarrison"]};
+//     systemChat str _x;
+    
+// } forEach _groups;
+
+// private _camPos  = (positionCameraToWorld [0,0,0]);
+private _data = grp1 call getData;
+// _camPos set [2,0];
+
+_data call ["unStop"];
+
+
 
 
 // 

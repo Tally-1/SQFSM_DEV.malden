@@ -61,6 +61,12 @@ class CfgFunctions
 			file = "functions\building";
 			class isHouse            {};
 			class nearBuildings      {};
+			class manGetBuilding     {};
+			class menInsideBuilding  {};
+			class buildingPosCount   {};
+			class buildingArrData    {};
+			class getBuildingScore   {};
+			class sortBuildings      {};
 		};
 
 		class clusters
@@ -122,6 +128,7 @@ class CfgFunctions
 			class posIsHostile           {};
 			class formatCtrlPos          {};
 			class newDisplayCtrl         {};
+			class allWaypointPositions   {};
 
 		};
 
@@ -258,6 +265,7 @@ class CfgFunctions
 			class firstValidGroupMember       {};
 			class getAssignedVehicles         {};
 			class teleportIntoAssignedVehicle {};
+			class manForceMoveToPos           {};
 		};
 
 		class vehicle
@@ -456,6 +464,7 @@ class CfgFunctions
 			class units3D                 {};
 			class groupDebugText          {};
 			class groupDebugTextAbilities {};
+			class groupFlashAction        {};
 		};
 
 		class groups_objectives
@@ -478,6 +487,9 @@ class CfgFunctions
 			class groupObjectiveInsertPosStandard {};
 			class groupObjectiveInsertPosDanger   {};
 			class groupObjectiveInsertPos         {};
+			class groupObjectiveAssignedHostiles  {};
+			class groupCanLeaveObjective          {};
+			class groupCanAssignObjective         {};
 
 			/*Attack*/
 			class assignGroupObjectivesAllSides   {};
@@ -495,19 +507,29 @@ class CfgFunctions
 		{
 			file = "functions\groups\tactics";
 			class groupGarrison            {};
-
+			class groupGetNearUrbanZones   {};
+			class groupCanIdleGarrison     {};
+			class groupInitIdleGarrison    {};
+			class groupGetInBuilding       {};
+			class groupIdleGarrison        {};
+			class waypointIdleGarrison     {};
+			
 		};
 
 		class groups_misc
 		{
 			file = "functions\groups\misc";
-			class groupIsIdle           {};
-			class groupUpdate           {};
-			class activeWp              {};
-			class getIdleGroups         {};
-			class getCategorizedGroups  {};
-			class assignAllGroupTasks   {};
-			class groupSetDataDelayed   {};
+			class groupIsIdle              {};
+			class groupUpdate              {};
+			class activeWp                 {};
+			class getIdleGroups            {};
+			class getCategorizedGroups     {};
+			class assignAllGroupTasks      {};
+			class assignGroupsMapIdleCover {};
+			class assignGroupsIdleCover    {};
+			class groupSetDataDelayed      {};
+			class groupUnstop              {};
+			
 		};
 
 		class groups_reinforcement_radio
@@ -549,9 +571,9 @@ class CfgFunctions
 		
 		};
 
-		class groups_hunt
+		class groups_pushNear
 		{
-			file = "functions\groups\hunt";
+			file = "functions\groups\pushNear";
 			class groupAbleToHunt             {};
 			class isHuntGroup                 {};
 			class sendHuntGroups              {};
@@ -592,6 +614,7 @@ class CfgFunctions
 			class curatorEvents              {};
 			class onCuratorGroupSelection    {};
 			class buildingChangedEh          {};
+			class onCuratorWaypoint          {};
 		};
 
 		class taskManager
@@ -610,5 +633,6 @@ class CfgFunctions
 			class handleDeadGroups {};
 			class updateAllGroups  {};
 		};
+		
 	};
 };
