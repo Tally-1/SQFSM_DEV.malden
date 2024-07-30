@@ -1,11 +1,13 @@
 params[
     ["_man",  nil, [objNull]],
     ["_pos",  nil,      [[]]],
-    ["_stop", false, [false]]
+    ["_stop", false, [false]],
+    ["_SFSM", false, [false]]
 ];
 // Use soldier FSM to move the soldier if possible.
-if(!isNil "SFSM_fnc_forcedMove")
-exitWith{_this call SFSM_fnc_forcedMove};
+if(_SFSM
+&&{!isNil "SFSM_fnc_forcedMove"})
+exitWith{[_this#0,_this#1] call SFSM_fnc_forcedMove};
 private _startTime  = time;
 private _timeLimit  = time+(_man distance _pos);
 private _ready      = false;
