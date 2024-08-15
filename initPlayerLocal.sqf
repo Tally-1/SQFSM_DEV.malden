@@ -1,3 +1,4 @@
+enableEnvironment false;
 [] spawn{
 waituntil {!isNull (findDisplay 46)};
 
@@ -23,5 +24,7 @@ _Pressed"];
     false;
 }];
 };
+
+
 
 //if ((_this # 1) == 80) then {hint 'reCompiling...'; [5] call BIS_fnc_recompile; _Pressed = true};

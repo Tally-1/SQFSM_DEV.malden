@@ -1,2 +1,9 @@
-[499m] Rewriting moveTo function. rewriting garrison function.
-[140]  Testing / bugfixing move function. Initial SFSM move rewrite.
+~9.8 hours (588 minutes)
+
+[80m]  Objective markers
+[214m] Objective infantry clearing sequence
+[152m] Urban Objective clearing sequence (infantry group)
+[143m] Objective roadmap (To be used for vehicle clearing)
+[113m] Urban Objective clearing sequence (Vehicle group)
+[72m]  Zone positions (radial) & zone-cone (to be used in firesupport/flanking functions)
+[102m] Objective Flank ---> clear sequence (Vehicle group, non urban objective)

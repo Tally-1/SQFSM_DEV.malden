@@ -10,7 +10,7 @@ params [
 private _whileSleep    = selectMin [0.1, _cndFreq];
 private _continue      = true;
 
-_man doFSM ["move.fsm", _position, objNull];
+_man doFSM ["SQFSM\move.fsm", _position, objNull];
 
 while {sleep _whileSleep; _continue} do { 
 	_continue = [_man, true] call SQFM_fnc_moveManFsmCondition;

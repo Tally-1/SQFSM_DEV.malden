@@ -2,7 +2,8 @@ params[
 	["_objModule",nil,[objNull]]
 ];
 params["_objModule"];
-[_self, _objModule]spawn{params
+[_self, _objModule]spawn{
+params
 ["_self", "_objModule"];
 private _infilPos  = _self call ["objectiveInsertPos", [_objModule]];
 private _canTravel = _self call ["initTravel",[_infilPos]];

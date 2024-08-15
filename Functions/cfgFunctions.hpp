@@ -1,4 +1,4 @@
-// "SQFSM\functions
+// "functions
 
 class CfgFunctions
 {

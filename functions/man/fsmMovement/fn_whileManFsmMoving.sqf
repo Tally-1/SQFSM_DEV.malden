@@ -22,7 +22,7 @@ then{
     _man setVariable ["MoveFsm_Reset", true];
 	_man doMove _position;
     sleep 0.1;
-	_man commandFSM ["move.fsm", _position, objNull]; 
+	_man commandFSM ["SQFSM\move.fsm", _position, objNull]; 
 	private _target  = getAttackTarget _man;
     private _repeats = _man getVariable ["FSM_movesRepeated",0];
     private _msg     = "reordered move (wrong order)";
@@ -42,6 +42,5 @@ then{
 
     sleep 0.1;
 };
-
 
 true;

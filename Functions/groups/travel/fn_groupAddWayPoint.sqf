@@ -4,12 +4,13 @@ params[
     ["_type",      nil,[""]],
     ["_statement", nil,[""]],
     ["_behaviour", nil,[""]],
-	["_speed",     nil,[""]]
+	["_speed",     nil,[""]],
+    ["_randomRad", 0,    []]
 ];
 
 private _group     = _self get "grp";
 private _groupData = _group getVariable "SQFM_grpData";
-private _wayPoint  = _group addWaypoint [_pos, 0];
+private _wayPoint  = _group addWaypoint [_pos, _randomRad];
 
 if(!isNil "_radius")    then {_wayPoint setWaypointCompletionRadius _radius};
 if(!isNil "_type")      then {_wayPoint setWaypointType _type;};
