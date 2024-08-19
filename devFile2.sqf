@@ -31,108 +31,11 @@
 // SQFM_fnc_groupUnstop          = {};
 // SQFM_fnc_waypointIdleGarrison = {};
 // SQFM_fnc_groupIdleGarrison   = {};
-
-
-
-SQFM_fnc_addPosMarker = { 
-params[
-    ["_position", nil,         [[]]],
-    ["_text",     nil,         [""]],
-    ["_size",     1,            [0]],
-    ["_type",    "hd_dot",     [""]],
-    ["_color",   "ColorBlack", [""]]    
-];
-
-private _markerName  = [_type,"_",round random 1000000] joinString "";
-private _marker = createMarkerLocal [_markerName, _position];
-
-_markerName setMarkerTypeLocal _type;
-_markerName setMarkerSizeLocal  [_size, _size];
-_markerName setMarkerColorLocal _color;
-_markerName setMarkerTextLocal _text;
-_markerName setMarkerAlpha 1;
-
-_markerName
-};
-
-SQFM_fnc_drawObjectiveMarkers = { 
-params[
-    ["_module", nil, [objNull]]
-];
-private _area   = [_module] call SQFM_fnc_getModuleArea;
-private _pos    = _area#0;
-private _a      = _area#1;
-private _b      = _area#2;
-private _dir    = _area#3;
-private _radius = selectMax [100,_a,_b];
-private _text   = [_module getVariable "objectiveType"] call SQFM_fnc_objectiveDescription;
-
-private _centerMarker = [_pos, _text, 0.8,"mil_objective_noShadow"] call SQFM_fnc_addPosMarker;
-private _areaMarker   = [_pos, _a, _b, _dir]  call SQFM_fnc_addRectangleMarker;
-private _radiusMarker = [_pos, _radius]       call SQFM_fnc_addCircleMarker;
-
-_radiusMarker setMarkerAlpha 0.5;
-_centerMarker setMarkerAlpha 0.5;
-
-[
-    _centerMarker, 
-    _areaMarker , 
-    _radiusMarker
-];
-};
-
-SQFM_fnc_objectiveUpdateMarkers = { 
-if!(SQFM_debugMode)exitWith{};
-private _owner = _self get "owner";
-private _color = [_owner,true] call SQFM_fnc_sideColor;
-
-{_x setMarkerColor _color} forEach (_self get "markers");
-
-true;
-};
-
-SQFM_fnc_addCircleMarker = { 
-params[
-    ["_position", nil,          [[]]],
-    ["_radius",   nil,           [0]],
-    ["_brush",    "BORDER",     [""]],
-    ["_color",    "ColorBlack", [""]]
-];
-
-private _markerName  = [round random 1000000, "_circleMarker"] joinString "";
-private _marker = createMarker [_markerName, _position];
-
-_markerName setMarkerShape "ELLIPSE";
-_markerName setMarkerBrush _brush;
-_markerName setMarkerSize  [_radius, _radius];
-_markerName setMarkerColor _color;
-_markerName setMarkerAlpha 1;
-
-
-_markerName
-};
-
-SQFM_fnc_addRectangleMarker = { 
-params[
-    ["_position", nil,          [[]]],
-    ["_a",        nil,           [0]],
-    ["_b",        nil,           [0]],
-    ["_dir",      nil,           [0]],
-    ["_color",    "ColorBlack", [""]],
-    ["_brush",    "BORDER",     [""]]    
-];
-private _markerName  = [round random 1000000, "_ellipseMarker"] joinString "";
-private _marker = createMarker [_markerName, _position];
-
-_marker setMarkerColorLocal _color;
-_marker setMarkerDirLocal   _dir;
-_marker setMarkerShapeLocal "RECTANGLE";
-_marker setMarkerSizeLocal  [_a, _b];
-_marker setMarkerBrushLocal _brush;
-_marker setMarkerAlpha      1;
-
-_marker;
-};
+// SQFM_fnc_addPosMarker = {};
+// SQFM_fnc_drawObjectiveMarkers = {};
+// SQFM_fnc_objectiveUpdateMarkers = {};
+// SQFM_fnc_addCircleMarker = {};
+// SQFM_fnc_addRectangleMarker = {};
 
 
 
@@ -288,6 +191,7 @@ private _methods = [
     ["endBoarding",                   SQFM_fnc_endGroupBoarding],
     ["boardThenTravel",           SQFM_fnc_groupBoardThenTravel],
     ["ejectAll",             SQFM_fnc_groupEjectFromAllVehicles],
+    // ["mechUnload",                     SQFM_fnc_groupMechUnload],
 
 	/********************{OBJECTIVES}***************************/
 	["validObjective",                       SQFM_fnc_group_validObjective],
@@ -321,6 +225,9 @@ private _methods = [
     ["infClearObjective",                  SQFM_fnc_groupInfClearObjective],
     ["infClearUrbanObjective",        SQFM_fnc_groupInfClearUrbanObjective],
     ["getUrbanObjInfSearchP",          SQFM_fnc_groupGetUrbanObjInfSearchP],
+
+    ["mechClearObjective",                SQFM_fnc_groupMechClearObjective],
+    ["mechClearUrbanObjective",      SQFM_fnc_groupMechClearUrbanObjective],
 
     ["vehicleClearObjective",          SQFM_fnc_groupVehicleClearObjective],
     ["vehicleClearUrbanObjective",SQFM_fnc_groupVehicleClearUrbanObjective],
@@ -575,544 +482,58 @@ private _methods =
 true;
 };
 
-SQFM_fnc_isUrbanArea = { 
-params[
-    ["_position",  nil, [[]]],
-    ["_radius",     nil, [0]],
-    ["_buildings", nil, [[]]]
-];
-private _urbanCoef = _this call SQFM_fnc_zoneUrbanCoef;
-private _minCoef   = 0.22;
-if(_urbanCoef >= _minCoef)exitWith{true};
-
-false;
-};
-
-
-SQFM_fnc_objectiveSetUrbanStatus = { 
-private _roadCount = count (_self get"roadmap"get"roads");
-if(_roadCount < 10)exitWith{_self set["isUrbanArea",false]};
-
-private _position  = (_self get "zone")#0;
-private _radius    = (_self get "zone")#1;
-private _buildings = _self get "buildings";
-private _urbanArea = [_position, _radius, _buildings] call SQFM_fnc_isUrbanArea;
-if!(_urbanArea)exitWith{_self set["isUrbanArea",false]};
-
-_self set["isUrbanArea",true];
-};
-
-
-
-SQFM_fnc_posArrToPath = { 
-params[
-    ["_startPos", nil,[[]]],
-	["_posArr",   nil,[[]]]
-];
-private _curPos          = _startPos;
-private _sortedPositions = [];
-private _posCount        = count _posArr;
-
-for "_i"from 1 to _posCount do { 
-    private _nextPos = [_curPos, _posArr] call SQFM_fnc_getNearest;
-    _sortedPositions pushBackUnique _nextPos;
-    _curPos = _nextPos;
-    _posArr = _posArr select {!(_x in _sortedPositions)};
-};
-
-_sortedPositions;
-};
-
-SQFM_fnc_groupInfClearObjective = { 
-params[
-    ["_objective",nil,[objNull]]
-];
-
-private _objData         = _objective call getData;
-private _center          = (_objData get "zone")#0;
-private _radius          = ((_objData get "zone")#1)*0.8;
-private _posCount        = 6;
-private _endFunction     = 'SQFM_fnc_endTaskGroup';
-private _startPos        = _self call ["getAvgPos"];
-private _edgePositions   = [_center, _radius, _posCount] call SQFM_fnc_pos360;
-private _pathPositions   = [_startPos, _edgePositions] call SQFM_fnc_posArrToPath;
-
-
-_pathPositions pushBackUnique _center;
-
-{_self call ["addWaypoint", [_x, 20]]}forEach _pathPositions;
-
-
-// Place the last waypoint at a random position inside the objective radius
-_self call ["addWaypoint", [_center,5,"MOVE", _endFunction,nil,nil,_radius]];
-
-_pathPositions;
-};
-
-
-
-SQFM_fnc_groupInfClearUrbanObjective = { 
-params[
-    ["_objective",nil,[objNull]]
-];
-private _searchPositions = _self call ["getUrbanObjInfSearchP",[_objective]];
-if(_searchPositions isEqualTo [])
-exitWith{
-    "No urban zones found" call dbgm;
-    _self call ["infClearObjective",[_objective]];
-};
-
-private _wpFnc      = "SQFM_fnc_searchNearBuildings";
-private _endFnc     = "SQFM_fnc_endTaskGroup";
-private _endParams  = [_center,5,"MOVE", _endFnc,"AWARE","NORMAL",_radius];
-
-{
-    private _wpParams = [_x,10,"MOVE",_wpFnc,"AWARE","NORMAL",10];
-    _self call ["addWaypoint", _wpParams]
-
-}forEach _searchPositions;
-
-_self call ["addWaypoint", _endParams];
-_self set  ["action", "Clearing Urban Objective"];
-
-true;
-};
-
-SQFM_fnc_groupGetUrbanObjInfSearchP = { 
-params[
-    ["_objective",nil,[objNull]]
-];
-private _objData         = _objective call getData;
-private _startPos        = _self call ["getAvgPos"];
-private _center          = _objData get "position";
-private _dir             = _center getDir _startPos;
-private _posCount        = 6;
-private _midPositions    = _objData call ["getZoneMidPositions",[_dir, _posCount]];
-private _urbanPositions  = _objData call ["getUrbanPositions"];
-private _searchPositions = [];
-
-if(_urbanPositions isEqualTo [])exitWith{[]};
-
-{
-    private _searchPos = [_x, _urbanPositions] call SQFM_fnc_getNearest;
-    if(_searchPos in _searchPositions)then{_searchPos = _x};
-
-    _searchPositions pushBackUnique _searchPos;
-    
-} forEach _midPositions;
-private _finalSearchPos = [_center, _urbanPositions] call SQFM_fnc_getNearest;
-private _pathPositions  = [_startPos, _searchPositions] call SQFM_fnc_posArrToPath;
-
-_pathPositions pushBackUnique _finalSearchPos;
-
-[_pathPositions] call SQFM_fnc_showPosArr3D;
-
-_pathPositions;
-};
-
-
-SQFM_fnc_searchNearBuildings = { 
-params[
-    ["_group", nil,[grpNull]],
-    ["_rad",   50,       [0]]
-];
-private _leader    = leader _group;
-private _data      = _group call getData;
-private _pos       = getPosATLVisual _leader;
-private _buildings = [_pos, _rad] call SQFM_fnc_nearBuildings;
-private _bldPosArr = [_buildings, _pos] call SQFM_fnc_allBuildingsPositions;
-private _men       = _data call ["getUnitsOnfoot"];
-private _endIndex  = count _men -1;
-
-
-{
-    if(_foreachIndex >= _endIndex)exitWith{};
-    private _targetPos = _x;
-    private _man       = _men#_foreachIndex;
-    private _time      = round(_man distance _targetPos)+15;
-    private _onMoveEnd = [_man, {_this setVariable ["SFSM_Excluded",false,true]}];
-    private _condition = [_man, {currentCommand _this isEqualTo "SCRIPTED"}];
-
-    _man setVariable ["SFSM_Excluded",true,true];
-    [_man, _targetPos, _time,3,_onMoveEnd,_condition] spawn SQFM_fnc_fsmMoveManToPos;
-    
-} forEach _bldPosArr;
-
-true;
-};
-
-
-SQFM_fnc_objectiveGetZoneMidPositions = { 
-params[
-    ["_dir",       0,        [0]],
-    ["_posCount",  4,        [0]],
-    ["_randomRad", false, [true]]
-];
-private _center    = (_self get "zone")#0;
-private _radius    = (_self get "zone")#1;
-private _dir       = _startPos getDir _center;
-private _altitude  = 0;
-private _coef      = if(_randomRad)then{0.5}else{0.35+(random 0.55)};
-
-// This ensures we get positions between the center and the edge of the objective
-// The random coef is usefull to make ai pathing unpredictable for the player.
-// The output of the random coef is 35-90% of the zone radius.
-_radius = _radius * _coef;
-
-private _positions = [_center, _radius, _posCount, _altitude, _dir] call SQFM_fnc_pos360;
-
-_positions;
-};
-
-SQFM_fnc_allBuildingsPositions = { 
-params[
-    ["_buildings",nil,[[]]],
-    ["_startPos", nil,[[]]]   // If declared it will be used to sort the positions according to distance.
-];
-private _positions = [];
-
-{
-    _positions insert [(count _positions), _x buildingPos -1,true];
-    
-} forEach _buildings;
-
-if(!isNil "_startPos")then{
-    _positions = [_positions, [], {_startPos distance _x}, "ASCEND"] call BIS_fnc_sortBy;
-};
-
-_positions;
-};
-
-
-SQFM_fnc_getRoadData = { 
-params[
-    ["_roadSegment",nil,[objNull]]
-];getRoadInfo _roadSegment
-params[
-    ["_type",         nil,   [""]],
-    ["_width",        nil,    [0]],
-    ["_pedestrian",   nil, [true]],
-    ["_texture",      nil,   [""]],
-    ["_textureEnd",   nil,   [""]],
-    ["_material",     nil,   [""]],
-    ["_begPos",       nil,   [[]]],
-    ["_endPos",       nil,   [[]]],
-    ["_isBridge",     nil, [true]],
-    ["_AIpathOffset", nil,    [0]]
-];
-// private _shape     = [_roadSegment] call SQFM_fnc_objectShape;
-private _length    = _begPos distance2D _endPos;//(_shape get "length")+0;
-private _dir       = _begPos getDir _endPos; //getDirVisual _roadSegment;
-private _position  = getPosATLVisual _roadSegment;
-private _connected = roadsConnectedTo _roadSegment;
-private _dataArr = [
-    ["type",                _type],
-    ["segment",      _roadSegment],
-    ["position",        _position],
-    ["dir",                  _dir],
-    ["width",              _width],
-    ["length",            _length],
-    ["pedestrian",    _pedestrian],
-    ["startPos",          _begPos],
-    ["endPos",            _endPos],
-    ["isBridge",        _isBridge],
-    ["connected",      _connected]
-];
-
-private _hashmap = createHashmapObject [_dataArr];
-
-_hashmap;
-};
-
-
-SQFM_fnc_hashifyRoads = { 
-params[
-    ["_roadArr",nil,[[]]]
-];
-private _validTypes   = ["ROAD", "MAIN ROAD", "TRACK", "TRAIL"];
-private _roadHashmaps = [];
-
-{
-    private _hashmap   = [_x] call SQFM_fnc_getRoadData;
-    private _validType = (_hashmap get "type") in _validTypes;
-    private _canDrive  = (_hashmap get "pedestrian") isEqualTo false;
-    private _valid     = _validType && {_canDrive};
-    if(_valid)
-    then{_roadHashmaps pushBack _hashmap};
-
-} forEach _roadArr;
-
-_roadHashmaps;
-};
-
-
-SQFM_fnc_roadIsZoneExit = { 
-params[
-    ["_pos",  nil,            [[]]],
-    ["_rad",  nil,             [0]],
-    ["_road", nil, [createHashmap]]  // Hashmaps extracted by using SQFM_fnc_getRoadData on a roadsegment.
-];
-private _validTypes = ["ROAD", "MAIN ROAD", "TRACK"];
-private _thisType   = _road get "type";
-if!(_thisType in _validTypes)exitWith{false};
-
-private _connecters   = _road get "connected";
-private _outLiers     = _connecters select {(getpos _x distance2D _pos)>_rad};
-
-if(_outLiers isEqualTo _connecters) exitWith{false};
-if(_outLiers isEqualTo [])          exitWith{false};
-if(count _outLiers > 1)             exitWith{false};
-
-// find out if the next segment connected to the road is back inside the zone.
-// private _all      = [_road get "segment", _connecters];
-// private _outLier1 = _outLiers#0;
-// private _insiders = roadsConnectedTo _outLier1 select{(!(_x in _all)) && {_x distance _pos < _rad}};
-// if(_outLiers isNotEqualTo [])exitWith{false};
-
-true;
-};
-
-
-SQFM_fnc_getZoneExitRoads = { 
-params[
-    ["_pos",   nil, [[]]],
-    ["_rad",   nil,  [0]],
-    ["_roads", nil, [[]]]  // array of hashmaps extracted by using SQFM_fnc_hashifyRoads on an array of roadsegments.
-];
-private _exits = [];
-
-
-{
-    if([_pos,_rad,_x] call SQFM_fnc_roadIsZoneExit)
-    then{_exits pushBack _x};
-    
-} forEach _roads;
-
-
-_exits
-};
-
-
-
-SQFM_fnc_getZoneRoadmap = { 
-params[
-    ["_pos", nil, [[]]],
-    ["_rad", nil,  [0]]
-];
-private _roads         = [_pos nearRoads _rad] call SQFM_fnc_hashifyRoads;
-private _positions     = _roads apply {_x get "position"};
-private _exits         = [_pos, _rad, _roads] call SQFM_fnc_getZoneExitRoads;
-private _exitPositions = _exits apply {_x get "position"};
-
-private _dataArr = [
-    ["roads",                 _roads],
-    ["positions",         _positions],
-    ["exits",                 _exits],
-    ["exitPositions", _exitPositions]
-];
-
-private _roadMap = createHashmapObject[_dataArr];
-
-_roadMap;
-};
-
-
-SQFM_fnc_groupVehicleClearUrbanObjective = { 
-"Vehicle clearing Urban objective" call dbgm;
-params[
-    ["_objective",nil,[objNull]]
-];
-private _objData    = _objective call getData;
-private _center     = _objData get "position";
-private _startPos   = _self call ["getAvgPos"];
-private _roadMap    = _objData get "roadmap";
-private _roads      = (_roadMap get "positions");//select{[_x, false, 8, 3]call SQFM_fnc_clearPos};
-private _centerRoad = [_center, _roads] call SQFM_fnc_getNearest;
-private _exits      = _roadMap get "exitPositions";
-
-if([_centerRoad, false, 8, 3]call SQFM_fnc_clearPos)
-then{_exits pushBackUnique _centerRoad};
-
-private _pathPositions = [_startPos, _exits] call SQFM_fnc_posArrToPath;
-
-[_pathPositions] call SQFM_fnc_showPosArr3D;
-
-private _endFnc = "SQFM_fnc_endTaskGroup";
-private _endPos = selectRandom _roads;
-
-{_self call ["addWaypoint", [_x,5]]}forEach _pathPositions;
-_self call ["addWaypoint", [_endPos,0,"MOVE",_endFnc]];
-
-};
-
-
-SQFM_fnc_groupVehicleClearObjective = { 
-"Vehicle clearing standard objective"call dbgm;
-params[
-    ["_objective",nil,[objNull]]
-];
-private _group         = _self get "grp";
-private _objData       = _objective call getData;
-private _center        = _objData get "position";
-private _radius        = (_objData get "zone")#1;
-private _startPos      = _self call ["getAvgPos"];
-private _roadMap       = _objData  get "roadmap";
-private _roads         = (_roadMap get "positions");
-private _centerRoad    = [_center, (_roads select {_x distance2D _center < 75})] call SQFM_fnc_getNearest;
-private _conePositions = _objData call ["getZoneCone",[_startPos,0,180]];
-private _targetPos     = if(!isNil "_centerRoad")then{_centerRoad}else{_center};
-private _vehicle       = vehicle leader _group;
-private _ignoreObjs    = [_vehicle];
-private _endFunction   = 'SQFM_fnc_endTaskGroup';
-private _firePositions = _conePositions select {
-    private _z         = 1.5;
-    private _firePos   = ATLToASL [_x#0,_x#1, _z];
-    private _targetPos = ATLToASL [_targetPos#0,_targetPos#1, _z];
-    private _valid     = [_x] call SQFM_fnc_clearPos && {!([_firePos,_targetPos,_ignoreObjs] call SQFM_fnc_lineBroken)};
-    
-    (!isNil "_valid"&&{_valid});
-};
-
-if(_firePositions isNotEqualTo [])then{
-    private _firePos = selectRandom _firePositions;
-    _self call ["addWaypoint", [_firePos]];
-};
-
-_self call ["addWaypoint", [_targetPos,20,"MOVE", _endFunction,nil,nil,_radius]];
-
-true;
-};
-
-
-SQFM_fnc_zonePosArr = { 
+// SQFM_fnc_flashActionMan = {};
+// SQFM_fnc_man3dAction = {};
+// SQFM_fnc_isUrbanArea = {};
+// SQFM_fnc_objectiveSetUrbanStatus = {};
+// SQFM_fnc_posArrToPath = {};
+// SQFM_fnc_groupInfClearObjective = {};
+// SQFM_fnc_groupInfClearUrbanObjective = {};
+// SQFM_fnc_groupGetUrbanObjInfSearchP = {};
+// SQFM_fnc_searchNearBuildings = {};
+// SQFM_fnc_objectiveGetZoneMidPositions = {};
+// SQFM_fnc_allBuildingsPositions = {};
+// SQFM_fnc_getRoadData = {};
+// SQFM_fnc_hashifyRoads = {};
+// SQFM_fnc_roadIsZoneExit = {};
+// SQFM_fnc_getZoneExitRoads = {};
+// SQFM_fnc_getZoneRoadmap = {};
+// SQFM_fnc_groupVehicleClearUrbanObjective = {};
+// SQFM_fnc_groupVehicleClearObjective      = {};
+// SQFM_fnc_zonePosArr = {};
+// SQFM_fnc_zoneCone = {};
+// SQFM_fnc_semiCirclePosArr = {};
+// SQFM_fnc_objectiveGetZoneCone = {};
+// SQFM_fnc_lineBroken = {};
+// SQFM_fnc_manInFipo = {};
+// SQFM_fnc_validMan = {};
+// SQFM_fnc_functionalMan = {};
+// SQFM_fnc_manEjectThenCover = {};
+// SQFM_fnc_manEjectFromVehicle = {};
+// SQFM_fnc_mechUnloadActivateMen = {};
+// SQFM_fnc_deployVehicleSmoke = {};
+// SQFM_fnc_getVehiclePassengers = {};
+// SQFM_fnc_mechUnloadPositions = {};
+// SQFM_fnc_mechUnloadEnd = {};
+// SQFM_fnc_manCurrentBuilding = {};
+// SQFM_fnc_validSurfaceIntersections = {};
+// SQFM_fnc_getSuppressionTargetPosition = {};
+
+// 
+// [player, aa] call SQFM_fnc_getSuppressionTargetPosition;
+/*
 params [
-    ["_pos",     nil,  [[]]], // Center position of the zone
-    ["_rad",     nil,   [0]],  // Radius of the zone
-    ["_posDist", 10,    [0]] 
+	"_intersectPosASL",    // Position where line intersects surface
+	"_surfaceNormal",     //  Vector normal to the intersected surface
+	"_intersectObj",     //   Object the surface belongs to (proxy-object. Ex: The current weapon of a man)
+	"_parentObject",    //    Proxy-objects parent. (Ex: The man holding said weapon)- objNull if terrain
+	"_selectionNames", //     Array of Strings (Names of the intersected selections) (bones).
+	"_pathToBisurf"   //      String - path to intersected surface properties (.bisurf) file.
 ];
+*/
 
-private _positions = []; // Array to store the positions
-
-// Iterate over the radius, generating semicircles with decreasing radii
-for "_r" from _rad to 0 step -_posDist do { 
-    if(_r < _posDist)exitWith{};
-
-    private _semiCirclePositions = [[_pos, _r],0, 359, _posDist] call SQFM_fnc_semiCirclePosArr;
-    private _lastIndex = count _semiCirclePositions-1;
-    private _first     = _semiCirclePositions#0;
-    private _last      = _semiCirclePositions#_lastIndex;
-        
-    if(_first distance2D _last < _posDist)
-    then{
-        _semiCirclePositions deleteAt _lastIndex;
-        _lastIndex = count _semiCirclePositions-1;
-        _last      = _semiCirclePositions#_lastIndex;
-        if(_first distance2D _last < _posDist)
-        then{_semiCirclePositions deleteAt _lastIndex};
-    };
-
-    _positions append _semiCirclePositions;
-};
-
-_positions;
-};
-
-SQFM_fnc_zoneCone = { 
-params [
-    ["_pos",         nil,  [[]]],  // Center position of the zone
-    ["_rad",         nil,   [0]],  // Radius of the zone
-    ["_dir",         nil,   [0]],  // Direction of cone
-    ["_width",       nil,   [0]],  // Width (in degrees) of the cone
-    ["_clearRad",    nil,   [0]],  // Radius at which the cone starts
-    ["_posDist",     10,    [0]],  // Distance between positions
-    ["_maxPosCount", nil,   [0]]   // Max number of positions to return
-];
-
-private _positions = []; // Array to store the positions
-
-// Adjust _posDist based on _maxPosCount if specified
-if (!isNil "_maxPosCount") then {
-            // Estimate the number of positions we would get with the original _posDist
-        private _estPosCount = (_rad / _posDist) * (_width / 360) * 2 * 3.14159265358979323846 * (_rad / _posDist);
-        
-        if (_estPosCount > _maxPosCount) then {
-            _posDist = _posDist * sqrt(_estPosCount / _maxPosCount);
-        };
-};
-
-// Iterate over the radius, generating semicircles with decreasing radii
-for "_r" from _rad to 0 step -_posDist do { 
-    if(_r < _clearRad) exitWith{};
-    if(_r < _posDist)  exitWith{};
-
-    private _conePositions = [[_pos, _r], _dir, _width, _posDist] call SQFM_fnc_semiCirclePosArr;
-    private _lastIndex = count _conePositions-1;
-    private _first     = _conePositions#0;
-    private _last      = _conePositions#_lastIndex;
-
-    _positions append _conePositions;
-
-    // Stop if _maxPosCount is reached
-    if (!isNil "_maxPosCount" && {count _positions >= _maxPosCount}) exitWith {
-        _positions resize _maxPosCount;
-    };
-};
-
-_positions;
-};
-
-SQFM_fnc_objectiveGetZoneCone = { 
-private _zone = _self get"zone";
-private _pos  = _zone#0;
-private _rad  = _zone#1;
-params[
-    ["_startPos",  nil,    [[]]],
-    ["_overLap",   30,      [0]],
-    ["_coneWidth", 180,     [0]],  // degrees wide 
-    ["_minDepth",  100,     [0]],
-    ["_sort",      true, [true]]
-];
-private _dir         = _pos getDir _startPos;
-private _coneDepth   = selectMax [_minDepth,_rad*0.5]; // How much is added to the original radius 
-private _coneStart   = _rad-_overLap;
-private _coneRad     = _coneStart+(_coneDepth);
-private _maxPosCount = 150;
-private _zoneCone    = [_pos, _coneRad, _dir, _coneWidth, _coneStart, 30,_maxPosCount] call SQFM_fnc_zoneCone;
-
-if(_sort)
-then{_zoneCone=[_zoneCone,[],{_startPos distance _x},"ASCEND"]call BIS_fnc_sortBy};
-
-_zoneCone;
-};
-
-
-SQFM_fnc_lineBroken = { 
-params[
-	["_startPosASL", nil,          [[]]],
-	["_endPosASL",   nil,          [[]]],
-    ["_ignoreList",  [],           [[]]]
-];
-private _count  = count _ignoreList;
-private _needed = 2-_count;
-if(_needed > 0)
-then{
-    for"_i"from 1 to _needed do
-    {_ignoreList pushBack objNull}
-};
-
-private _linebreaks = lineIntersectsSurfaces [_startPosASL, _endPosASL, (_ignoreList#0), (_ignoreList#1), true, 5];
-
-// Select objects that are not men, nor in the ignoreList
-_linebreaks = _linebreaks select { 
-    private _object         = _x#3;
-    private _isMan          = _object isKindOf "man";// isEqualTo false;
-    private _ignored        = _object in _ignoreList;
-    private _validLineBreak = (_isMan isEqualTo false && {_ignored isEqualTo false})||{isNull _object};
-    
-    _validLineBreak;
-};
-
-private _broken = _linebreaks isNotEqualTo [];
-
-_broken;
-};
+// SQFM_fnc_getBuildingSuppressionPos = {};
+// SQFM_fnc_posOnVector = {};
+// SQFM_fnc_getSuppressionTarget = {};
+// SQFM_fnc_suppressionTargetValue = {};
+// SQFM_fnc_zoneSuppressionTargets = {};

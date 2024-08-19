@@ -53,7 +53,7 @@ TODO:
 // SQFM_fnc_onGroupHuntWp    = {};
 // SQFM_fnc_groupInitHuntTask = {};
 // SQFM_fnc_onGroupHuntEnd   = {};
-// SFSM_fnc_canRun
+// SFSM_fnc_functional
 
 
 SQFM_fnc_assignAllGroupTasks = {};
@@ -76,89 +76,18 @@ SQFM_fnc_assignAllGroupTasks = {};
 // SQFM_fnc_fsmMoveManToPos          = {};
 // SQFM_fnc_garrisonMan              = {};
 
-
-SQFM_fnc_zoneUrbanCoef = { 
-params[
-    ["_position",  nil, [[]]],
-    ["_radius",     nil, [0]],
-    ["_buildings", nil, [[]]]
-];
-if(isNil "_buildings")then{_buildings = [_position, _radius] call SQFM_fnc_nearBuildings};
-if(_buildings isEqualTo []) exitWith{0};
-if(_radius <= 20)           exitWith{0};
-
-private _count = count _buildings;
-private _coef  = _count/_radius;
-
-_coef;
-};
-
-
-
-
-SQFM_fnc_groupObjectiveAttackLoop = { 
-private _group        = _self get "grp";
-private _ownSide      = _self get "side";
-private _ownPos       = _self call ["getAvgPos"];
-private _objModule    = _self get "objective";
-private _objData      = _objModule call getData;
-private _taskData     = _self call ["getTaskData"];
-private _groups       = _objData  call ["getGroupsInZone"];
-private _enemyGroups  = _groups select {[_x, _ownSide] call SQFM_fnc_hostile && {[_x] call SQFM_fnc_validGroup}};
-private _enemyCount   = count _enemyGroups;
-
-if(_enemyCount < 1)exitWith{
-    "No enemies present" call dbgm; 
-    _taskData call ["endTask"];
-};
-
-_self call ["deleteWaypoints"];
-_self set  ["action", "Attacking Enemies inside objective"];
-
-private _enemyPositions = _enemyGroups apply {(_x call getData) call ["getAvgPos"]};
-private _nearest        = [_ownPos, _enemyPositions] call SQFM_fnc_getNearest;
-private _onCompletion   = '(group this call getData) call ["objectiveAttackLoop"]';
-private _wayPoint       = _group addWaypoint [_nearest, 0];
-
-_wayPoint setWaypointType "SAD";
-_wayPoint setWaypointStatements ["true", _onCompletion];
-_wayPoint setWaypointCompletionRadius 30;
-
-true;
-};
-
-SQFM_fnc_endTaskGroup = { 
-params[
-	["_group",nil,[grpNull]]
-];
-private _data     = _group call getData;
-private _taskData = _data call ["getTaskData"];
-private _nullTask = str _taskData isEqualTo "[]";
-
-if(_nullTask)then{
-	_taskData = [_group] call SQFM_fnc_reapplyTask;
-	_nullTask = str _taskData isEqualTo "[]";
-};
-
-if(_nullTask)
-exitWith{"{TaskData not found}" call dbgm};
-
-_taskData call["endTask"];
-
-true
-};
 /*
-Types of objective clearing:
-    1) Infantry clearing (non urban)
-    2) Infantry clearing (Urban)
-    3) Mech(mixed) clearing (non urban)
-    4) Mech(mixed) clearing (urban)
-    5) Vehicle clearing (non urban)
-    6) Vehicle clearing (urban)
+- CHECK POS ON VECTOR FUNCTION
+- MAKE SURE OBJECTIVE ATTACK LOOP IMPLEMENTS NEW FUNCTIONS
+- UPDATE ENDTASK FUNCTIONS (OBJECTIVES)
+- Multiple target test on Mech unload.
 */
 
-SQFM_fnc_groupMechClearObj      = {};
-SQFM_fnc_groupMechClearUrbanObj = {};
+// SQFM_fnc_zoneUrbanCoef = {};
+
+
+// SQFM_fnc_groupObjectiveAttackLoop = {};
+// SQFM_fnc_endTaskGroup = {};
 
 
 SQFM_fnc_groupClearObjective = { 
@@ -173,12 +102,15 @@ private _infantry  = _squadType isEqualTo "infantry";
 private _mech      = "(infantry)" in _squadType;
 private _vehicle   = _infantry isEqualTo false && {_mech isEqualTo false};
 
-[["mech: ",_mech, " infantry: ", _infantry, " vehicle: ", _vehicle, " urban: ", _urban]] call dbgm;
+[["mech: ",_mech, " infantry: ", _infantry, " vehicle: ", _vehicle, " urban: ", _urban, " type: ",_squadType]] call dbgm;
 
 if(_urban isEqualTo false
 &&{_infantry}) exitWith{_self call ["infClearObjective",[_objective]]};
 if(_infantry)  exitWith{_self call ["infClearUrbanObjective",[_objective]]};
 
+if(_urban isEqualTo false
+&&{_mech}) exitWith{_self call ["mechClearObjective",[_objective]]};
+if(_mech)  exitWith{_self call ["mechClearUrbanObjective",[_objective]]};
 
 if(_urban isEqualTo false
 &&{_vehicle}) exitWith{_self call ["vehicleClearObjective",[_objective]]};
@@ -214,28 +146,98 @@ SQFM_Custom3Dpositions = _posArr apply {_i=_i+1;[_x, str _i]};
 
 };
 
-SQFM_fnc_semiCirclePosArr = { 
-params [
-    ["_zone",         nil,  [[]]], // [pos, rad] (The zone which will be encircled)
-    ["_dir",          nil,   [0]], // 0-359 
-    ["_dirRange",     nil,   [0]], // 0-360 (default to 180 degrees for a semicircle)
-    ["_posToPosDist", nil,   [0]]  // 0-inf (the wanted distance between each position)
+
+SQFM_fnc_groupMechClearObjective      = {};
+
+
+SQFM_fnc_groupMechClearUrbanObjective = { 
+params[
+    ["_objective",nil,[objNull]]
 ];
-_zone params ["_center", "_radius"];
+private _vehicles   = (_self call ["getOwnVehicles"])#2;
+private _objData    = _objective call getData;
+private _center     = _objData get "position";
+private _startPos   = _self call ["getAvgPos"];
+private _roadMap    = _objData get "roadmap";
+private _roads      = (_roadMap get "positions");//select{[_x, false, 8, 3]call SQFM_fnc_clearPos};
+private _centerRoad = [_center, _roads] call SQFM_fnc_getNearest;
+private _exits      = _roadMap get "exitPositions";
 
-private _dir           = [_dir - (_dirRange*0.5)]call SQFM_fnc_formatDir;
-private _circumference = _radius * 2 * 3.14159265358979323846; // Full circle circumference
-private _angleStep     = _posToPosDist / _circumference * 360; // Angle step in degrees
-private _positions     = [];
+if([_centerRoad, false, 8, 3]call SQFM_fnc_clearPos)
+then{_exits pushBackUnique _centerRoad};
 
-for "_i" from 0 to _dirRange step _angleStep do {
-    private _currentDir = [_dir + _i]call SQFM_fnc_formatDir;
-    private _pos = [_center, _currentDir, _radius] call SQFM_fnc_sinCosPos;
-    _positions pushBack _pos;
+private _pathPositions = [_startPos, _exits] call SQFM_fnc_posArrToPath;
+
+{_self call ["mechUnload"]} forEach _vehicles;
+
+
 };
 
-_positions;
+
+// hint str ((allTurrets this)apply{this weaponsTurret _x});
+SQFM_fnc_assignSuppressionTargets = { 
+params[
+    ["_shooters",    nil,   [[]]],
+    ["_targets",     nil,   [[]]],
+    ["_setVariable", nil, [true]]
+];
+if(_targets  isEqualTo [])exitWith{false};
+if(_shooters isEqualTo [])exitWith{false};
+
+private _endIndex    = count _targets;
+private _targetIndex = 0;
+
+{
+    if(_targetIndex >= _endIndex)
+    then{_targetIndex = 0};
+
+    private _target = _targets#_targetIndex;
+
+    if(typeName _target isEqualTo "OBJECT"
+    &&{_target isKindOf "house"})
+    then{_target = [aimPos _x, _target] call SQFM_fnc_getBuildingSuppressionPos};
+
+    if(_setVariable)
+    then{_x setVariable ["SQFM_suppressionTarget", _target]}
+    else{_x doSuppressiveFire _target};
+    
+    _targetIndex=_targetIndex+1;
+    
+} forEach _shooters;
+
+true;
 };
+
+SQFM_fnc_onMechUnloadDanger = { 
+params[
+    ["_vehicle",  nil,[objNull]],
+    ["_shooters", nil,     [[]]],
+    ["_targets",  nil,     [[]]]
+];
+private _gunners = (allTurrets _vehicle)apply{_vehicle turretUnit _x};
+
+[_vehicle] call SQFM_fnc_deployVehicleSmoke;
+
+if(_targets isEqualTo [])exitWith{};
+[_gunners, _targets, false] call SQFM_fnc_assignSuppressionTargets;
+
+if(_shooters isEqualTo [])exitWith{};
+[_shooters, _targets, true] call SQFM_fnc_assignSuppressionTargets;
+
+private _gunner = gunner _vehicle;
+if(!alive _gunner)exitWith{};
+
+sleep 3;
+
+private _command = toLower currentCommand _gunner;
+if("supp" in _command)exitWith{};
+
+_gunner suppressFor 15;
+
+true;
+};
+
+
 
 
 
@@ -253,11 +255,21 @@ call SQFM_fnc_updateMethodsAllObjectives;
 if(time < 3)exitWith{};
 
 
-private _pos      = getPos player;
-private _dir      = getDirVisual player;
+private _pos      = eyePos player;
+// ppp = ASLToATL ([_pos, cursorObject] call SQFM_fnc_getBuildingSuppressionPos);
+// [[ppp]] call SQFM_fnc_showPosArr3D;
+
+// private _dir      = getDirVisual vehicle player;
+private _dir      = [(getDirVisual (vehicle player)-180)] call SQFM_fnc_formatDir;
 private _width    = 170;
 private _clearRad = 100;
-private _grpData = (curatorSelected#1#0) call getData;
+private _grpData  = (curatorSelected#1#0) call getData;
+
+// private _objCenter = cursorObject modelToWorld (([cursorObject] call SQFM_fnc_objectShape)get"center");
+// [[_objCenter]] call SQFM_fnc_showPosArr3D;
+// hint str _objCenter;
+// _positions = [[_pos, 30], _dir, 160, 10,6] call SQFM_fnc_semiCirclePosArr;
+// [_positions] call SQFM_fnc_showPosArr3D;
 // private _grpData = (group player) call getData;
 // private _rad     = 250;
 // private _posDist = selectMax [_rad*0.1, 10];
@@ -272,7 +284,7 @@ exitWith{systemChat "nil module"};
 
 if(isNil "_grpData")
 exitWith{systemChat "nil grpData"};
-
+_grpData call ["garrison"];
 
 
 // private _roads   = _pos nearRoads _rad;

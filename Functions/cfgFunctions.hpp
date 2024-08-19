@@ -61,15 +61,27 @@ class CfgFunctions
 		class building
 		{
 			file = "functions\building";
-			class isHouse            {};
-			class nearBuildings      {};
-			class manGetBuilding     {};
-			class menInsideBuilding  {};
-			class buildingPosCount   {};
-			class buildingArrData    {};
-			class getBuildingScore   {};
-			class sortBuildings      {};
+			class isHouse               {};
+			class nearBuildings         {};
+			class manGetBuilding        {};
+			class menInsideBuilding     {};
+			class buildingPosCount      {};
+			class buildingArrData       {};
+			class getBuildingScore      {};
+			class sortBuildings         {};
+			class allBuildingsPositions {};
+			class zoneUrbanCoef         {};
 		};
+
+		class roads 
+		{
+			file = "functions\roads";
+			class getRoadData      {};
+			class hashifyRoads     {};
+			class roadIsZoneExit   {};
+			class getZoneExitRoads {};
+			class getZoneRoadmap   {};
+		}
 
 		class clusters
 		{
@@ -107,6 +119,12 @@ class CfgFunctions
 			class drawTransportModule       {};
 			class drawTransportModuleNoInit {};
 
+			class addPosMarker              {};
+			class addCircleMarker           {};
+			class drawObjectiveMarkers      {};
+			class objectiveUpdateMarkers    {};
+			class addRectangleMarker        {};
+
 		};
 
 		
@@ -131,49 +149,67 @@ class CfgFunctions
 			class formatCtrlPos          {};
 			class newDisplayCtrl         {};
 			class allWaypointPositions   {};
+			class isUrbanArea            {};
 
 		};
 
 		class math
 		{
 			file = "functions\math";
-			class module3dData           {};
-			class getModuleArea          {};
-			class getAreaCorners         {};
-			class areaCornerLines        {};
-			class sinCosPos              {};
-			class AddZ                   {};
-			class roundPos               {};
-			class average                {};
-			class avgPos2D               {};
-			class getMidpoint            {};
-			class straightPosArr         {};
-			class squareGrid             {};
-			class getNearest             {};
-			class pos360                 {};
-			class getCircleLines         {};
-			class clearPos               {};
-			class clearPosSqrArea        {};
-			class clearPosInArea         {};
-			class posHasTerrainCover     {};
-			class posIsHidden            {};
-			class numDiff                {};
-			class decimals               {};
-			class objectShape            {};
-			class shapeFitsShape         {};
+			class module3dData              {};
+			class getModuleArea             {};
+			class getAreaCorners            {};
+			class areaCornerLines           {};
+			class sinCosPos                 {};
+			class AddZ                      {};
+			class roundPos                  {};
+			class average                   {};
+			class avgPos2D                  {};
+			class getMidpoint               {};
+			class straightPosArr            {};
+			class squareGrid                {};
+			class getNearest                {};
+			class pos360                    {};
+			class getCircleLines            {};
+			class clearPos                  {};
+			class clearPosSqrArea           {};
+			class clearPosInArea            {};
+			class posHasTerrainCover        {};
+			class posIsHidden               {};
+			class numDiff                   {};
+			class decimals                  {};
+			class objectShape               {};
+			class shapeFitsShape            {};
 
-			class roadsInArea            {};
-			class findParkingSpot        {};
-			class getAreaParkingPos      {};
-			class formatDir              {};
-			class lineBroken             {};
-			class selectSafePositions    {};
-			class semiCirclePosArr       {};
-			class formatDirRanges        {};
-			class inDirRange             {};
-			class dangerZoneSafePositions{};
-			class describeDistance       {};
-			class describeDir            {};
+			class roadsInArea               {};
+			class findParkingSpot           {};
+			class getAreaParkingPos         {};
+			class formatDir                 {};
+			class lineBroken                {};
+			class selectSafePositions       {};
+			class semiCirclePosArr          {};
+			class formatDirRanges           {};
+			class inDirRange                {};
+			class dangerZoneSafePositions   {};
+			class describeDistance          {};
+			class describeDir               {};
+
+			class posArrToPath              {};
+			class zonePosArr                {};
+			class zoneCone                  {};
+			class validSurfaceIntersections {};
+			class posOnVector               {};
+
+		};
+
+		class suppression 
+		{
+			file =       "functions\suppression";
+			class getSuppressionTargetPosition {};
+			class getBuildingSuppressionPos    {};
+			class getSuppressionTarget         {};
+			class suppressionTargetValue       {};
+			class zoneSuppressionTargets       {};
 
 		};
 
@@ -203,6 +239,10 @@ class CfgFunctions
 			class objectiveSafeposMatch           {};
 			class objectiveRemoveSafePosSearches  {};
 			class objectiveOnCapture              {};
+
+			class objectiveSetUrbanStatus         {};
+			class objectiveGetZoneMidPositions    {};
+			class objectiveGetZoneCone            {};
 
 		};
 
@@ -262,6 +302,7 @@ class CfgFunctions
 			class unconscious                 {};
 			class isRealMan                   {};
 			class functionalMan               {};
+			class validMan                    {};
 			class hostile                     {};
 			class validEnemy                  {};
 			class firstValidGroupMember       {};
@@ -269,7 +310,15 @@ class CfgFunctions
 			class teleportIntoAssignedVehicle {};
 			class manForceMoveToPos           {};
 			class garrisonMan                 {};
+			class manCurrentBuilding          {};
 			class onManGarrison               {};
+			class flashActionMan              {};
+			class man3dAction                 {};
+			class manInFipo                   {};
+
+			class manEjectThenCover           {};
+			class manEjectFromVehicle         {};
+			class manEjectThenCoverOnArrival  {};
 		};
 
 		class man_fsmMovement
@@ -311,6 +360,7 @@ class CfgFunctions
 			class isArmedCar               {};
 			class isLightArmor             {};
 			class isHeavyArmor             {};
+			class deployVehicleSmoke       {};
 
 		};
 
@@ -322,6 +372,20 @@ class CfgFunctions
 			class hashifySeatData           {};
 			class clearSeat                 {};
 			class seatStatus                {};
+			class getVehiclePassengers      {};
+		};
+
+		class mechanized
+		{
+			file =    "functions\mechanized";
+
+			class mechUnload            {};
+			class mechUnloadStart       {};
+			class mechUnloadActivateMen {};
+			class mechUnloadPositions   {};
+			class mechUnloadEnd         {};
+			class onMechUnloadDanger    {};
+
 		};
 
 		class groups_global
@@ -520,6 +584,14 @@ class CfgFunctions
 			class groupAttackObjective            {};
 			class groupAssignDefenseObjective     {};
 
+			/*Clearing*/
+			class groupInfClearObjective          {};
+			class groupInfClearUrbanObjective     {};
+			class groupGetUrbanObjInfSearchP      {};
+			class groupVehicleClearObjective      {};
+			class groupVehicleClearUrbanObjective {};
+			
+
 
 		};
 
@@ -533,6 +605,7 @@ class CfgFunctions
 			class groupGetInBuilding       {};
 			class groupIdleGarrison        {};
 			class waypointIdleGarrison     {};
+			class searchNearBuildings      {};
 			
 		};
 
