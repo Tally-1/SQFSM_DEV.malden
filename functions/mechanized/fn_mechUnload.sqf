@@ -1,5 +1,6 @@
 params[
-    ["_vehicle",nil,[objNull]]
+    ["_vehicle",    nil, [objNull]],
+    ["_waitForMen", nil,    [true]]
 ];
 
 private _men = [_vehicle] call SQFM_fnc_getVehiclePassengers;
@@ -29,8 +30,7 @@ then{
 
 ] call SQFM_fnc_mechUnloadStart;
 
-[_vehicle, _men, _stayIncover] call SQFM_fnc_mechUnloadEnd;
+[_vehicle, _men, _stayIncover, _waitForMen] call SQFM_fnc_mechUnloadEnd;
 
-[["Mech unloaded ",count _men," men in ", round (time-_startTime), " seconds."]] call dbgm;
 
 true;

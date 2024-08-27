@@ -1,6 +1,7 @@
 "Vehicle clearing standard objective"call dbgm;
 params[
-    ["_objective",nil,[objNull]]
+    ["_objective",    nil,[objNull]],
+    ["_getPositions", false, [true]]
 ];
 private _group         = _self get "grp";
 private _objData       = _objective call getData;
@@ -24,10 +25,14 @@ private _firePositions = _conePositions select {
     (!isNil "_valid"&&{_valid});
 };
 
+if(_getPositions)exitWith{[_firePositions, _targetPos]};
+
 if(_firePositions isNotEqualTo [])then{
     private _firePos = selectRandom _firePositions;
     _self call ["addWaypoint", [_firePos]];
 };
+
+
 
 _self call ["addWaypoint", [_targetPos,20,"MOVE", _endFunction,nil,nil,_radius]];
 

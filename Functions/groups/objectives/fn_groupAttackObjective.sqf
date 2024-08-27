@@ -1,7 +1,6 @@
 params[
 	["_objModule",nil,[objNull]]
 ];
-params["_objModule"];
 [_self, _objModule]spawn{
 params
 ["_self", "_objModule"];
@@ -14,7 +13,8 @@ _self call["assignObjective",[_objModule]];
 private _taskName    = "Attack Objective";
 private _objData     = _objModule call getData;
 private _zone        = _objData get "zone";
-private _arrivalCode = {(_self call ["ownerData"]) call ["objectiveAttackLoop"]};
+// private _arrivalCode = {(_self call ["ownerData"]) call ["objectiveAttackLoop"]};
+private _arrivalCode = {(_self call ["ownerData"]) call ["onObjectiveArrival"]};
 private _endCode     = {(_self call ["ownerData"]) call ["endObjectiveAttack"]};
 private _task       = _self call ["initTask",
 [

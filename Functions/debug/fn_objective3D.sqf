@@ -1,5 +1,4 @@
-private _camPos     = (positionCameraToWorld [0,0,0]);
-private _objectives = _camPos nearEntities ["SQFSM_Objective", SQFM_maxObjRange];
+private _objectives = camPos nearEntities ["SQFSM_Objective", SQFM_maxObjRange];
 
 {
 	private _data = _x getVariable "SQFM_objectiveData";

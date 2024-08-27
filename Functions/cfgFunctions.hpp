@@ -104,6 +104,7 @@ class CfgFunctions
 			class sendDbgMsg                {};
 			class debug3D                   {};
 			class custom3Dmarkers           {};
+			class showPosArr3D              {};
 
 			class objective3D               {};
 			class drawObjectiveModule       {};
@@ -151,6 +152,8 @@ class CfgFunctions
 			class allWaypointPositions   {};
 			class isUrbanArea            {};
 
+			class scriptListDone         {};
+			class waitForScriptList      {};
 		};
 
 		class math
@@ -200,6 +203,8 @@ class CfgFunctions
 			class validSurfaceIntersections {};
 			class posOnVector               {};
 
+			class getObjectCorners          {};
+
 		};
 
 		class suppression 
@@ -210,6 +215,7 @@ class CfgFunctions
 			class getSuppressionTarget         {};
 			class suppressionTargetValue       {};
 			class zoneSuppressionTargets       {};
+			class assignSuppressionTargets     {};
 
 		};
 
@@ -319,6 +325,7 @@ class CfgFunctions
 			class manEjectThenCover           {};
 			class manEjectFromVehicle         {};
 			class manEjectThenCoverOnArrival  {};
+			class enforceFormation            {};
 		};
 
 		class man_fsmMovement
@@ -361,6 +368,9 @@ class CfgFunctions
 			class isLightArmor             {};
 			class isHeavyArmor             {};
 			class deployVehicleSmoke       {};
+			class getVehicleWeapons        {};
+			class vehicleIsUnarmed         {};
+			class vehicleEjectCrew         {};
 
 		};
 
@@ -382,9 +392,12 @@ class CfgFunctions
 			class mechUnload            {};
 			class mechUnloadStart       {};
 			class mechUnloadActivateMen {};
+			class activateMechMan       {};
 			class mechUnloadPositions   {};
 			class mechUnloadEnd         {};
 			class onMechUnloadDanger    {};
+			class keepMechFormationLoop {};
+			class onMechClearingWp      {};
 
 		};
 
@@ -445,6 +458,7 @@ class CfgFunctions
 			class onKnowsAboutChanged         {};
 			class onSquadManFired             {};
 			class onSquadManSuppressed        {};
+			class onSquadManGetOut            {};
 			class onUnitJoined                {};
 			class groupAddUnitEventHandler    {};
 			class groupRemoveUnitEventHandler {};
@@ -472,6 +486,9 @@ class CfgFunctions
 			class groupIsTraveling           {};
 			class groupAddWayPoint           {};
 			class groupWaitForTransportSpawn {};
+			class onWpGroupTravelArrival     {};
+			class wpEndMechClearing          {};
+			class groupCurrentWayPoint       {};
 		};
 
 		class groups_boarding
@@ -492,6 +509,9 @@ class CfgFunctions
 			class endGroupBoarding          {};
 			class groupBoardThenTravel      {};
 			class groupEjectFromAllVehicles {};
+			class groupLeaveUnarmedVehicles {};
+			class groupMechUnload           {};
+			class isVanillaBoarding         {};
 		};
 
 		class groups_members
@@ -503,6 +523,7 @@ class CfgFunctions
 			class getGroupCluster          {};
 			class setGroupCluster          {};
 			class groupAvgPos              {};
+			class groupGetRadius           {};
 			class getGroupVehicles         {};
 			class groupCrew                {};
 			class groupNonCrew             {};
@@ -516,6 +537,7 @@ class CfgFunctions
 			class groupStrengthCoef        {};
 			class groupMergeWithGroup      {};
 			class initSquadMembers         {};
+			class groupIsMechanized        {};
 
 		};
 
@@ -585,13 +607,17 @@ class CfgFunctions
 			class groupAssignDefenseObjective     {};
 
 			/*Clearing*/
+			class groupClearObjective             {};
 			class groupInfClearObjective          {};
 			class groupInfClearUrbanObjective     {};
 			class groupGetUrbanObjInfSearchP      {};
 			class groupVehicleClearObjective      {};
 			class groupVehicleClearUrbanObjective {};
-			
 
+			class groupInitMechClearing           {};
+			class groupMechClearObjective         {};
+			class groupMechClearUrbanObjective    {};
+			class groupEndMechClearing            {};
 
 		};
 
@@ -706,6 +732,7 @@ class CfgFunctions
 			class ACE_Medical_OnStatusChange {};
 			class curatorEvents              {};
 			class onCuratorGroupSelection    {};
+			class onCuratorGroupDoubleClick  {};
 			class buildingChangedEh          {};
 			class onCuratorWaypoint          {};
 		};
@@ -725,6 +752,69 @@ class CfgFunctions
 			class handleNewGroups  {};
 			class handleDeadGroups {};
 			class updateAllGroups  {};
+		};
+
+		class GUI 
+		{ 
+			file = "Functions\GUI";
+			class RGBtoA3color              {};
+			class initHudDisplay            {};
+			class initDisplayData           {};
+			class imgCtrlSetText            {};
+			class displayCtrlSpawnString    {};
+			class ctrlSpawnText             {};
+			class setCtrlStructuredText     {};
+			class setCtrlStandardText       {};
+			class oopCtrlSetPos             {};
+			class oopCtrlSetPosSafeSquare   {};
+			class oopCtrlGetPosSafe         {};
+			class oopCtrlSetPosSafe         {};
+			class setTextBoxBackgroundColor {};
+			class displayAddTextBox         {};
+			class displayAddCtrl            {};
+			class displayAddImageCtrl       {};
+			class displayAddSlider          {};
+			class displayAddCheckBox        {};
+			class displayAddButton          {};
+			class displayAddFrame           {};
+			class btnCtrlAddFunction        {};
+			class imgCtrlGetAngle           {};
+			class imgCtrlSetAngle           {};
+			class formatPosCenterSquare     {};
+			class textTexture               {};
+			class getCtrlSafePos            {};
+			class setCtrlSafePos            {};
+			class displayCtrlSetFont        {};
+			class displayAddProgressBarV    {};
+			class hideProgressBar           {};
+			class showProgressBar           {};
+			class setProgressOnBar          {};
+			class setProgressBarTitle       {};
+			class setProgressBarFrameColor  {};
+			class setProgressBarFillColor   {};
+			class setProgressBarTitleColor  {};
+
+			class hideDisplay               {};
+			class showDisplay               {};
+			class hideCtrl                  {};
+			class showCtrl                  {};
+		};
+
+		class GUI_curatorMenu 
+		{ 
+			file = "Functions\GUI\curatorMenu";
+			class openCuratorSquadMenu             {};
+			class applySquadMenuSettings           {};
+			class initCuratorSquadMenuDisplay      {};
+			class curatorSquadMenuAddCBS           {};
+			class curatorSquadMenuAddSLS           {};
+			class onCuratorSquadMenuSettingChange  {};
+			class curatorSquadMenuInitSettingEdits {};
+			class addCuratorGroupMenuButton        {};
+			class initCuratorSquadMenuButtons      {};
+			class initCuratorSquadMenuBackground   {};
+			
+		
 		};
 		
 	};

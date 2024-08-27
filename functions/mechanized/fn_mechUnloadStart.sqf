@@ -10,6 +10,7 @@ private _driver   = driver _vehicle;
 
 _group enableAttack false;
 _driver disableAI "path";
+_vehicle setVariable ["SQFM_mechUnloading",true,true];
 
 {
     if(_foreachIndex >= _endIndex)exitWith{};
@@ -28,5 +29,6 @@ waitUntil {
     _groupReady || {time > _timeLimit};
 };
 
+[["Mech unloaded ",count _men," men in ", round (time-_startTime), " seconds."]] call dbgm;
 
 true;

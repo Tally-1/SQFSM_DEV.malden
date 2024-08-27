@@ -4,15 +4,15 @@ params [
     ["_wait",         nil,    [true]],
     ["_timeLimit",    time+30,   [0]]
 ];
-private _ejectTimer = time+10;
 
 [_man] orderGetIn false;
 _man   action ["Eject", _vehicle];
 unassignVehicle _man;
 
 if!(_wait)exitWith{};
-if!(canSuspend)then{"Mech unload called unscheduled" call dbgm};
+if!(canSuspend)then{"Man eject from vehidle called unscheduled" call dbgm};
 
+private _ejectTimer = time+10;
 sleep 3;
 
 waitUntil{

@@ -4,7 +4,7 @@ params[
 private _command = currentCommand _man;
 private _action  = _man getVariable ["SQFM_flashActionMan", _command];
 
-if(_camPos distance2D _man > 100)  exitWith{false};
+if(camPos distance2D _man > 100)   exitWith{false};
 if(vehicle _man isNotEqualTo _man) exitWith{false};
 if(_action isEqualTo "")           exitWith{false};
 

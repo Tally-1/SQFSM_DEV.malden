@@ -10,7 +10,7 @@ exitWith{
 
 private _wpFnc      = "SQFM_fnc_searchNearBuildings";
 private _endFnc     = "SQFM_fnc_endTaskGroup";
-private _endParams  = [_center,5,"MOVE", _endFnc,"AWARE","NORMAL",_radius];
+private _endParams  = [_center,10,"MOVE", _endFnc,"AWARE","NORMAL",10];
 
 {
     private _wpParams = [_x,10,"MOVE",_wpFnc,"AWARE","NORMAL",10];
@@ -20,5 +20,6 @@ private _endParams  = [_center,5,"MOVE", _endFnc,"AWARE","NORMAL",_radius];
 
 _self call ["addWaypoint", _endParams];
 _self set  ["action", "Clearing Urban Objective"];
+
 
 true;

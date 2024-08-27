@@ -5,13 +5,22 @@ params[
 
 sleep _menDelay;
 
+private _delayed = [];
+
 {
-    _x enableAI     "path";
-    _x setUnitPos   "AUTO";
-    _x setVariable ["SFSM_Excluded",false,true];
-    _x setVariable ["SQFM_suppressionTarget",nil];
-    _x setAnimSpeedCoef 1;
-    
+    if!(_x getVariable ["FSM_moveEnded",true])then{
+        _x setVariable ["MoveFsm_Reset", true];
+        _delayed pushBack _x;
+    };
+
+    [_x] call SQFM_fnc_activateMechMan;
+
 } forEach _men;
 
-true;
+if(_delayed isEqualTo [])exitWith{true};
+
+sleep 0.1;
+
+{[_x] call SQFM_fnc_activateMechMan} forEach _delayed;
+
+false;
