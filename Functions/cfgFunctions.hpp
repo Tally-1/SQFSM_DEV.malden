@@ -4,6 +4,20 @@ class CfgFunctions
 {
 	class SQFM
 	{
+		class direct_control
+		{
+			file = "functions\direct_control";
+			class endDirectControl              {};
+			class endDirectControlAction        {};
+			class switchUnit_start              {};
+			class switchUnit_exit               {};
+			class initDirectControlOptions      {};
+			class addCuratorControlEntityButton {};
+			class isCuratorEntityMenuDisplay    {};
+			class validSwitchEntity             {};
+			class handleDirectControlDamage     {};
+		};
+		
 		
 		class battlefield
 		{
@@ -724,17 +738,18 @@ class CfgFunctions
 		class globalEvents
 		{
 			file = "functions\globalEvents";
-			class groupSpawnedEh             {};
-			class projectileCreated          {};
-			class onProjectileCreated        {};
-			class entityKilledEh             {};
-			class ACE_MedicalEvents          {};
-			class ACE_Medical_OnStatusChange {};
-			class curatorEvents              {};
-			class onCuratorGroupSelection    {};
-			class onCuratorGroupDoubleClick  {};
-			class buildingChangedEh          {};
-			class onCuratorWaypoint          {};
+			class groupSpawnedEh               {};
+			class projectileCreated            {};
+			class onProjectileCreated          {};
+			class entityKilledEh               {};
+			class ACE_MedicalEvents            {};
+			class ACE_Medical_OnStatusChange   {};
+			class curatorEvents                {};
+			class onCuratorGroupSelection      {};
+			class onCuratorGroupDoubleClick    {};
+			class buildingChangedEh            {};
+			class onCuratorWaypoint            {};
+			class onCuratorObjectDoubleClicked {};
 		};
 
 		class taskManager
@@ -756,7 +771,7 @@ class CfgFunctions
 
 		class GUI 
 		{ 
-			file = "Functions\GUI";
+			file = "functions\GUI";
 			class RGBtoA3color              {};
 			class initHudDisplay            {};
 			class initDisplayData           {};
@@ -802,7 +817,7 @@ class CfgFunctions
 
 		class GUI_curatorMenu 
 		{ 
-			file = "Functions\GUI\curatorMenu";
+			file = "functions\GUI\curatorMenu";
 			class openCuratorSquadMenu             {};
 			class applySquadMenuSettings           {};
 			class initCuratorSquadMenuDisplay      {};
@@ -813,6 +828,7 @@ class CfgFunctions
 			class addCuratorGroupMenuButton        {};
 			class initCuratorSquadMenuButtons      {};
 			class initCuratorSquadMenuBackground   {};
+			class isCuratorGroupMenuDisplay        {};
 			
 		
 		};

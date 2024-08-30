@@ -14,8 +14,41 @@ addToGroups = SQFM_fnc_addToDataAllGroups;
 // SQFM_fnc_setObjectiveData   = {};
 // SQFM_fnc_setObjectiveMethods = {};
 // SQFM_fnc_initTransportSpawner = {};
+// SQFSM_fnc_endDirectControl = {};
+// call SQFM_fnc_switchUnit_exit;
+SQFM_fnc_assignAllGroupTasks = {};
 
-// SQFM_fnc_assignAllGroupTasks = {};
+
+// DCO_check = false;
+// sleep 1;
+// DCO_check = true;
+
+// while {DCO_check} do {
+//     hint str SQFM_clickDc;
+//     sleep 0.3;
+// };
+
+// path = "\a3\editor_f\Data\Scripts\dikCodes.h";
+
+
+// SQFM_fnc_addCuratorGroupMenuButton = {};
+// SQFM_fnc_isCuratorGroupMenuDisplay = {};
+// SQFM_fnc_onCuratorObjectDoubleClicked = { 
+// params [
+//     ["_curator", nil, [objNull]],
+//     ["_entity",  nil, [objNull]]
+// ];
+
+// // [_entity] call SQFM_fnc_initDirectControlOptions;
+
+// true;
+// };
+// SQFM_fnc_validSwitchEntity         = {};
+// if(true)exitWith{"aborted" call dbgm};
+// SQFM_fnc_isCuratorEntityMenuDisplay = {};
+// SQFM_fnc_addCuratorControlEntityButton = {};
+// SQFM_fnc_endDirectControlAction = {};
+
 
 
 // this addEventHandler ["CuratorGroupDoubleClicked", {
@@ -48,6 +81,13 @@ addToGroups = SQFM_fnc_addToDataAllGroups;
 
 */
 
+// SQFM_fnc_switchUnit_exit = {};
+// SQFM_switchUnit_start = {};
+
+
+
+
+
 /**************Update group and objective methods***********************/
 call SQFM_fnc_updateMethodsAllGroups;
 call SQFM_fnc_updateMethodsAllObjectives;
@@ -55,6 +95,8 @@ call SQFM_fnc_updateMethodsAllObjectives;
 
 if(time < 3)
 exitWith{systemChat "devfiled executed"};
+
+
 
 
 private _pos      = eyePos player;
@@ -72,7 +114,7 @@ if(isNil "_group")exitWith{"nil group" call dbgm};
 // exitWith{systemChat "nil module"};
 
 // [SQFM_curObj] call SQFM_fnc_setObjectiveData;
-
+// SQFM_switchUnit_start
 if(isNil "_grpData")
 exitWith{systemChat "nil grpData"};
 _grpData call ["leaveUnarmedVehicles"];
