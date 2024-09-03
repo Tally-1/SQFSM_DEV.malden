@@ -16,7 +16,7 @@ addToGroups = SQFM_fnc_addToDataAllGroups;
 // SQFM_fnc_initTransportSpawner = {};
 // SQFSM_fnc_endDirectControl = {};
 // call SQFM_fnc_switchUnit_exit;
-SQFM_fnc_assignAllGroupTasks = {};
+// SQFM_fnc_assignAllGroupTasks = {};
 
 
 // DCO_check = false;
@@ -48,7 +48,23 @@ SQFM_fnc_assignAllGroupTasks = {};
 // SQFM_fnc_isCuratorEntityMenuDisplay = {};
 // SQFM_fnc_addCuratorControlEntityButton = {};
 // SQFM_fnc_endDirectControlAction = {};
-
+// SQFM_fnc_virtualManGetVehicle = {};
+// SQFM_fnc_virtualManGetInVehicle = {};
+// SQFM_fnc_virtualVehicleSpawnIn = {};
+// SQFM_fnc_virtualManSpawnIn = {};
+// SQFM_fnc_virtualizeMan = {};
+// SQFM_fnc_virtualizeVehicle  = {};
+// SQFM_fnc_virtualizeSquad = {};
+// SQFM_fnc_virtualSquadSpawnIn = {};
+// SQFM_fnc_virtualizeSquadsWhenReady = {};
+// SQFM_fnc_initReforceModule = {};
+// SQFM_fnc_setReforceModuleMethods = {};
+// SQFM_fnc_reforceModuleCanSpawn = {};
+// SQFM_fnc_reforceModuleUpdateSquads = {};
+// SQFM_fnc_reforceModuleSpawnSquad = {};
+// SQFM_fnc_moduleSpawnOnReforceRequest = {};
+// (ref_1 call getData) call ["setMethods"];
+// [getPos player, group player] call SQFM_fnc_moduleSpawnOnReforceRequest;
 
 
 // this addEventHandler ["CuratorGroupDoubleClicked", {
@@ -64,13 +80,13 @@ SQFM_fnc_assignAllGroupTasks = {};
 // SQFM_fnc_initCuratorSquadMenuDisplay  = {};
 // SQFM_fnc_curatorSquadMenuAddCBS        = {};
 // SQFM_fnc_curatorSquadMenuAddSLS         = {};
-// SQFM_fnc_onCuratorSquadMenuSettingChange = {};
 // SQFM_fnc_displayAddSlider                = {};
 // SQFM_fnc_curatorSquadMenuInitSettingEdits = {};
 // SQFM_fnc_openCuratorSquadMenu            = {};
-
-
-
+// SQFM_fnc_addCuratorControlEntityButton  = {};
+// SQFM_fnc_isCuratorEntityMenuDisplay    = {};
+// SQFM_fnc_initDirectControlOptions     = {};
+// SQFM_fnc_isCuratorGroupMenuDisplay   = {};
 
 /*
     TODO:
@@ -81,12 +97,13 @@ SQFM_fnc_assignAllGroupTasks = {};
 
 */
 
-// SQFM_fnc_switchUnit_exit = {};
-// SQFM_switchUnit_start = {};
 
+// SQFM_fnc_reforceModules3D = {};
+// SQFM_fnc_reforceModule3Ddata = {};
+// SQFM_fnc_reforceObjectiveIsHostile = {};
+// SQFM_fnc_tenSecondTasks = {};
 
-
-
+// SQFM_reinforRequests call ["addRequest",[]];
 
 /**************Update group and objective methods***********************/
 call SQFM_fnc_updateMethodsAllGroups;
@@ -96,18 +113,23 @@ call SQFM_fnc_updateMethodsAllObjectives;
 if(time < 3)
 exitWith{systemChat "devfiled executed"};
 
+// [ref_1] call SQFM_fnc_initReforceModule;
+// [curatorSelected#1] call SQFM_fnc_virtualizeSquadsWhenReady;
+// (ref_1 call getData) call ["setMethods"];
+// df= (ref_1 call getData) call ["canSpawn",[getPos player, group player]];
+// hint str [df];
+// [getPos player, group player] call SQFM_fnc_moduleSpawnOnReforceRequest;
 
-
-
-private _pos      = eyePos player;
-private _dir      = [(getDirVisual (vehicle player)-180)] call SQFM_fnc_formatDir;
-private _width    = 170;
-private _clearRad = 100;
+// private _pos      = eyePos player;
 private _group    = curatorSelected#1#0;
 private _grpData  = if(!isNil "_group")then{_group call getData}else{nil};
 
+// 
+// (ref_1 call getData) call ["sendSquad",[_pos]];
+
 if(isNil "_group")exitWith{"nil group" call dbgm};
 // [_positions] call SQFM_fnc_showPosArr3D;
+
 
 
 // if(isNil "SQFM_curObj")
@@ -117,7 +139,15 @@ if(isNil "_group")exitWith{"nil group" call dbgm};
 // SQFM_switchUnit_start
 if(isNil "_grpData")
 exitWith{systemChat "nil grpData"};
-_grpData call ["leaveUnarmedVehicles"];
+while {true} do {
+    hint str [SQFM_clickDc];
+};
+// _grpData call ["addToReinfRequests"];
+// private _vSquad = [_group, true] call SQFM_fnc_virtualizeSquad;
+// sleep 3;
+// _vSquad call ["spawnIn"];
+
+// _grpData call ["leaveUnarmedVehicles"];
 // _grpData call ["mechClearUrbanObjective",[SQFM_curObj]];
 // _grpData call ["initObjectiveTask",[SQFM_curObj]];
 

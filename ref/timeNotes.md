@@ -1,4 +1,9 @@
-[160m] Researching & Adapting Achilles direct control function for SQFM, ZEH compatibility.
-[192m] Refactoring switch function, adding keybinds (Had a bunch of problems here) Rewriting action.
-[40m] packing as mod, tweaking supression function (No more killing rabbits)
-[22m] Testing new code
+15.2 hours (912 minutes)
+
+[48m]  ZEH menu compatibility (x2)
+[48m]  Reinforcer module 3Den listing and setting entries.
+[172m] Reinforcer module, virtualization and de-virtualization.
+[59m]  Reinforcer module init functions.
+[218m] Reinforcer module Respond to request, 3D debug.
+[323m] Reinforcer module complete build, multiple battletests, fixes & tweaks.
+[44m] Packing, testing new mod build.
