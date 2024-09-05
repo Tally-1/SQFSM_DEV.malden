@@ -81,7 +81,6 @@ addToGroups = SQFM_fnc_addToDataAllGroups;
 // SQFM_fnc_curatorSquadMenuAddCBS        = {};
 // SQFM_fnc_curatorSquadMenuAddSLS         = {};
 // SQFM_fnc_displayAddSlider                = {};
-// SQFM_fnc_curatorSquadMenuInitSettingEdits = {};
 // SQFM_fnc_openCuratorSquadMenu            = {};
 // SQFM_fnc_addCuratorControlEntityButton  = {};
 // SQFM_fnc_isCuratorEntityMenuDisplay    = {};
@@ -90,20 +89,27 @@ addToGroups = SQFM_fnc_addToDataAllGroups;
 
 /*
     TODO:
-        1) BACKGROUND
-        2) FRAME
-        3) CheckBoxes
-            - "text lorem ipsum"       [x]
+        1) Exclude from SQFSM 
+            - Behaviour module
+            - Menu
+            - CBA options
 
+        2) No clearing of friendly owned objectives.
 */
 
 
 // SQFM_fnc_reforceModules3D = {};
-// SQFM_fnc_reforceModule3Ddata = {};
-// SQFM_fnc_reforceObjectiveIsHostile = {};
-// SQFM_fnc_tenSecondTasks = {};
+// SQFM_fnc_groupCanInitObjectiveDefense = {};
+// SQFM_fnc_groupOnObjectiveArrival = {};
+// SQFM_fnc_groupAssignFipos = {};
+// SQFM_fnc_groupAssignObjectiveFipos = {};
+// SQFM_fnc_groupAssignObjectiveTurrets = {};
+// SQFM_fnc_groupInitObjectiveDefense = {};
 
 // SQFM_reinforRequests call ["addRequest",[]];
+
+// "\A3\ui_f\data\map\markers\handdrawn\objective_CA.paa"
+// SQFM_fnc_curatorSquadMenuInitSettingEdits = {};
 
 /**************Update group and objective methods***********************/
 call SQFM_fnc_updateMethodsAllGroups;
@@ -113,46 +119,19 @@ call SQFM_fnc_updateMethodsAllObjectives;
 if(time < 3)
 exitWith{systemChat "devfiled executed"};
 
-// [ref_1] call SQFM_fnc_initReforceModule;
-// [curatorSelected#1] call SQFM_fnc_virtualizeSquadsWhenReady;
-// (ref_1 call getData) call ["setMethods"];
-// df= (ref_1 call getData) call ["canSpawn",[getPos player, group player]];
-// hint str [df];
-// [getPos player, group player] call SQFM_fnc_moduleSpawnOnReforceRequest;
+private _data = defPos call getData;
+private _type = _data get "type";
+// hint str _type;
+// copyToClipboard str _type;
 
 // private _pos      = eyePos player;
 private _group    = curatorSelected#1#0;
 private _grpData  = if(!isNil "_group")then{_group call getData}else{nil};
-
-// 
-// (ref_1 call getData) call ["sendSquad",[_pos]];
-
 if(isNil "_group")exitWith{"nil group" call dbgm};
-// [_positions] call SQFM_fnc_showPosArr3D;
 
-
-
-// if(isNil "SQFM_curObj")
-// exitWith{systemChat "nil module"};
-
-// [SQFM_curObj] call SQFM_fnc_setObjectiveData;
-// SQFM_switchUnit_start
 if(isNil "_grpData")
 exitWith{systemChat "nil grpData"};
-while {true} do {
-    hint str [SQFM_clickDc];
-};
-// _grpData call ["addToReinfRequests"];
-// private _vSquad = [_group, true] call SQFM_fnc_virtualizeSquad;
-// sleep 3;
-// _vSquad call ["spawnIn"];
 
-// _grpData call ["leaveUnarmedVehicles"];
-// _grpData call ["mechClearUrbanObjective",[SQFM_curObj]];
-// _grpData call ["initObjectiveTask",[SQFM_curObj]];
-
-// [_data get "exitPositions"] call SQFM_fnc_showPosArr3D;
-// private _groups = curatorSelected#1;
-// [_groups] spawn SQFM_fnc_assignGroupsIdleCover;
+_grpData call ["initObjectiveDefense",[defPos]];
 /************************{FILE END}*******************************/
 systemChat "devfiled read";
