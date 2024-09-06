@@ -266,6 +266,7 @@ class CfgFunctions
             class objectiveSetUrbanStatus         {};
             class objectiveGetZoneMidPositions    {};
             class objectiveGetZoneCone            {};
+            class objectiveGetFipos               {};
 
         };
 
@@ -506,6 +507,9 @@ class CfgFunctions
             class onWpGroupTravelArrival     {};
             class wpEndMechClearing          {};
             class groupCurrentWayPoint       {};
+
+            class groupForcedMoveStart       {};
+            class groupForcedMoveEnd         {};
         };
 
         class groups_boarding
@@ -529,6 +533,7 @@ class CfgFunctions
             class groupLeaveUnarmedVehicles {};
             class groupMechUnload           {};
             class isVanillaBoarding         {};
+            
         };
 
         class groups_members
@@ -555,6 +560,7 @@ class CfgFunctions
             class groupMergeWithGroup      {};
             class initSquadMembers         {};
             class groupIsMechanized        {};
+            class groupGetFipoMen          {};
 
         };
 
@@ -740,9 +746,11 @@ class CfgFunctions
             file = "functions\groups\defense";
             class groupCanInitObjectiveDefense {};
             class groupAssignFipos             {};
+            class groupLeaveFipos              {};
             class groupAssignObjectiveFipos    {};
             class groupAssignObjectiveTurrets  {};
             class groupInitObjectiveDefense    {};
+            class onInitObjectiveDefenseWp     {};
         };
 
         class reforceModule

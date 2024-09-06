@@ -102,9 +102,17 @@ addToGroups = SQFM_fnc_addToDataAllGroups;
 // SQFM_fnc_groupCanInitObjectiveDefense = {};
 // SQFM_fnc_groupOnObjectiveArrival = {};
 // SQFM_fnc_groupAssignFipos = {};
-// SQFM_fnc_groupAssignObjectiveFipos = {};
 // SQFM_fnc_groupAssignObjectiveTurrets = {};
+// SQFM_fnc_groupAssignObjectiveFipos = {};
+// SQFM_fnc_onInitObjectiveDefenseWp = {};
+// SQFM_fnc_objectiveGetFipos = {};
+// SQFM_fnc_groupForcedMoveStart = {};
+// SQFM_fnc_groupForcedMoveEnd = {};
 // SQFM_fnc_groupInitObjectiveDefense = {};
+// SQFM_fnc_groupGetFipoMen = {};
+// SQFM_fnc_groupLeaveFipos = {};
+// SQFM_fnc_groupUnstop = {};
+
 
 // SQFM_reinforRequests call ["addRequest",[]];
 
@@ -132,6 +140,6 @@ if(isNil "_group")exitWith{"nil group" call dbgm};
 if(isNil "_grpData")
 exitWith{systemChat "nil grpData"};
 
-_grpData call ["initObjectiveDefense",[defPos]];
+// _grpData call ["initObjectiveDefense",[defPos]];
 /************************{FILE END}*******************************/
 systemChat "devfiled read";
