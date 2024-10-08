@@ -3,7 +3,7 @@ waitUntil {scriptDone scr;};
 scr = [] execVM "SFSM_Devfile.sqf";
 waitUntil {scriptDone scr;};
 // if(true)exitWith{systemChat "devfile exited"};
-systemChat "devfiled found";
+systemChat "devfile found";
 addToGroups = SQFM_fnc_addToDataAllGroups;
 
 // SQFM_Custom3Dpositions = [[getPosATL player, "playerPos"]];
@@ -14,8 +14,7 @@ addToGroups = SQFM_fnc_addToDataAllGroups;
 // SQFM_fnc_setObjectiveData   = {};
 // SQFM_fnc_setObjectiveMethods = {};
 // SQFM_fnc_initTransportSpawner = {};
-// SQFSM_fnc_endDirectControl = {};
-// call SQFM_fnc_switchUnit_exit;
+// SQFSM_fnc_endDirectControl   = {};
 // SQFM_fnc_assignAllGroupTasks = {};
 
 
@@ -98,48 +97,59 @@ addToGroups = SQFM_fnc_addToDataAllGroups;
 */
 
 
-// SQFM_fnc_reforceModules3D = {};
+// SQFM_fnc_reforceModules3D            = {};
 // SQFM_fnc_groupCanInitObjectiveDefense = {};
-// SQFM_fnc_groupOnObjectiveArrival = {};
-// SQFM_fnc_groupAssignFipos = {};
+// SQFM_fnc_groupOnObjectiveArrival     = {};
+// SQFM_fnc_groupAssignFipos           = {};
 // SQFM_fnc_groupAssignObjectiveTurrets = {};
 // SQFM_fnc_groupAssignObjectiveFipos = {};
 // SQFM_fnc_onInitObjectiveDefenseWp = {};
-// SQFM_fnc_objectiveGetFipos = {};
-// SQFM_fnc_groupForcedMoveStart = {};
-// SQFM_fnc_groupForcedMoveEnd = {};
-// SQFM_fnc_groupInitObjectiveDefense = {};
-// SQFM_fnc_groupGetFipoMen = {};
-// SQFM_fnc_groupLeaveFipos = {};
-// SQFM_fnc_groupUnstop = {};
-
-
-// SQFM_reinforRequests call ["addRequest",[]];
-
-// "\A3\ui_f\data\map\markers\handdrawn\objective_CA.paa"
+// SQFM_fnc_objectiveGetFipos         = {};
+// SQFM_fnc_groupForcedMoveStart       = {};
+// SQFM_fnc_groupForcedMoveEnd          = {};
+// SQFM_fnc_groupInitObjectiveDefense    = {};
+// SQFM_fnc_groupGetFipoMen               = {};
+// SQFM_fnc_groupLeaveFipos                = {};
+// SQFM_fnc_groupUnstop                     = {};
 // SQFM_fnc_curatorSquadMenuInitSettingEdits = {};
+// SQFM_fnc_updateMethodsAllReforcers       = {};
+// SQFM_fnc_getBattleOnPos                 = {};
+// SQFM_fnc_groupInitReinforceTask        = {};
+// SQFM_fnc_sendReforceToTrigger         = {};
+// SQFM_fnc_reinforceTrigger            = {};
+// SQFM_fnc_groupOnReinforceArrival    = {};
+// SQFM_fnc_normalizeTextCtrlHeight   = {};
+// SQFM_fnc_initHudDisplay            = {};
+// SQFM_fnc_initMarkerFeedBackDisplay = {};
+// SQFM_fnc_objectiveHudShowData       = {};
+// SQFM_fnc_initObjectiveFeedbackHud    = {};
+// SQFM_fnc_onObjectiveFeedbackHudClosed = {};
+// SQFM_fnc_initObjectiveHudBackground  = {};
+// SQFM_fnc_objectiveHudCamReady       = {};
+// SQFM_fnc_objectiveHudShowCamera    = {};
+
+
+
 
 /**************Update group and objective methods***********************/
 call SQFM_fnc_updateMethodsAllGroups;
 call SQFM_fnc_updateMethodsAllObjectives;
+call SQFM_fnc_updateMethodsAllReforcers;
 /************************Code to execute*******************************/
 
 if(time < 3)
-exitWith{systemChat "devfiled executed"};
+exitWith{systemChat "devfile read"};
 
-private _data = defPos call getData;
-private _type = _data get "type";
-// hint str _type;
-// copyToClipboard str _type;
-
-// private _pos      = eyePos player;
+// private _type     = _data get "type";
 private _group    = curatorSelected#1#0;
 private _grpData  = if(!isNil "_group")then{_group call getData}else{nil};
+
+[obj_2] call SQFM_fnc_showObjectiveData;
+
 if(isNil "_group")exitWith{"nil group" call dbgm};
 
 if(isNil "_grpData")
 exitWith{systemChat "nil grpData"};
 
-// _grpData call ["initObjectiveDefense",[defPos]];
 /************************{FILE END}*******************************/
-systemChat "devfiled read";
+systemChat "devfile read";
