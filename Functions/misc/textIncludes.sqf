@@ -2,11 +2,12 @@ private _smallTxt    = "<t size='0.75'>";
 private _mediumTxt   = "<t size='1.2'>";
 private _largeTxt    = "<t size='1.5'>";
 private _bigTxt      = "<t size='2'>";
-private _versionName = ["Squad FSM V. ", SQFSM_Version] joinString "";
+private _versionName = ["Squad FSM ", SQFSM_Version] joinString "";
 private _space       = "      ";
 
 private _outLine = "<t shadow='2'>";
 private _white   = "<t color='#f5f5f5'>";
+private _smoke   = "<t color='#bebebeb3'>";
 private _grey    = "<t color='#a1a1a1df'>";
 private _aqua    = "<t color='#00ffff'>";
 private _khaki   = "<t color='#acffa4'>";

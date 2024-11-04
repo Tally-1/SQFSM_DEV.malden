@@ -1,26 +1,28 @@
 params[
     ["_module", nil, [objNull]]
 ];
-private _position     = getPosATLVisual _module;
-private _data3d       = [_module] call SQFM_fnc_module3dData;
-private _type         = _module getVariable "objectiveType";
-private _area         = _data3d get "area";
-private _radius       = if(_type isEqualTo "dp")then{selectMax [_area#1, _area#2]}else{selectMax [100, _area#1, _area#2]};
-private _zone         = [_position, _radius];
-private _zoneLines    = [_position, _radius, 16, [0,1,0,1]] call SQFM_fnc_getCircleLines;
-private _description  = [_type] call SQFM_fnc_objectiveDescription;
-private _capStrength  = _module getVariable "capStrength";
-private _distance     = _module getVariable "activationDistance";
-private _defaultOwner = _module getVariable "defaultOwner";
-private _buildings    = [_position, _radius] call SQFM_fnc_nearBuildings;
-private _isUrbanArea  = (_type isEqualTo "town");//||{[_position, _radius, _buildings] call SQFM_fnc_isUrbanArea};
-private _urbanZones   = [_buildings] call SQFM_fnc_getUrbanZones;
-private _owner        = sideUnknown;
-private _sides        = [];
-private _assetTypes   = [];
-private _markers      = [];// if(SQFM_debugMode)then{[_module] call SQFM_fnc_drawObjectiveMarkers}else{[]};
-private _triggers     = synchronizedObjects _module select {"EmptyDetector" in typeOf _x};
-private _activated    = _triggers isEqualTo [];// Will be updated once methods are decleared.
+private _position       = getPosATLVisual _module;
+private _data3d         = [_module] call SQFM_fnc_module3dData;
+private _type           = _module getVariable "objectiveType";
+private _area           = _data3d get "area";
+private _radius         = if(_type isEqualTo "dp")then{selectMax [_area#1, _area#2]}else{selectMax [100, _area#1, _area#2]};
+private _zone           = [_position, _radius];
+private _zoneLines      = [_position, _radius, 16, [0,1,0,1]] call SQFM_fnc_getCircleLines;
+private _description    = [_type] call SQFM_fnc_objectiveDescription;
+private _capStrength    = _module getVariable "capStrength";
+private _distance       = _module getVariable "activationDistance";
+private _defaultOwner   = _module getVariable "defaultOwner";
+private _buildings      = [_position, _radius] call SQFM_fnc_nearBuildings;
+private _isUrbanArea    = (_type isEqualTo "town");//||{[_position, _radius, _buildings] call SQFM_fnc_isUrbanArea};
+private _urbanZones     = [_buildings] call SQFM_fnc_getUrbanZones;
+private _owner          = sideUnknown;
+private _sides          = [];
+private _assetTypes     = [];
+private _markers        = [];// if(SQFM_debugMode)then{[_module] call SQFM_fnc_drawObjectiveMarkers}else{[]};
+private _triggers       = synchronizedObjects _module select {"EmptyDetector" in typeOf _x};
+private _activated      = _triggers isEqualTo [];// Will be updated once methods are decleared.
+private _coverPositions = [_position, _radius, false] call SQFM_fnc_nearInfantryIdlePositions;
+private _markerData     = [_module] call SQFM_fnc_getObjectiveMarkerData;
 
 if (_defaultOwner isNotEqualTo "undefined")
 then{_owner = (call compile _defaultOwner)};
@@ -60,6 +62,7 @@ private _dataArr = [
     ["isUrbanArea",                                     _isUrbanArea],
     ["urbanZones",                                       _urbanZones],
     ["roadmap",                   _zone call SQFM_fnc_getZoneRoadmap],
+    ["infCoverPositions",                            _coverPositions],
     ["range",                                              _distance],
     ["type",                                                   _type],
     ["description",                                     _description],
@@ -79,7 +82,8 @@ private _dataArr = [
     ["contestedIcon",    "\A3\ui_f\data\map\markers\military\warning_CA.paa"],
     ["capturedIcon",     "\A3\ui_f\data\map\markers\handdrawn\pickup_CA.paa"],
     ["3dData",                                                       _data3d],
-    ["3dColor",                           ([_owner] call SQFM_fnc_sideColor)]
+    ["3dColor",                           ([_owner] call SQFM_fnc_sideColor)],
+	["markerData",                                               _markerData]
 ];
 
 private _data = createhashMapObject [_dataArr];

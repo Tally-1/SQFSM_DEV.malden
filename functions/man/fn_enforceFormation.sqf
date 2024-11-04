@@ -14,7 +14,7 @@ _group setFormDir getDir _leaderVehicle;
 
 {
     private _position  = formationPosition _x;
-    private _distance  = _x distance _position;
+    private _distance  = if(!isNil "_position")then{_x distance _position}else{0};
     private _timeLimit = selectMin [30, round _distance+10];
     _x setUnitPos "UP";
     if(_timeLimit >= 10
@@ -33,13 +33,11 @@ _group setFormDir getDir _leaderVehicle;
 
 if(_scripts isEqualTo [])exitWith{false};
 
-{_x setVariable ["SFSM_Excluded",true,true]} forEach _men;
+_self call ["toggleExternalAi",[false]];
 
 [_scripts, 30] call SQFM_fnc_waitForScriptList;
 
-{
-    _x setVariable ["SFSM_Excluded",false,true];
-    _x setUnitPos "AUTO";
-} forEach _men;
+{_x setUnitPos "AUTO"} forEach _men;
+_self call ["toggleExternalAi",[true]];
 
 true;

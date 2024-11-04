@@ -5,151 +5,75 @@ waitUntil {scriptDone scr;};
 // if(true)exitWith{systemChat "devfile exited"};
 systemChat "devfile found";
 addToGroups = SQFM_fnc_addToDataAllGroups;
+// SQFM_fnc_validMapDrawSquad = {};
 
+// [_pathPositions] call SQFM_fnc_showPosArr3D;
 // SQFM_Custom3Dpositions = [[getPosATL player, "playerPos"]];
 // SQFM_fnc_
 // SQFM_battles
-// SQFSM_TransportSpawner
-// SQFM_fnc_initBattleMap     = {};
-// SQFM_fnc_setObjectiveData   = {};
-// SQFM_fnc_setObjectiveMethods = {};
-// SQFM_fnc_initTransportSpawner = {};
-// SQFSM_fnc_endDirectControl   = {};
-// SQFM_fnc_assignAllGroupTasks = {};
-
-
-// DCO_check = false;
-// sleep 1;
-// DCO_check = true;
-
-// while {DCO_check} do {
-//     hint str SQFM_clickDc;
-//     sleep 0.3;
-// };
-
-// path = "\a3\editor_f\Data\Scripts\dikCodes.h";
-
-
-// SQFM_fnc_addCuratorGroupMenuButton = {};
-// SQFM_fnc_isCuratorGroupMenuDisplay = {};
-// SQFM_fnc_onCuratorObjectDoubleClicked = { 
-// params [
-//     ["_curator", nil, [objNull]],
-//     ["_entity",  nil, [objNull]]
-// ];
-
-// // [_entity] call SQFM_fnc_initDirectControlOptions;
-
-// true;
-// };
-// SQFM_fnc_validSwitchEntity         = {};
-// if(true)exitWith{"aborted" call dbgm};
-// SQFM_fnc_isCuratorEntityMenuDisplay = {};
-// SQFM_fnc_addCuratorControlEntityButton = {};
-// SQFM_fnc_endDirectControlAction = {};
-// SQFM_fnc_virtualManGetVehicle = {};
-// SQFM_fnc_virtualManGetInVehicle = {};
-// SQFM_fnc_virtualVehicleSpawnIn = {};
-// SQFM_fnc_virtualManSpawnIn = {};
-// SQFM_fnc_virtualizeMan = {};
-// SQFM_fnc_virtualizeVehicle  = {};
-// SQFM_fnc_virtualizeSquad = {};
-// SQFM_fnc_virtualSquadSpawnIn = {};
-// SQFM_fnc_virtualizeSquadsWhenReady = {};
-// SQFM_fnc_initReforceModule = {};
-// SQFM_fnc_setReforceModuleMethods = {};
-// SQFM_fnc_reforceModuleCanSpawn = {};
-// SQFM_fnc_reforceModuleUpdateSquads = {};
-// SQFM_fnc_reforceModuleSpawnSquad = {};
-// SQFM_fnc_moduleSpawnOnReforceRequest = {};
-// (ref_1 call getData) call ["setMethods"];
-// [getPos player, group player] call SQFM_fnc_moduleSpawnOnReforceRequest;
-
-
-// this addEventHandler ["CuratorGroupDoubleClicked", {
-// 	params ["_curator", "_group"];
-// }];
-
 /************************TODO list*******************************/
+/*
+    - Dedicated Server:
+        // - Keyhandler does not work
+        // - Transport does not stop when called.
+        // - Transport does not leave when boarded.
+        // - Debug HUD fires before server is initialized
+        - Transport action is not applied when JIP
+
+*/
 /********************New Functions/Methods*****************************/
 
-// SQFM_fnc_onCuratorGroupDoubleClick = {};
-// SQFM_fnc_initDisplayData            = {};
-// SQFM_fnc_applySquadMenuSettings      = {};
-// SQFM_fnc_initCuratorSquadMenuDisplay  = {};
-// SQFM_fnc_curatorSquadMenuAddCBS        = {};
-// SQFM_fnc_curatorSquadMenuAddSLS         = {};
-// SQFM_fnc_displayAddSlider                = {};
-// SQFM_fnc_openCuratorSquadMenu            = {};
-// SQFM_fnc_addCuratorControlEntityButton  = {};
-// SQFM_fnc_isCuratorEntityMenuDisplay    = {};
-// SQFM_fnc_initDirectControlOptions     = {};
-// SQFM_fnc_isCuratorGroupMenuDisplay   = {};
+// SQFM_fnc_objectName                       = {};
+// SQFM_fnc_nearestTransport                 = {};
+// SQFM_fnc_selectTransportDestination       = {};
+// SQFM_fnc_drawNearestTransport             = {};
+// SQFM_fnc_endTransportDestinationSelection = {};
+// SQFM_fnc_playerCanCallTransport           = {};
+// SQFM_fnc_rejectTransportCall              = {};
+// SQFM_fnc_playerCallTransport              = {};
+// SQFM_fnc_updateTransportInfo              = {};
+// SQFM_fnc_getTransportInfoText             = {};
+// SQFM_fnc_showTransportData                = {};
+// SQFM_fnc_selectDestinationTip             = {};
+// SQFM_fnc_endPlayerTransport               = {};
+// SQFM_fnc_playerAbortTransportKeyEh        = {};
+// SQFM_fnc_abortPlayerTransport             = {};
+// SQFM_fnc_canGetTransportAction            = {};
+// SQFM_fnc_callTransportAction              = {};
+// SQFM_fnc_simpleSelfAction                 = {};
+// SQFM_fnc_simpleSelfActionAce              = {};
 
-/*
-    TODO:
-        1) Exclude from SQFSM 
-            - Behaviour module
-            - Menu
-            - CBA options
+// missionNamespace setVariable ["SQFM_fnc_waitforPlayerBoarding",{}];
 
-        2) No clearing of friendly owned objectives.
-*/
-
-
-// SQFM_fnc_reforceModules3D            = {};
-// SQFM_fnc_groupCanInitObjectiveDefense = {};
-// SQFM_fnc_groupOnObjectiveArrival     = {};
-// SQFM_fnc_groupAssignFipos           = {};
-// SQFM_fnc_groupAssignObjectiveTurrets = {};
-// SQFM_fnc_groupAssignObjectiveFipos = {};
-// SQFM_fnc_onInitObjectiveDefenseWp = {};
-// SQFM_fnc_objectiveGetFipos         = {};
-// SQFM_fnc_groupForcedMoveStart       = {};
-// SQFM_fnc_groupForcedMoveEnd          = {};
-// SQFM_fnc_groupInitObjectiveDefense    = {};
-// SQFM_fnc_groupGetFipoMen               = {};
-// SQFM_fnc_groupLeaveFipos                = {};
-// SQFM_fnc_groupUnstop                     = {};
-// SQFM_fnc_curatorSquadMenuInitSettingEdits = {};
-// SQFM_fnc_updateMethodsAllReforcers       = {};
-// SQFM_fnc_getBattleOnPos                 = {};
-// SQFM_fnc_groupInitReinforceTask        = {};
-// SQFM_fnc_sendReforceToTrigger         = {};
-// SQFM_fnc_reinforceTrigger            = {};
-// SQFM_fnc_groupOnReinforceArrival    = {};
-// SQFM_fnc_normalizeTextCtrlHeight   = {};
-// SQFM_fnc_initHudDisplay            = {};
-// SQFM_fnc_initMarkerFeedBackDisplay = {};
-// SQFM_fnc_objectiveHudShowData       = {};
-// SQFM_fnc_initObjectiveFeedbackHud    = {};
-// SQFM_fnc_onObjectiveFeedbackHudClosed = {};
-// SQFM_fnc_initObjectiveHudBackground  = {};
-// SQFM_fnc_objectiveHudCamReady       = {};
-// SQFM_fnc_objectiveHudShowCamera    = {};
-
-
-
+// missionNamespace setVariable ["SQFM_fnc_onGetinWpPassenger",{},true];
+// SQFM_fnc_groupSetStrengthIcon = {};
 
 /**************Update group and objective methods***********************/
 call SQFM_fnc_updateMethodsAllGroups;
 call SQFM_fnc_updateMethodsAllObjectives;
 call SQFM_fnc_updateMethodsAllReforcers;
+if(time < 3)exitWith{systemChat "devfile read early"};
 /************************Code to execute*******************************/
+SQFM_Custom3Dpositions = [];
+// [] spawn SQFM_fnc_playerCallTransport;
+// call SQFM_fnc_selectDestinationTip;
 
-if(time < 3)
-exitWith{systemChat "devfile read"};
-
-// private _type     = _data get "type";
-private _group    = curatorSelected#1#0;
-private _grpData  = if(!isNil "_group")then{_group call getData}else{nil};
-
-[obj_2] call SQFM_fnc_showObjectiveData;
+private _pos     = getPosATLVisual player;
+private _rad     = 50;
+private _sort    = true;
+private _man     = curatorSelected#0#0;
+private _group   = curatorSelected#1#0;
+private _grpData = if(!isNil "_group")then{_group call getData}else{nil};
+// private _knArr   = units grp_2 apply {[_x, 0.7, 0.2]};
 
 if(isNil "_group")exitWith{"nil group" call dbgm};
 
 if(isNil "_grpData")
 exitWith{systemChat "nil grpData"};
+
+if(isNil "_man")
+exitWith{"nil man" call dbgm};
+
 
 /************************{FILE END}*******************************/
 systemChat "devfile read";

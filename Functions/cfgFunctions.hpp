@@ -1,9 +1,18 @@
-// "functions
+// "
 
 class CfgFunctions
 {
     class SQFM
     {
+        class actionMenu
+        {
+            file = "functions\actionMenu";
+            class simpleSelfAction      {};
+            class simpleSelfActionAce   {};
+            class selfActionCategoryACE {};
+
+        }
+        
         class direct_control
         {
             file = "functions\direct_control";
@@ -57,6 +66,7 @@ class CfgFunctions
             class updateBattleHudGlobal         {};
             class battleReplenishGroups         {};
             class getBattleOnPos                {};
+            class shareBattleKnowledge          {};
 
         };
 
@@ -76,16 +86,18 @@ class CfgFunctions
         class building
         {
             file = "functions\building";
-            class isHouse               {};
-            class nearBuildings         {};
-            class manGetBuilding        {};
-            class menInsideBuilding     {};
-            class buildingPosCount      {};
-            class buildingArrData       {};
-            class getBuildingScore      {};
-            class sortBuildings         {};
-            class allBuildingsPositions {};
-            class zoneUrbanCoef         {};
+            class isHouse                  {};
+            class nearBuildings            {};
+            class manGetBuilding           {};
+            class menInsideBuilding        {};
+            class buildingPosCount         {};
+            class buildingArrData          {};
+            class getBuildingScore         {};
+            class sortBuildings            {};
+            class allBuildingsPositions    {};
+            class getHouseOnPos            {};
+            class zoneUrbanCoef            {};
+            class getNearBuildingPositions {};
         };
 
         class roads 
@@ -144,6 +156,9 @@ class CfgFunctions
             class reforceModule3Ddata           {};
             class objectiveDrawTriggers3D       {};
             class objectiveGetDebugIconAndColor {};
+            class initDebugHUD                  {};
+            class updateDebugHudOOP             {};
+            class updateDebugHud                {};
         };
 
         class mapDrawing
@@ -152,11 +167,31 @@ class CfgFunctions
             class initMapDrawLoop           {};
             class drawOnMap                 {};
             class drawMapIcon               {};
+          
+        };
+
+        class mapDrawing_objectives
+        {
+            file = "functions\mapDrawing\objectives";
             class drawObjectivesMap         {};
             class setFocusedMapObjective    {};
             class objectiveMapFocusChanged  {};
             class objectiveDrawMapRectangle {};
             class thisObjectiveOnMap        {};
+        };
+
+        class mapDrawing_squads
+        {
+            file = "functions\mapDrawing\squads";
+            class drawSquadsOnMap           {};
+            class validMapDrawSquad         {};
+            class setFocusedMapSquad        {};
+            class squadMapFocusChanged      {};
+            class squadMapColor             {};
+            class groupSetMapIcon           {};
+            class squadOnMap                {};
+            class groupDrawOnMapMouseOver   {};
+
         };
 
         class misc
@@ -185,6 +220,36 @@ class CfgFunctions
             class waitForScriptList      {};
             class loadedAddons           {};
             class onCuratorOpened        {};
+            class getVarNames            {};
+            class terminateCam           {};
+            class killCameras            {};
+            class getCurrentMan          {};
+            class getNearFipoPositions   {};
+            class setGlobalVar           {};
+            class objectName             {};
+            class playableUnit           {};
+            
+        };
+
+        class forcedRpg
+        {
+            file = "functions\forcedRpg";
+            class setMissileTarget           {};
+            class missileAimed               {};
+            class handleForcedRPG            {};
+            class onForcedRpgFire            {};
+            class forcedLauncherEh           {};
+            class forceLauncherFire          {};
+            class rpgLaunchZoneCone          {};
+            class isValidRpgFirePos          {};
+            class getRpgLaunchPos            {};
+            class onForcedRpgAnim            {};
+            class initRpgOnTarget            {};
+            class deInitRpgOnTarget          {};
+            class endRpgOnTarget             {};
+            class manFireRpgAtTarget         {};
+            class manEngageAtTargetCondition {};
+            class manEngageAtTarget          {};
         };
 
         class math
@@ -235,6 +300,8 @@ class CfgFunctions
             class posOnVector               {};
 
             class getObjectCorners          {};
+            class getNearCoverPositions     {};
+            class setDirAndPitchToPos       {};
 
         };
 
@@ -287,6 +354,9 @@ class CfgFunctions
             class objectiveOnActiveChange         {};
             class updateTriggerObjectives         {};
             class drawAdvancedObjectiveMapData    {};
+
+            class objectiveCanshowMarker          {};
+            class getObjectiveMarkerData          {};
 
         };
 
@@ -364,6 +434,14 @@ class CfgFunctions
             class manEjectFromVehicle         {};
             class manEjectThenCoverOnArrival  {};
             class enforceFormation            {};
+
+            class sendManToIdleCover          {};
+            class manOnIdleCoverArrival       {};
+
+            class hasAmmoForWeapon            {};
+            class isAtMan                     {};
+            class forceLookAtPos              {};
+            class manToggleExternalAi         {};
         };
 
         class man_fsmMovement
@@ -409,6 +487,8 @@ class CfgFunctions
             class getVehicleWeapons        {};
             class vehicleIsUnarmed         {};
             class vehicleEjectCrew         {};
+            class vehicleEngageTarget      {};
+            class isAtVehicle              {};
 
         };
 
@@ -442,19 +522,22 @@ class CfgFunctions
         class groups_global
         {
             file =    "functions\groups";
-            class validGroup               {};
-            class initGroup                {};
-            class initGroupData            {};
-            class setGroupMethods          {};
-            class addToDataAllGroups       {};
-            class getGroupsZone            {};
-            class groupsInZone             {};
-            class updateMethodsAllGroups   {};
-            class isPlayerGroup            {};
-            class groupBehaviourSettings   {};
-            class groupGetBehaviorModule   {};
-            class getNearestGroup          {};
-            class setGroupOwner            {};
+            class validGroup                        {};
+            class initGroup                         {};
+            class initGroupData                     {};
+            class knowsAboutGroup                   {};
+            class setGroupMethods                   {};
+            class addToDataAllGroups                {};
+            class getGroupsZone                     {};
+            class groupsInZone                      {};
+            class updateMethodsAllGroups            {};
+            class isPlayerGroup                     {};
+            class groupBehaviourSettings            {};
+            class groupGetBehaviorModule            {};
+            class getNearestGroup                   {};
+            class setGroupOwner                     {};
+            class updateGroupSideKnowledgeOnTargets {};
+            class groupGlobalizeData                {};
         };
 
         class groups_abilities
@@ -479,6 +562,39 @@ class CfgFunctions
             class groupAttackGroup          {};
             class groupCombatZone           {};
             class groupUpdateBattleStrength {};
+            class groupRevealAndTarget      {};
+        };
+
+        class groups_atSupport 
+        {
+            file = "functions\groups\atSupport";
+            class groupInitAtSupportTask     {};
+            class groupInfEngageAtTarget     {};
+            class groupAtSupportInsertionPos {};
+            class groupOnAtInsertion         {};
+            class groupAtSupportUpdate       {};
+            class groupEndAtSupport          {};
+            class atSupportDestroyWp         {};
+            class groupCanAtReveal           {};
+            class atSupportTargetEh          {};
+            class validAtTarget              {};
+            class groupInfMoveOnAtTarget     {};
+            class groupAtSupportDirectMove   {};
+            class groupInitAtSupportTravel   {};
+            class groupInitAtTarget          {};
+            class groupDeInitAtTarget        {};
+
+            class addAtSupportRequest        {};
+            class initAtSupportRequestsMap   {};
+            class getAtSupportGroups         {};
+            class groupHasAT                 {};
+            class groupCanCallAtSupport      {};
+            class groupCallAtSupport         {};
+            class groupSendAtSupportRequest  {};
+            class respondAtSupportRequest    {};
+            class respondAllAtSupportRequests {};
+            class handleArmorSpotted          {};
+            class groupAttackArmorOnSight     {};
         };
         
         class groups_suppress
@@ -581,6 +697,8 @@ class CfgFunctions
             class initSquadMembers         {};
             class groupIsMechanized        {};
             class groupGetFipoMen          {};
+            class groupGetAtMen            {};
+            class groupIsInfantryGroup     {};
 
         };
 
@@ -598,6 +716,7 @@ class CfgFunctions
             class getGroupTask            {};
             class groupCanRecieveNewTask  {};
             class groupActionStatus       {};
+            class groupUpdateTask         {};
             
         };
 
@@ -610,10 +729,13 @@ class CfgFunctions
             class group3DIcon             {};
             class group3DColor            {};
             class group3DText             {};
+            class groupDebugIdleText      {};
             class units3D                 {};
             class groupDebugText          {};
             class groupDebugTextAbilities {};
             class groupFlashAction        {};
+            class groupDrawBattleIntel    {};
+            class drawIntelTarget3D       {};
         };
 
         class groups_objectives
@@ -628,7 +750,6 @@ class CfgFunctions
             class groupOnObjectiveArrival         {};
             class groupInitObjectiveTask          {};
             class groupTakeObjective              {};
-            class groupGuardObjective             {};
             class groupObjectiveData              {};
             class groupAutoAssignObjective        {};
             class groupTypeMatchObjective         {};
@@ -640,6 +761,8 @@ class CfgFunctions
             class groupObjectiveAssignedHostiles  {};
             class groupCanLeaveObjective          {};
             class groupCanAssignObjective         {};
+            class groupGuardObjective             {};
+            class groupGuardObjectiveTakeCover    {};
 
             /*Attack*/
             class assignGroupObjectivesAllSides   {};
@@ -662,6 +785,7 @@ class CfgFunctions
             class groupMechClearObjective         {};
             class groupMechClearUrbanObjective    {};
             class groupEndMechClearing            {};
+            class groupQuickClearingObjective     {};
 
         };
 
@@ -670,11 +794,7 @@ class CfgFunctions
             file = "functions\groups\tactics";
             class groupGarrison            {};
             class groupGetNearUrbanZones   {};
-            class groupCanIdleGarrison     {};
-            class groupInitIdleGarrison    {};
             class groupGetInBuilding       {};
-            class groupIdleGarrison        {};
-            class waypointIdleGarrison     {};
             class searchNearBuildings      {};
             
         };
@@ -682,17 +802,15 @@ class CfgFunctions
         class groups_misc
         {
             file = "functions\groups\misc";
-            class groupIsIdle              {};
             class groupUpdate              {};
             class activeWp                 {};
-            class getIdleGroups            {};
             class getCategorizedGroups     {};
             class assignAllGroupTasks      {};
-            class assignGroupsMapIdleCover {};
-            class assignGroupsIdleCover    {};
             class groupSetDataDelayed      {};
             class groupUnstop              {};
-            
+            class groupTargetVisible       {};
+            class groupRevealTargets       {};
+            class groupToggleExternalAi    {};
         };
 
         class groups_reinforcement_radio
@@ -773,6 +891,30 @@ class CfgFunctions
             class onInitObjectiveDefenseWp     {};
         };
 
+        class groups_idleState
+        {
+            file = "functions\groups\idleState";
+            class getIdleGroups             {};
+            class groupIsIdle               {};
+            class groupSetIdleState         {};
+            class assignGroupsMapIdleCover  {};
+            class groupSetLastActionTime    {};
+            class groupListInitIdleState    {};
+
+            class groupInitIdleState        {};
+            class groupGetIdleCoverArea     {};
+            class groupCanIdleGarrison      {};
+            class groupInitIdleGarrison     {};
+            class groupIdleCover            {};
+            class groupIdleGarrison         {};
+            class waypointIdleGarrison      {};
+            class waypointIdleCover         {};
+            class nearInfantryIdlePositions {};
+            class sortInfantryIdlePositions {};
+            class infantryIdlePosScore      {};
+
+        };
+
         class reforceModule
         {
             file = "functions\reforceModule";
@@ -803,6 +945,8 @@ class CfgFunctions
             class initSettings    {};
             class clientInit      {};
             class initgameState   {};
+            class getModlist      {};
+            class validModlist    {};
             // class CBAOptions    {preInit = 1; file = "CBA_Options\main.sqf"};
         };
 
@@ -821,6 +965,9 @@ class CfgFunctions
             class buildingChangedEh            {};
             class onCuratorWaypoint            {};
             class onCuratorObjectDoubleClicked {};
+            class playerAbortTransportKeyEh    {};
+            class playerConnectedEh            {};
+            class onPlayerConnectedRemote      {};
         };
 
         class taskManager
@@ -896,6 +1043,7 @@ class CfgFunctions
             class openCuratorSquadMenu             {};
             class applySquadMenuSettings           {};
             class initCuratorSquadMenuDisplay      {};
+            class initCuratorSquadMenuSettingList  {};
             class curatorSquadMenuAddCBS           {};
             class curatorSquadMenuAddSLS           {};
             class onCuratorSquadMenuSettingChange  {};
@@ -927,6 +1075,30 @@ class CfgFunctions
         {
             file = "functions\GUI\markerFeedback";
             class initMarkerFeedBackDisplay       {};
+        };
+
+        class playerTransport 
+        {
+            file = "functions\playerTransport";
+            class playerCallTransport              {};
+            class updateTransportInfo              {};
+            class getTransportInfoText             {};
+            class showTransportData                {};
+            class selectDestinationTip             {};
+            class groupEndPlayerTransport          {};
+            class endPlayerTransport               {};
+            class abortPlayerTransport             {};
+            class rejectTransportCall              {};
+            class playerCanCallTransport           {};
+            class endTransportDestinationSelection {};
+            class drawNearestTransport             {};
+            class nearestTransport                 {};
+            class selectTransportDestination       {};
+            class canGetTransportAction            {};
+            class callTransportAction              {};
+            class callTransportActionCondition     {};
+            class waitforPlayerBoarding            {};
+            class onGetinWpPassenger               {};
         };
         
     };

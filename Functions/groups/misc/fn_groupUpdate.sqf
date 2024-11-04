@@ -1,18 +1,33 @@
-_self call ["setGroupCluster"];
-_self call ["setGroupType"];
-_self call ["setStrengthIcon"];
-_self call ["updateBattleStrength"];
+private _since = time - (_self get "lastUpdate");
+if(_since<1)exitWith{};
+_self set ["lastUpdate", time];
 
 private _group        = _self get "grp";
 private _ownerActual  = groupOwner _group;
 private _ownerVirtual = _self get "owner";
+private _birth        = _self get "birth";
+private _timePassed   = time - _birth;
+private _unitCount    = count units _group;
+private _inStrength   = _self get "initialStrength";
+
+if(_timePassed < 10)
+then{_self set ["initialStrength", _unitCount]}
+else{if(_inStrength < 1 &&{_unitCount > 0})
+then{_self set ["initialStrength", _unitCount]}};
+
+_self call ["setGroupCluster"];
+_self call ["setGroupType"];
+_self call ["setStrengthIcon"];
+_self call ["updateBattleStrength"];
+_self call ["setIdleState"];
+_self call ["setMapIcon"];
+_self call ["updateTask"];
+_self call ["globalize"];
 
 if(_ownerActual isNotEqualTo _ownerVirtual)then{ 
-	[["Group: ", str _group," owner inconsistent ", str ["o",_ownerActual, "v",_ownerVirtual]]] call dbgm;
+	[["Group: ", str _group," owner inconsistent ", str ["owner: ",_ownerActual, "registered: ",_ownerVirtual]]] call dbgm;
 	_self set ["owner", _ownerActual];
 	[_group] call SQFM_fnc_setGroupOwner;
 };
-
-_group setVariable ["SQFM_grpData", _self, true];
 
 true;

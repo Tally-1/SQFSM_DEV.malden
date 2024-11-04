@@ -1,4 +1,5 @@
 enableEnvironment false;
+getVariables = SQFM_fnc_getVarNames;
 [] spawn{
 waituntil {!isNull (findDisplay 46)};
 

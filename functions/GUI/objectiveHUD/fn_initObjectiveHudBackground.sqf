@@ -3,13 +3,14 @@ private _title      = _objData get "description";
 private _titleColor = [0.4, 1, 0.9, 1];
 private _canvas     = "#(argb,8,8,3)color(0,0,0,0.800000,ca)";
 private _backPos    = [0.09,0.045,0.2,0.7];
-private _backGround = _self call ["addImage",   [_canvas, _backPos]]; //_backPos set [1,0.06];
+private _backGround = _self call ["addImage",   [_canvas, _backPos]];
 private _textPos    = [_backPos#0,0.06,_backPos#2,_backPos#3];
 private _textBox    = _self call ["addTextBox", [_textPos]];
 private _imgPos     = [_backPos#0,0.545,_backPos#2,_backPos#2];
 private _imgBox     = _self call ["addImage",   ["", _imgPos]];
 private _mapImgBox  = _imgBox;
-private _frame      = _self call ["addFrame",   [_backPos, _title, _titleColor, true, 0.05]];
+private _goodFps    = diag_fps > 22;
+private _frame      = _self call ["addFrame",   [_backPos, _title, _titleColor, _goodFps, 0.05]];
 
 if(visibleMap)then{
     private _mapDisplay = findDisplay 12;

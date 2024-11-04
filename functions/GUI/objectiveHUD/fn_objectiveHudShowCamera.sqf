@@ -15,6 +15,7 @@ private _lowLight  = (getLighting#1)<200;
 private _targetPos = ([_camPos#0,(_camPos#1)+1, 10]);
 private _dummy     = "UserTexture1m_F" createVehicleLocal _targetPos;
 private _timeLimit = time + 2;
+private _goodFps   = diag_fps > 22;
 
 _camera cameraEffect ["internal", "back", _camName];
 _camera camSetTarget _dummy;
@@ -26,7 +27,9 @@ _self set ["camTime",     time];
 
 _imageBox call ["setImage",[_loadImg]];
 
-waitUntil {_self call ["cameraReady",[_timeLimit]]};
+// In order to avoid unnecesary lag the wait is only done when the FPS is over 22
+if(_goodFps)
+then{waitUntil {_self call["cameraReady",[_timeLimit]]}};
 
 _imageBox call ["setImage",[_renderImg]];
 
