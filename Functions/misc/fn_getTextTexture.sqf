@@ -1,18 +1,14 @@
-private _coef     = _self call ["strengthCoef"];
-private _prcnt    = round(_coef*100);
-private _excluded = (_self get "grp") getVariable ["SQFM_Excluded", false];
-private _color    = "#86ff35";
+params [
+	["_text",            nil,           [""]],
+    ["_fontSize",        0.1,            [0]],
+    ["_textColor",       "#ffffff",     [""]],
+    ["_backgroundColor", "#00000000",   [""]],
+    ["_font",            "PuristaBold", [""]]	
+];
 
-if(_prcnt < 75)then{_color = "#ffe96f";};
-if(_prcnt < 26)then{_color = "#ff4f4f";};
+private _xPos    = 1;
+private _yPos    = 1;
+private _rgbPx   = "#(rgb,128,128,3)text";
+private _texture = [_rgbPx, '(', _xPos,',', _yPos,',"',_font,'",', _fontSize,',"', _backgroundColor,'","', _textColor,'","', _text,'")']joinString'';
 
-private _text    = [_prcnt,"%"]joinString"";
-private _texture = [_text, 0.57, _color, "#00000000", "PuristaBold"]call SQFM_fnc_getTextTexture;
-
-if(_excluded)then{
-	_texture = ["excluded", 0.34, "#ff1d1d", "#00000000", "PuristaBold"]call SQFM_fnc_getTextTexture;
-};
-
-_self set ["strengthIndicator", _texture];
-// systemChat str [_text];
-_prcnt;
+_texture;

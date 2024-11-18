@@ -1,3 +1,4 @@
+private _group      = _self get "grp";
 private _unitCount  = count units _group;
 private _initial    = _self getOrDefault ["initialStrength",_unitCount,true];
 private _current    = _self call ["getStrength"];

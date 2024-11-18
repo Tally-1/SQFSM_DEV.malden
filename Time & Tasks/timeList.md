@@ -59,21 +59,21 @@
 --{**0.69**}--
 30.6 hours (1837 minutes)
 
-[106m] Cohesion check and video (Needed since Yip refuse to belive what I tell him)
-[18m] Changelog and Upload of Soldier FSM 1.46
-[26m] No squad markers on High-command mode
-[58m] Planning At-Support
-[67m] Building task-init for AT-support.
-[52m] At-support insertion & wp functions. Replanning feature with yip.
-[279m] At-Support, eventhandlers, travel, Target reveal, target engagement
-[96m]  Vehicle AT-support, target disengaging, End AT-support.
-[120m] Infantry AT-support engagement (initial build)
-[48m]  Valid RPG launch position.
-[49m]  Move to launch position.
-[105m] Forced launcher-fire (adapted and upgraded SFSM building-rpg function)
-[53m]  Forced launcher movement and exception handling, improved aim.
-[53m]  RPG missile guidance script (adapted and upgraded SFSM building-rpg function).
-[73m]  Implementing infantry Tank-hunting into overall AT-support task.
+[106m]  Cohesion check and video (Needed since Yip refuse to belive what I tell him)
+[18m]   Changelog and Upload of Soldier FSM 1.46
+[26m]   No squad markers on High-command mode
+[58m]   Planning At-Support
+[67m]   Building task-init for AT-support.
+[52m]   At-support insertion & wp functions. Replanning feature with yip.
+[279m]  At-Support, eventhandlers, travel, Target reveal, target engagement
+[96m]   Vehicle AT-support, target disengaging, End AT-support.
+[120m]  Infantry AT-support engagement (initial build)
+[48m]   Valid RPG launch position.
+[49m]   Move to launch position.
+[105m]  Forced launcher-fire (adapted and upgraded SFSM building-rpg function)
+[53m]   Forced launcher movement and exception handling, improved aim.
+[53m]   RPG missile guidance script (adapted and upgraded SFSM building-rpg function).
+[73m]   Implementing infantry Tank-hunting into overall AT-support task.
 [176m]  Final tweaks (AT-support), testing, refactoring
 [87m]   Initial request build(AT-support).
 [120m]  Automated AT-support request on enemy spotted, AT-respond loop.
@@ -82,22 +82,37 @@
 [75m]   Packing, testing, fixing, tweaking.
 --------------------------------------------
 
---{**0.7**}--
+--{**0.70**}--
+20.53 hours (1232 minutes)
 
 [91m] External AI-toggle, initial map selection-build (transport)
-- 
 [84m] Map selection final, Selection HUD, Transport marker.
 [21m] Fixing pickup waypoints for playerGroups.
 [80m] Call conditions, reject Call feedback.
 [28m] Reinforcements Test (Ready Squads)
-- 
 [219m] Player transport final build, (GUI, Cancel, Call, Abort)
 [30m]  Refactoring, small test.
 [54m]  Actions framework initial build (ACE and Vanilla)
-- 
 [143m] Dynamic self action framework, Call transport Action, refactoring
 [275m] Dedicated server compatibility (missing JIP action).
-- 
 [39m]  JIP action
 [17m]  Dedicated test.
 [75m]  Various Dedicated tests and bugfixes.
+[76m]  Various battle tests and bugfixes.
+--------------------------------------------
+
+--{**0.71**}--
+[15m] Changelog and Upload of Squad FSM 0.70
+[62m] Quickfix of Squad FSM 0.70
+[24m] Reading getting overview of community tests.
+[83m] Replace D-control with R-control on clients, excluded playersquads from automated actions.
+[82m] Reinforcment call action added on start.
+[14m] Simple reinforcement-call
+-
+[215m] Reinforcement GUI
+-
+[98m] player Abort reinforcements, replacing public-var
+[47m] Reinforcement destruction abort, Reinforcement type GUI-notation.
+[23m]  Refactoring, local test.
+[109m] Dedicated server test & fix (Player reforce)
+[50m]  Dedicated server test & fix (Player transport)

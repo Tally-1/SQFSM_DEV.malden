@@ -7,13 +7,13 @@ private _ownerActual  = groupOwner _group;
 private _ownerVirtual = _self get "owner";
 private _birth        = _self get "birth";
 private _timePassed   = time - _birth;
-private _unitCount    = count units _group;
+private _strength     = _self call ["getStrength"];
 private _inStrength   = _self get "initialStrength";
 
-if(_timePassed < 10)
-then{_self set ["initialStrength", _unitCount]}
-else{if(_inStrength < 1 &&{_unitCount > 0})
-then{_self set ["initialStrength", _unitCount]}};
+if(_timePassed < 5)
+then{_self set ["initialStrength", _strength]}
+else{if(_inStrength < 1 &&{_strength > 0})
+then{_self set ["initialStrength", _strength]}};
 
 _self call ["setGroupCluster"];
 _self call ["setGroupType"];

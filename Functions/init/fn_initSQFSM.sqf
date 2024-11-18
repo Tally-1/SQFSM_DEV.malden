@@ -1,4 +1,4 @@
-isNil{// Forced unsheduled execution. Can run without, but this is faster.
+isNil{
 private _addons = call SQFM_fnc_loadedAddons;
 
 dbgm         = SQFM_fnc_debugMessage;
@@ -32,11 +32,8 @@ SQFM_validMods     = [
   "@GOLD_AK"
 ];
 
-[]spawn{
-	waitUntil { time>0;};
-	isNil{
-    if(isServer)     then{[] call  SQFM_fnc_serverInit};
-    if(hasInterface) then{[] spawn SQFM_fnc_clientInit};
-}}};
+};
+
+[]spawn SQFM_fnc_servClientInit;
 
 true;
