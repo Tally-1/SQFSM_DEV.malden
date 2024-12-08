@@ -21,6 +21,9 @@ private _list    = _center nearEntities['land',_radius];
     
 }} forEach _list;
 
+if(isNil "_targets")      exitWith{[]};
+if(_targets isEqualTo []) exitWith{[]};
+
 _targets = [_targets, [], {[_x] call SQFM_fnc_suppressionTargetValue}, "DESCEND"] call BIS_fnc_sortBy;
 
 _targets;

@@ -102,17 +102,22 @@
 --------------------------------------------
 
 --{**0.71**}--
+14.4 hours (864 minutes)
+
 [15m] Changelog and Upload of Squad FSM 0.70
 [62m] Quickfix of Squad FSM 0.70
 [24m] Reading getting overview of community tests.
 [83m] Replace D-control with R-control on clients, excluded playersquads from automated actions.
 [82m] Reinforcment call action added on start.
 [14m] Simple reinforcement-call
--
 [215m] Reinforcement GUI
--
 [98m] player Abort reinforcements, replacing public-var
 [47m] Reinforcement destruction abort, Reinforcement type GUI-notation.
 [23m]  Refactoring, local test.
 [109m] Dedicated server test & fix (Player reforce)
 [50m]  Dedicated server test & fix (Player transport)
+[42m]  Packing mod, testing packed version, minor fixes.
+--------------------------------------------
+
+--{**0.72**}--
+[10m] Changelog and Upload of Squad FSM 0.71

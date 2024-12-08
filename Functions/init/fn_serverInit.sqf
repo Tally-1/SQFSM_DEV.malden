@@ -28,7 +28,7 @@ call SQFM_fnc_playerConnectedEh;
 missionNamespace setVariable ["SQFM_Dedicated",    isDedicated, true];
 missionNamespace setVariable ["SQFSM_serverReady", true,        true];
 
-// if(isDedicated)
-// then{enableEnvironment false};
+if(isDedicated)
+then{enableEnvironment false};
 
 true;
